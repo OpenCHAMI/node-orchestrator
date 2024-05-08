@@ -1,0 +1,3 @@
+.venv/
+node-orchestrator
+schemas/*.json
