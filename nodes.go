@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"regexp"
@@ -30,7 +29,7 @@ type BootData struct {
 type ComputeNode struct {
 	ID                uuid.UUID          `json:"id,omitempty" format:"uuid"`
 	Hostname          string             `json:"hostname" binding:"required"`
-	XName             string             `json:"xname,omitempty"`
+	XName             NodeXname          `json:"xname,omitempty"`
 	Architecture      string             `json:"architecture" binding:"required"`
 	BootMac           string             `json:"boot_mac,omitempty" format:"mac-address"`
 	NetworkInterfaces []NetworkInterface `json:"network_interfaces,omitempty"`
@@ -48,46 +47,6 @@ type NetworkInterface struct {
 	Description   string `json:"description,omitempty"`
 }
 
-// Cabinet returns the cabinet ID of the node or 0 if the node does not have an XName
-func (node *ComputeNode) Cabinet() (int, error) {
-	if node.XName == "" {
-		return 0, fmt.Errorf("node does not have an XName")
-	}
-	return extractXNameComponents(node.XName).Cabinet, nil
-}
-
-// Chassis returns the Chassis ID of the node or 0 if the node does not have an XName
-func (node *ComputeNode) Chassis() (int, error) {
-	if node.XName == "" {
-		return 0, fmt.Errorf("node does not have an XName")
-	}
-	return extractXNameComponents(node.XName).Chassis, nil
-}
-
-// Slot returns the Slot ID of the node or 0 if the node does not have an XName
-func (node *ComputeNode) Slot() (int, error) {
-	if node.XName == "" {
-		return 0, fmt.Errorf("node does not have an XName")
-	}
-	return extractXNameComponents(node.XName).Slot, nil
-}
-
-// NodePosition returns the Node Position ID of the node or 0 if the node does not have an XName
-func (node *ComputeNode) NodePosition() (int, error) {
-	if node.XName == "" {
-		return 0, fmt.Errorf("node does not have an XName")
-	}
-	return extractXNameComponents(node.XName).NodePosition, nil
-}
-
-// BMCPosition returns the BMC Position ID of the node or 0 if the node does not have an XName
-func (node *ComputeNode) BMCPosition() (int, error) {
-	if node.XName == "" {
-		return 0, fmt.Errorf("node does not have an XName")
-	}
-	return extractXNameComponents(node.XName).BMCPosition, nil
-}
-
 func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 	var newNode ComputeNode
 
@@ -97,12 +56,12 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If the XName is supplied, confirm that it is valid and not a duplicate
-	if newNode.XName != "" {
-		if !isValidNodeXName(newNode.XName) {
+	if newNode.XName.String() != "" {
+		if !isValidNodeXName(newNode.XName.String()) {
 			http.Error(w, "invalid XName", http.StatusBadRequest)
 		}
 		// If the xname isn't empty, check for duplicates which are not allowed
-		_, err := a.Storage.LookupComputeNodeByXName(newNode.XName)
+		_, err := a.Storage.LookupComputeNodeByXName(newNode.XName.String())
 		if err == nil {
 			http.Error(w, "Compute Node with the same XName already exists", http.StatusBadRequest)
 		}
@@ -160,7 +119,7 @@ func (a *App) updateNode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if updateNode.XName != "" && !isValidNodeXName(updateNode.XName) {
+	if updateNode.XName.String() != "" && !isValidNodeXName(updateNode.XName.String()) {
 		http.Error(w, "invalid XName", http.StatusBadRequest)
 	}
 	err = a.Storage.UpdateComputeNode(nodeID, updateNode)

@@ -4,7 +4,7 @@ This experimental service and client are meant to explore standardized object st
 
 In [nodes.go](/nodes.go) is the definition of a set of go structs with some struct tags that allow code in [main.go](/main.go) to automatically create a [jsonschema](https://json-schema.org/) representation of the object structure.
 
-Once compiled, this go program will create the schemas in the [schemas/](/schemas/) directory.  These could also be served through a special service endpoint so clients can refer to them directly.
+Once compiled, this go program will create the schemas in the schemas/ directory.  These could also be served through a special service endpoint so clients can refer to them directly.
 
 [client.py](/clients/client.py) demonstrates how to somewhat automatically create a python client that can read the jsonschema files and automatically generate API calls for common CRUD operations.  Since the jsonschema file establishes a contract, the client can validate the object before trying to submit it to a remote endpoint.
 

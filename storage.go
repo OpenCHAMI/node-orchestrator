@@ -82,7 +82,7 @@ func (s *InMemoryStorage) DeleteBMC(bmcID uuid.UUID) error {
 
 func (s *InMemoryStorage) LookupComputeNodeByXName(xname string) (ComputeNode, error) {
 	for _, node := range s.nodes {
-		if node.XName == xname {
+		if (node.XName == NodeXname{Value: xname}) {
 			return node, nil
 		}
 	}
