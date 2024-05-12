@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
+	base "github.com/Cray-HPE/hms-base"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -49,6 +50,7 @@ func generateAndWriteSchemas(path string) {
 		"ComputeNode.json":      &ComputeNode{},
 		"NetworkInterface.json": &NetworkInterface{},
 		"BMC.json":              &BMC{},
+		"Component.json":        &base.Component{},
 	}
 
 	if err := os.MkdirAll(path, 0755); err != nil {
