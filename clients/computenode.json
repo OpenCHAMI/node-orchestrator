@@ -1,4 +1,12 @@
 {
     "hostname": "localhost",
-    "architecture": "x86_64"
+    "architecture": "x86_64",
+    "xname": "x1000c4s4b1n1",
+    "bmc" :
+    {
+        "username": "admin",
+        "password": "admin",
+        "mac_address": "00:00:00:00:00:00",
+        "ipv4_address": "192.168.0.1"
+    }
 }

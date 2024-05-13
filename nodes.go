@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"regexp"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -52,18 +50,25 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 
 	// Decode the request body into the new node
 	if err := json.NewDecoder(r.Body).Decode(&newNode); err != nil {
+		log.Print("Error decoding request body", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	log.Print("Decoded new node", newNode)
 	// If the XName is supplied, confirm that it is valid and not a duplicate
 	if newNode.XName.String() != "" {
-		if !isValidNodeXName(newNode.XName.String()) {
-			http.Error(w, "invalid XName", http.StatusBadRequest)
+		log.Print("Validating XName", newNode.XName.String())
+		if _, err := newNode.XName.Valid(); err != nil {
+			log.Print("Invalid XName", newNode.XName.String(), err)
+			http.Error(w, "Invalid XName"+err.Error(), http.StatusBadRequest)
 		}
+
 		// If the xname isn't empty, check for duplicates which are not allowed
 		_, err := a.Storage.LookupComputeNodeByXName(newNode.XName.String())
 		if err == nil {
+			log.Print("Duplicate XName", newNode.XName.String())
 			http.Error(w, "Compute Node with the same XName already exists", http.StatusBadRequest)
+			return
 		}
 	}
 
@@ -71,6 +76,7 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 	if newNode.BMC != nil {
 		if newNode.BMC.XName != "" && !isValidBMCXName(newNode.BMC.XName) {
 			http.Error(w, "invalid BMC XName", http.StatusBadRequest)
+			return
 		}
 		// Check if the BMC alread exists via MAC or XName
 		existingBMC, err := a.Storage.LookupBMCByXName(newNode.BMC.XName)
@@ -90,8 +96,19 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newNode.ID = uuid.New()
-	a.Storage.SaveComputeNode(newNode.ID, newNode)
-	json.NewEncoder(w).Encode(newNode)
+	err := a.Storage.SaveComputeNode(newNode.ID, newNode)
+	if err != nil {
+		log.Print("Error saving node", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	log.Print("New node created", newNode.ID)
+	w.WriteHeader(http.StatusCreated)
+	err = json.NewEncoder(w).Encode(newNode)
+	if err != nil {
+		log.Print("Error encoding response", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (a *App) getNode(w http.ResponseWriter, r *http.Request) {
@@ -119,13 +136,15 @@ func (a *App) updateNode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if updateNode.XName.String() != "" && !isValidNodeXName(updateNode.XName.String()) {
-		http.Error(w, "invalid XName", http.StatusBadRequest)
+	if _, err := updateNode.XName.Valid(); err != nil {
+		http.Error(w, "invalid XName "+err.Error(), http.StatusBadRequest)
+		return
 	}
 	err = a.Storage.UpdateComputeNode(nodeID, updateNode)
 	if err != nil {
 		http.Error(w, "node not found", http.StatusNotFound)
 	}
+
 }
 
 func (a *App) deleteNode(w http.ResponseWriter, r *http.Request) {
@@ -138,29 +157,4 @@ func (a *App) deleteNode(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "node not found", http.StatusNotFound)
 	}
-}
-
-func isValidNodeXName(xname string) bool {
-	// Compile the regular expression. This is the pattern from your requirement.
-	re := regexp.MustCompile(`^x(?P<cabinet>\d{3,5})c(?P<chassis>\d{1,3})s(?P<slot>\d{1,3})b(?P<bmc>\d{1,3})n(?P<node>\d{1,3})$`)
-
-	// Use FindStringSubmatch to capture the parts of the xname.
-	matches := re.FindStringSubmatch(xname)
-	if matches == nil {
-		return false
-	}
-
-	// Since the cabinet can go up to 100,000 and others up to 255, we need to check these values.
-	// The order of subexpressions in matches corresponds to the groups in the regex.
-	cabinet, _ := strconv.Atoi(matches[1])
-	chassis, _ := strconv.Atoi(matches[2])
-	slot, _ := strconv.Atoi(matches[3])
-	bmc, _ := strconv.Atoi(matches[4])
-	node, _ := strconv.Atoi(matches[5])
-
-	if cabinet > 100000 || chassis >= 256 || slot >= 256 || bmc >= 256 || node >= 256 {
-		return false
-	}
-
-	return true
 }
