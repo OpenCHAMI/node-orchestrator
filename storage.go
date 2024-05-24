@@ -6,6 +6,24 @@ import (
 	"github.com/google/uuid"
 )
 
+type Storage interface {
+	SaveComputeNode(nodeID uuid.UUID, node ComputeNode) error
+	GetComputeNode(nodeID uuid.UUID) (ComputeNode, error)
+	UpdateComputeNode(nodeID uuid.UUID, node ComputeNode) error
+	DeleteComputeNode(nodeID uuid.UUID) error
+
+	LookupComputeNodeByXName(xname string) (ComputeNode, error)
+	LookupComputeNodeByMACAddress(mac string) (ComputeNode, error)
+
+	SaveBMC(bmcID uuid.UUID, bmc BMC) error
+	GetBMC(bmcID uuid.UUID) (BMC, error)
+	UpdateBMC(bmcID uuid.UUID, bmc BMC) error
+	DeleteBMC(bmcID uuid.UUID) error
+
+	LookupBMCByXName(xname string) (BMC, error)
+	LookupBMCByMACAddress(mac string) (BMC, error)
+}
+
 type InMemoryStorage struct {
 	nodes      map[uuid.UUID]ComputeNode
 	bmcEntries map[uuid.UUID]BMC

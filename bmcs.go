@@ -55,9 +55,6 @@ func (a *App) updateBMC(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if updateBMC.XName != "" && !isValidNodeXName(updateBMC.XName) {
-		http.Error(w, "invalid XName", http.StatusBadRequest)
-	}
 	if _, err := a.Storage.GetBMC(bmcID); err == nil {
 		updateBMC.ID = bmcID
 		a.Storage.SaveBMC(bmcID, updateBMC)

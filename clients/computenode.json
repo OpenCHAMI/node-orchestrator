@@ -1,12 +1,134 @@
-{
-    "hostname": "localhost",
-    "architecture": "x86_64",
-    "xname": "x1000c4s4b1n1",
-    "bmc" :
-    {
-        "username": "admin",
-        "password": "admin",
-        "mac_address": "00:00:00:00:00:00",
-        "ipv4_address": "192.168.0.1"
-    }
-}
+[
+        {
+            "hostname": "localhost",
+            "architecture": "x86_64",
+            "xname": "x1000c4s4b1n1",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:00",
+                "ipv4_address": "192.168.0.1"
+            }
+        },
+        {
+            "hostname": "node1",
+            "architecture": "x86_64",
+            "xname": "x2000c8s8b2n2",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:01",
+                "ipv4_address": "192.168.0.2"
+            }
+        },
+        {
+            "hostname": "node2",
+            "architecture": "x86_64",
+            "xname": "x3000c12s12b3n3",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:02",
+                "ipv4_address": "192.168.0.3"
+            }
+        },
+        {
+            "hostname": "node3",
+            "architecture": "x86_64",
+            "xname": "x4000c16s16b4n4",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:03",
+                "ipv4_address": "192.168.0.4"
+            }
+        },
+        {
+            "hostname": "node4",
+            "architecture": "x86_64",
+            "xname": "x5000c20s20b5n5",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:04",
+                "ipv4_address": "192.168.0.5"
+            }
+        },
+        {
+            "hostname": "node5",
+            "architecture": "x86_64",
+            "xname": "x6000c24s24b6n6",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:05",
+                "ipv4_address": "192.168.0.6"
+            }
+        },
+        {
+            "hostname": "node6",
+            "architecture": "x86_64",
+            "xname": "x7000c28s28b7n7",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:06",
+                "ipv4_address": "192.168.0.7"
+            }
+        },
+        {
+            "hostname": "node7",
+            "architecture": "x86_64",
+            "xname": "x8000c32s32b8n8",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:07",
+                "ipv4_address": "192.168.0.8"
+            }
+        },
+        {
+            "hostname": "node8",
+            "architecture": "x86_64",
+            "xname": "x9000c36s36b9n9",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:08",
+                "ipv4_address": "192.168.0.9"
+            }
+        },
+        {
+            "hostname": "node9",
+            "architecture": "x86_64",
+            "xname": "x10000c40s40b10n10",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:09",
+                "ipv4_address": "192.168.0.10"
+            }
+        },
+        {
+            "hostname": "node10",
+            "architecture": "x86_64",
+            "xname": "x11000c44s44b11n11",
+            "bmc" :
+            {
+                "username": "admin",
+                "password": "admin",
+                "mac_address": "00:00:00:00:00:10",
+                "ipv4_address": "192.168.0.11"
+            }
+        }
+    ]

@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/ajg/form v1.5.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
@@ -22,5 +23,6 @@ require (
 
 require (
 	github.com/Cray-HPE/hms-base v1.15.1
+	github.com/go-chi/render v1.0.3
 	github.com/google/uuid v1.6.0
 )

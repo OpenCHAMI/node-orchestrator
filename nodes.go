@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/render"
 	"github.com/google/uuid"
 )
 
@@ -49,9 +50,10 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 	var newNode ComputeNode
 
 	// Decode the request body into the new node
-	if err := json.NewDecoder(r.Body).Decode(&newNode); err != nil {
+	if err := render.DecodeJSON(r.Body, &newNode); err != nil {
 		log.Print("Error decoding request body", err)
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, err.Error())
 		return
 	}
 	log.Print("Decoded new node", newNode)
@@ -128,23 +130,33 @@ func (a *App) getNode(w http.ResponseWriter, r *http.Request) {
 func (a *App) updateNode(w http.ResponseWriter, r *http.Request) {
 	nodeID, err := uuid.Parse(chi.URLParam(r, "nodeID"))
 	if err != nil {
-		http.Error(w, "malformed node ID", http.StatusBadRequest)
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, "malformed node ID")
 		return
-	}
-	var updateNode ComputeNode
-	if err := json.NewDecoder(r.Body).Decode(&updateNode); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	if _, err := updateNode.XName.Valid(); err != nil {
-		http.Error(w, "invalid XName "+err.Error(), http.StatusBadRequest)
-		return
-	}
-	err = a.Storage.UpdateComputeNode(nodeID, updateNode)
-	if err != nil {
-		http.Error(w, "node not found", http.StatusNotFound)
 	}
 
+	var updateNode ComputeNode
+	if err := render.DecodeJSON(r.Body, &updateNode); err != nil {
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, err.Error())
+		return
+	}
+
+	if _, err := updateNode.XName.Valid(); err != nil {
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, "invalid XName "+err.Error())
+		return
+	}
+
+	err = a.Storage.UpdateComputeNode(nodeID, updateNode)
+	if err != nil {
+		render.Status(r, http.StatusNotFound)
+		render.JSON(w, r, "node not found")
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.JSON(w, r, updateNode)
 }
 
 func (a *App) deleteNode(w http.ResponseWriter, r *http.Request) {

@@ -47,10 +47,10 @@ def cli(jwt, schema_dir, url):
 
 @cli.command()
 @click.argument('object', type=str)
-@click.option('--data', type=str, help='JSON string representing the object to create')
-@click.option('--file', type=click.File('r'), help='File containing JSON object to create')
+@click.option('--data', type=str, help='JSON string representing the object(s) to create')
+@click.option('--file', type=click.File('r'), help='File containing JSON object(s) to create')
 def create(object, data, file):
-    """Create an object on the remote API."""
+    """Create object(s) on the remote API."""
     if file:
         data = json.load(file)
     elif data:
@@ -58,10 +58,22 @@ def create(object, data, file):
     else:
         click.echo("Error: No data provided for creation.", err=True)
         return
-    if cli.schema_dir:
-        validate_json(cli.schema_dir, object, data)
-    response = api_call('POST', cli.url, object, None, data, cli.jwt)
-    click.echo(response)
+    if isinstance(data, list):
+        print(data)
+        for obj in data:
+            if cli.schema_dir:
+                validate_json(cli.schema_dir, object, obj)
+            try:
+                response = api_call('POST', cli.url, object, None, obj, cli.jwt)
+                click.echo(response)
+            except requests.exceptions.HTTPError as e:
+                click.echo(f"Error creating object: {obj}")
+                click.echo(e)
+    else:
+        if cli.schema_dir:
+            validate_json(cli.schema_dir, object, data)
+        response = api_call('POST', cli.url, object, None, data, cli.jwt)
+        click.echo(response)
 
 @cli.command()
 @click.argument('object', type=str)

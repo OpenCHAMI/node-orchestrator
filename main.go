@@ -1,19 +1,16 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
-	"path/filepath"
 
-	base "github.com/Cray-HPE/hms-base"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
-	"github.com/invopop/jsonschema"
 )
 
 var (
@@ -22,53 +19,15 @@ var (
 	schemaPath = schemaCmd.String("dir", "schemas/", "directory to store JSON schemas")
 )
 
-type Storage interface {
-	SaveComputeNode(nodeID uuid.UUID, node ComputeNode) error
-	GetComputeNode(nodeID uuid.UUID) (ComputeNode, error)
-	UpdateComputeNode(nodeID uuid.UUID, node ComputeNode) error
-	DeleteComputeNode(nodeID uuid.UUID) error
+type Config struct {
+	ListenAddr string
+	BMCSubnet  net.IPNet // BMCSubnet is the subnet for BMCs
 
-	LookupComputeNodeByXName(xname string) (ComputeNode, error)
-	LookupComputeNodeByMACAddress(mac string) (ComputeNode, error)
-
-	SaveBMC(bmcID uuid.UUID, bmc BMC) error
-	GetBMC(bmcID uuid.UUID) (BMC, error)
-	UpdateBMC(bmcID uuid.UUID, bmc BMC) error
-	DeleteBMC(bmcID uuid.UUID) error
-
-	LookupBMCByXName(xname string) (BMC, error)
-	LookupBMCByMACAddress(mac string) (BMC, error)
 }
 
 type App struct {
 	Storage Storage
 	Router  *chi.Mux
-}
-
-func generateAndWriteSchemas(path string) {
-	schemas := map[string]interface{}{
-		"ComputeNode.json":      &ComputeNode{},
-		"NetworkInterface.json": &NetworkInterface{},
-		"BMC.json":              &BMC{},
-		"Component.json":        &base.Component{},
-	}
-
-	if err := os.MkdirAll(path, 0755); err != nil {
-		log.Fatalf("Failed to create schema directory: %v", err)
-	}
-
-	for filename, model := range schemas {
-		schema := jsonschema.Reflect(model)
-		data, err := json.MarshalIndent(schema, "", "  ")
-		if err != nil {
-			log.Fatalf("Failed to generate JSON schema for %v: %v", filename, err)
-		}
-		fullpath := filepath.Join(path, filename)
-		if err := os.WriteFile(fullpath, data, 0644); err != nil {
-			log.Fatalf("Failed to write JSON schema to file %v: %v", fullpath, err)
-		}
-		fmt.Printf("Schema written to %s\n", fullpath)
-	}
 }
 
 func main() {
@@ -114,6 +73,17 @@ func serveAPI() {
 	r.Put("/bmc/{bmcID}", app.updateBMC)
 	r.Delete("/bmc/{bmcID}", app.deleteBMC)
 
+	manager := NewCollectionManager()
+	manager.AddConstraint(DefaultType, &MutualExclusivityConstraint{existingNodes: make(map[NodeXname]uuid.UUID)})
+
+	r.Route("/NodeCollection", func(r chi.Router) {
+		r.Post("/", createCollection(manager))
+		r.Get("/{identifier}", getCollection(manager))
+		r.Put("/{identifier}", updateCollection(manager))
+		r.Delete("/{identifier}", deleteCollection(manager))
+	})
+
+	log.Printf("Starting server on :8080")
 	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		fmt.Printf("[%s]: '%s' has %d middlewares\n", method, route, len(middlewares))
 		return nil
