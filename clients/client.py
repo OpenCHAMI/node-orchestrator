@@ -2,10 +2,14 @@ import click
 import requests
 import json
 import os
+import jwt as pyjwt
+import datetime
+from datetime import timezone
 from jsonschema import validate, ValidationError
 
 def common_options(f):
     f = click.option('--jwt', help='JWT for API authentication', required=False)(f)
+    f = click.option('--gen-jwt-secret', help='Secret for generating JWT for testing.', required=False)(f)
     f = click.option('--schema-dir', type=click.Path(exists=True, file_okay=False, dir_okay=True), required=False, help='Directory containing JSON schema files')(f)
     f = click.option('--url', required=True, help='Base URL for the API')(f)
     return f
@@ -39,11 +43,30 @@ def api_call(method, url, object, id, data, jwt):
 
 @common_options
 @click.group()
-def cli(jwt, schema_dir, url):
+def cli(jwt, gen_jwt_secret, schema_dir, url):
     """Command Line Interface for API operations."""
     cli.jwt = jwt
     cli.schema_dir = schema_dir
     cli.url = url
+    cli.gen_jwt_secret = gen_jwt_secret
+    if cli.gen_jwt_secret:
+        cli.jwt =  pyjwt.encode({
+            "sub": "alex@lovelltroy.org", # This is the subject of the token, Normally the email address of the user
+            "uid": "810c1862-8c7d-440e-9c44-21d98ca5fad2",
+            "username": "testuser",
+            "tenant_id": "f8b3b3b7-4b1b-4b7b-8b3b-7b4b1b4b1b4b",
+            "tenant_name": "testtenant",
+            "tenant_roles": ["user"],
+            "partition_id": "f8b3b3b7-4b1b-4b7b-8b3b-7b4b1b4b1b4b",
+            "partition_name": "testpartition",
+            "partition_roles": ["admin"],
+            # These are the standard claims
+            "exp": datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(seconds=600),
+            "nbf": datetime.datetime.now(tz=timezone.utc),
+            "iss": "https://foobar.openchami.cluster",
+            "aud": "https://foobar.openchami.cluster",
+            "iat": datetime.datetime.now(tz=timezone.utc),
+            }, gen_jwt_secret, algorithm="HS256")
 
 @cli.command()
 @click.argument('object', type=str)
