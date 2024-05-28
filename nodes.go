@@ -53,17 +53,17 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 
 	// Decode the request body into the new node
 	if err := render.DecodeJSON(r.Body, &newNode); err != nil {
-		log.Print("Error decoding request body", err)
-		render.Status(r, http.StatusBadRequest)
-		render.JSON(w, r, err.Error())
+		log.WithError(err).Error("Error decoding request body")
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
 	// If the XName is supplied, confirm that it is valid and not a duplicate
 	if newNode.XName.String() != "" {
-
 		if _, err := newNode.XName.Valid(); err != nil {
 			log.Print("Invalid XName ", newNode.XName.String(), err)
 			http.Error(w, "Invalid XName "+err.Error(), http.StatusBadRequest)
+			return
 		}
 
 		// If the xname isn't empty, check for duplicates which are not allowed
@@ -81,7 +81,7 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "invalid BMC XName", http.StatusBadRequest)
 			return
 		}
-		// Check if the BMC alread exists via MAC or XName
+		// Check if the BMC already exists via MAC or XName
 		existingBMC, err := a.Storage.LookupBMCByXName(newNode.BMC.XName)
 		if err == nil {
 			newNode.BMC.ID = existingBMC.ID
@@ -95,7 +95,6 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 			newNode.BMC.ID = uuid.New()
 			a.Storage.SaveBMC(newNode.BMC.ID, *newNode.BMC)
 		}
-
 	}
 
 	newNode.ID = uuid.New()
@@ -105,8 +104,8 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// Log the full details once and only once.  This is the "event" of creating a node.
-	// Add fields as necessary for log analysis and event correlation
+
+	// Log the full details once and only once. This is the "event" of creating a node.
 	log.WithFields(log.Fields{
 		"node_id":       newNode.ID,
 		"node_xname":    newNode.XName.String(),
@@ -118,12 +117,9 @@ func (a *App) postNode(w http.ResponseWriter, r *http.Request) {
 		"bmc_id":        newNode.BMC.ID,
 		"request_id":    middleware.GetReqID(r.Context()),
 	}).Info("Node created")
-	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(newNode)
-	if err != nil {
-		log.Print("Error encoding response", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+
+	render.Status(r, http.StatusCreated)
+	render.JSON(w, r, newNode)
 }
 
 func (a *App) getNode(w http.ResponseWriter, r *http.Request) {

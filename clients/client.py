@@ -36,8 +36,8 @@ def api_call(method, url, object, id, data, jwt):
     if jwt:
         headers['Authorization'] = f'Bearer {jwt}'
     response = requests.request(method, full_url, json=data, headers=headers)
-    if response.status_code in [200, 201, 204]:
-        return response.json()
+    if response.status_code in [200, 201, 204, 400]:
+        return response
     else:
         response.raise_for_status()
 
@@ -52,8 +52,6 @@ def cli(jwt, gen_jwt_secret, schema_dir, url):
     if cli.gen_jwt_secret:
         cli.jwt =  pyjwt.encode({
             "sub": "alex@lovelltroy.org", # This is the subject of the token, Normally the email address of the user
-            "uid": "810c1862-8c7d-440e-9c44-21d98ca5fad2",
-            "username": "testuser",
             "tenant_id": "f8b3b3b7-4b1b-4b7b-8b3b-7b4b1b4b1b4b",
             "tenant_name": "testtenant",
             "tenant_roles": ["user"],
@@ -88,9 +86,17 @@ def create(object, data, file):
                 validate_json(cli.schema_dir, object, obj)
             try:
                 response = api_call('POST', cli.url, object, None, obj, cli.jwt)
-                click.echo(response)
+                if response.status_code in [200, 201]:
+                    click.echo(f"Created object: {obj}")
+                elif response.status_code == 400:
+                    click.echo(f"Error creating object: {obj}, {response.content}")
+                else:
+                    click.echo(f" Status Code: {response.status_code}, {response.content}")
             except requests.exceptions.HTTPError as e:
                 click.echo(f"Error creating object: {obj}")
+                click.echo(e)
+            except requests.exceptions.JSONDecodeError as e:
+                click.echo(f"Error decoding JSON response when creating object: {obj}")
                 click.echo(e)
     else:
         if cli.schema_dir:

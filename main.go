@@ -58,6 +58,36 @@ func main() {
 	}
 }
 
+func AuthenticatorWithRequiredClaims(ja *jwtauth.JWTAuth, requiredClaims []string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			token, claims, err := jwtauth.FromContext(r.Context())
+
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusUnauthorized)
+				return
+			}
+
+			if token == nil || jwt.Validate(token, ja.ValidateOptions()...) != nil {
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+				return
+			}
+
+			for _, claim := range requiredClaims {
+				if _, ok := claims[claim]; !ok {
+					err := fmt.Errorf("missing required claim %s", claim)
+					log.WithError(err).Error("Missing required claim")
+					http.Error(w, "missing required claim", http.StatusUnauthorized)
+					return
+				}
+			}
+
+			// Token is authenticated and all required claims are present, pass it through
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
 func serveAPI() {
 	// Create a new token authenticator
 	tokenAuth := jwtauth.New("HS256", []byte("secret"), nil, jwt.WithAcceptableSkew(30*time.Second))
@@ -80,7 +110,7 @@ func serveAPI() {
 		r.Use(jwtauth.Verifier(tokenAuth))
 
 		// Handle valid / invalid tokens.
-		r.Use(jwtauth.Authenticator(tokenAuth))
+		r.Use(AuthenticatorWithRequiredClaims(tokenAuth, []string{"sub", "iss", "aud"}))
 		r.Put("/ComputeNode/{nodeID}", app.updateNode)
 		r.Post("/ComputeNode", app.postNode)
 		r.Delete("/ComputeNode/{nodeID}", app.deleteNode)

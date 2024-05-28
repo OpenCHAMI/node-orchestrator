@@ -93,7 +93,7 @@ func createCollection(manager *CollectionManager) http.HandlerFunc {
 			}).Error("Error extracting claims")
 		}
 
-		collection.Owner = uuid.MustParse(claims["uid"].(string))
+		collection.Owner = uuid.MustParse(claims["sub"].(string))
 		collection.CreatorSubject = claims["sub"].(string)
 
 		if err := manager.CreateCollection(&collection); err != nil {
