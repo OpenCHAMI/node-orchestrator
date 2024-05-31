@@ -131,6 +131,18 @@ def delete(object, id):
     response = api_call('DELETE', cli.url, object, id, None, cli.jwt)
     click.echo(f'Deleted {object} with ID {id}')
 
+@cli.command()
+@click.argument('object', type=str)
+@click.argument('id', type=str)
+def get(object, id):
+    """Get an object from the remote API."""
+    response = api_call('GET', cli.url, object, id, None, cli.jwt)
+    try:
+        click.echo(response.json())
+    except requests.exceptions.JSONDecodeError:
+        click.echo(response.content)
+
+
 if __name__ == '__main__':
     cli()
 

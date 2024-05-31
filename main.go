@@ -8,12 +8,14 @@ import (
 	"os"
 	"time"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/lestrrat-go/jwx/v2/jwt"
+	"github.com/openchami/node-orchestrator/internal/storage"
+	"github.com/openchami/node-orchestrator/pkg/nodes"
+	"github.com/openchami/node-orchestrator/pkg/xnames"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/google/uuid"
 )
@@ -31,11 +33,12 @@ type Config struct {
 }
 
 type App struct {
-	Storage Storage
+	Storage storage.Storage
 	Router  *chi.Mux
 }
 
 func main() {
+
 	log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stdout)
 	log.SetLevel(log.InfoLevel)
@@ -95,14 +98,18 @@ func serveAPI() {
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	myStorage, err := storage.NewDuckDBStorage("data.db")
+	if err != nil {
+		log.WithError(err).Fatal("Error creating storage")
+	}
 
 	app := &App{
-		Storage: NewInMemoryStorage(),
+		Storage: myStorage,
 		Router:  r,
 	}
 
-	manager := NewCollectionManager()
-	manager.AddConstraint(DefaultType, &MutualExclusivityConstraint{existingNodes: make(map[NodeXname]uuid.UUID)})
+	manager := nodes.NewCollectionManager()
+	manager.AddConstraint(nodes.DefaultType, &nodes.MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
 
 	// Protected routes
 	r.Group(func(r chi.Router) {
@@ -111,17 +118,17 @@ func serveAPI() {
 
 		// Handle valid / invalid tokens.
 		r.Use(AuthenticatorWithRequiredClaims(tokenAuth, []string{"sub", "iss", "aud"}))
-		r.Put("/ComputeNode/{nodeID}", app.updateNode)
-		r.Post("/ComputeNode", app.postNode)
-		r.Delete("/ComputeNode/{nodeID}", app.deleteNode)
+		r.Put("/ComputeNode/{nodeID}", updateNode(app.Storage))
+		r.Post("/ComputeNode", postNode(app.Storage))
+		r.Delete("/ComputeNode/{nodeID}", deleteNode(app.Storage))
 
-		r.Post("/nodes", app.postNode)
-		r.Put("/nodes/{nodeID}", app.updateNode)
-		r.Delete("/nodes/{nodeID}", app.deleteNode)
+		r.Post("/nodes", postNode(app.Storage))
+		r.Put("/nodes/{nodeID}", updateNode(app.Storage))
+		r.Delete("/nodes/{nodeID}", deleteNode(app.Storage))
 
-		r.Post("/bmc", app.postBMC)
-		r.Put("/bmc/{bmcID}", app.updateBMC)
-		r.Delete("/bmc/{bmcID}", app.deleteBMC)
+		r.Post("/bmc", postBMC(app.Storage))
+		r.Put("/bmc/{bmcID}", updateBMC(app.Storage))
+		r.Delete("/bmc/{bmcID}", deleteBMC(app.Storage))
 
 		r.Post("/NodeCollection", createCollection(manager))
 		r.Put("/NodeCollection/{identifier}", updateCollection(manager))
@@ -131,9 +138,9 @@ func serveAPI() {
 
 	// Public routes
 
-	r.Get("/ComputeNode/{nodeID}", app.getNode)
-	r.Get("/nodes/{nodeID}", app.getNode)
-	r.Get("/bmc/{bmcID}", app.getBMC)
+	r.Get("/ComputeNode/{nodeID}", getNode(app.Storage))
+	r.Get("/nodes/{nodeID}", getNode(app.Storage))
+	r.Get("/bmc/{bmcID}", getBMC(app.Storage))
 	r.Get("/NodeCollection/{identifier}", getCollection(manager))
 
 	log.Info("Starting server on :8080")

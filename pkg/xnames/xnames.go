@@ -1,4 +1,4 @@
-package main
+package xnames
 
 import (
 	"fmt"
@@ -122,4 +122,28 @@ func (xname NodeXname) Valid() (bool, error) {
 
 func NewNodeXname(xname string) NodeXname {
 	return NodeXname{Value: xname}
+}
+
+func IsValidBMCXName(xname string) bool {
+	// Compile the regular expression. This is the pattern from your requirement.
+	re := regexp.MustCompile(`^x(?P<cabinet>\d{3,5})c(?P<chassis>\d{1,3})s(?P<slot>\d{1,3})b(?P<bmc>\d{1,3})$`)
+
+	// Use FindStringSubmatch to capture the parts of the xname.
+	matches := re.FindStringSubmatch(xname)
+	if matches == nil {
+		return false
+	}
+
+	// Since the cabinet can go up to 100,000 and others up to 255, we need to check these values.
+	// The order of subexpressions in matches corresponds to the groups in the regex.
+	cabinet, _ := strconv.Atoi(matches[1])
+	chassis, _ := strconv.Atoi(matches[2])
+	slot, _ := strconv.Atoi(matches[3])
+	bmc, _ := strconv.Atoi(matches[4])
+
+	if cabinet > 100000 || chassis >= 256 || slot >= 256 || bmc >= 256 {
+		return false
+	}
+
+	return true
 }

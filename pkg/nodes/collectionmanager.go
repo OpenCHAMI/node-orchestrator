@@ -1,9 +1,10 @@
-package main
+package nodes
 
 import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/openchami/node-orchestrator/pkg/xnames"
 )
 
 // CollectionManager manages collections with constraints.
@@ -20,8 +21,8 @@ func NewCollectionManager() *CollectionManager {
 		Constraints:        make(map[NodeCollectionType]CollectionConstraint),
 	}
 	// Add constraints for each type if needed
-	manager.AddConstraint(PartitionType, &MutualExclusivityConstraint{existingNodes: make(map[NodeXname]uuid.UUID)})
-	manager.AddConstraint(TenantType, &MutualExclusivityConstraint{existingNodes: make(map[NodeXname]uuid.UUID)})
+	manager.AddConstraint(PartitionType, &MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
+	manager.AddConstraint(TenantType, &MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
 	// Add other constraints as necessary
 	return manager
 }
@@ -50,7 +51,7 @@ func (m *CollectionManager) CreateCollection(collection *NodeCollection) error {
 	if constraint, exists := m.Constraints[NodeCollectionType(collection.Type)]; exists {
 		if mec, ok := constraint.(*MutualExclusivityConstraint); ok {
 			for _, nodeID := range collection.Nodes {
-				mec.existingNodes[nodeID] = collection.ID
+				mec.ExistingNodes[nodeID] = collection.ID
 			}
 		}
 	}
