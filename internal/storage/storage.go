@@ -13,6 +13,7 @@ type Storage interface {
 
 	LookupComputeNodeByXName(xname string) (nodes.ComputeNode, error)
 	LookupComputeNodeByMACAddress(mac string) (nodes.ComputeNode, error)
+	SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMAC string) ([]nodes.ComputeNode, error)
 
 	SaveBMC(bmcID uuid.UUID, bmc nodes.BMC) error
 	GetBMC(bmcID uuid.UUID) (nodes.BMC, error)

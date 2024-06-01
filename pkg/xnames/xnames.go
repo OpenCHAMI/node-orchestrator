@@ -1,6 +1,7 @@
 package xnames
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -82,6 +83,10 @@ func (NodeXname) JSONSchema() *jsonschema.Schema {
 		Description: "XName for a compute node",
 		Pattern:     `^x(\d{3,5})c(\d{1,3})s(\d{1,3})b(\d{1,3})n(\d{1,3})$`,
 	}
+}
+
+func (xname NodeXname) MarshalJSON() ([]byte, error) {
+	return json.Marshal(xname.Value)
 }
 
 func (xname *NodeXname) UnmarshalJSON(data []byte) error {

@@ -91,6 +91,19 @@ func (s *InMemoryStorage) LookupComputeNodeByXName(xname string) (nodes.ComputeN
 	return nodes.ComputeNode{}, fmt.Errorf("ComputeNode not found")
 }
 
+func (s *InMemoryStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMAC string) ([]nodes.ComputeNode, error) {
+	var nodes []nodes.ComputeNode
+	for _, node := range s.nodes {
+		if (xname == "" || node.XName.Value == xname) &&
+			(hostname == "" || node.Hostname == hostname) &&
+			(arch == "" || node.Architecture == arch) &&
+			(bootMAC == "" || node.BootMac == bootMAC) {
+			nodes = append(nodes, node)
+		}
+	}
+	return nodes, nil
+}
+
 func (s *InMemoryStorage) LookupBMCByXName(xname string) (nodes.BMC, error) {
 	for _, bmc := range s.bmcEntries {
 		if bmc.XName == xname {

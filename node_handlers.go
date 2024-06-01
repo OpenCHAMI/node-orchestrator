@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/openchami/node-orchestrator/internal/storage"
@@ -104,6 +104,33 @@ func getNode(storage storage.Storage) http.HandlerFunc {
 		} else {
 			json.NewEncoder(w).Encode(node)
 		}
+	}
+}
+
+func searchNodes(storage storage.Storage) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()
+		xname := query.Get("xname")
+		hostname := query.Get("hostname")
+		arch := query.Get("arch")
+		bootMac := query.Get("boot_mac")
+		bmcMac := query.Get("bmc_mac")
+		log.WithFields(log.Fields{
+			"xname":      xname,
+			"hostname":   hostname,
+			"arch":       arch,
+			"boot_mac":   bootMac,
+			"request_id": middleware.GetReqID(r.Context()),
+			"path":       r.URL.Path,
+			"query":      r.URL.RawQuery,
+		}).Info("Searching nodes")
+		nodes, err := storage.SearchComputeNodes(xname, hostname, arch, bootMac, bmcMac)
+		if err != nil {
+			log.WithError(err).Error("Error searching nodes")
+			http.Error(w, "error searching nodes", http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(nodes)
 	}
 }
 

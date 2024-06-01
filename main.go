@@ -8,8 +8,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/openchami/node-orchestrator/internal/storage"
@@ -139,7 +139,9 @@ func serveAPI() {
 	// Public routes
 
 	r.Get("/ComputeNode/{nodeID}", getNode(app.Storage))
+	r.Get("/ComputeNode", searchNodes(app.Storage))
 	r.Get("/nodes/{nodeID}", getNode(app.Storage))
+	r.Get("/nodes", searchNodes(app.Storage))
 	r.Get("/bmc/{bmcID}", getBMC(app.Storage))
 	r.Get("/NodeCollection/{identifier}", getCollection(manager))
 

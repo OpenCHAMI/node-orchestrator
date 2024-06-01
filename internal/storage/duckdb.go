@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 
 	"github.com/openchami/node-orchestrator/pkg/nodes"
+	log "github.com/sirupsen/logrus"
 )
 
 // DuckDBStorage is a storage backend that uses DuckDB
@@ -93,6 +94,67 @@ func (d *DuckDBStorage) LookupComputeNodeByXName(xname string) (nodes.ComputeNod
 	var node nodes.ComputeNode
 	err = json.Unmarshal([]byte(data), &node)
 	return node, err
+}
+
+// buildQuery builds a SQL query for searching compute nodes
+func buildQuery(condition string, fields ...string) string {
+	query := "SELECT data FROM compute_nodes WHERE 1=1"
+	for _, field := range fields {
+		query += " " + condition + " " + field
+	}
+	return query
+}
+
+func (d *DuckDBStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMAC string) ([]nodes.ComputeNode, error) {
+	// Examine each parameter and build a query that includes it if it is not empty
+	var queryStrings []string
+	var queryArgs []interface{} // We know these are all strings, but we need pass them as []interface{} to db.Query
+	if xname != "" {
+		queryStrings = append(queryStrings, "json_extract(data, '$.xname')::text = ?")
+		queryArgs = append(queryArgs, `"`+xname+`"`)
+	}
+	if hostname != "" {
+		queryStrings = append(queryStrings, " json_extract(data, '$.hostname')::text = ? ")
+		queryArgs = append(queryArgs, `"`+hostname+`"`)
+	}
+	if arch != "" {
+		queryStrings = append(queryStrings, " json_extract(data, '$.arch')::text = ? ")
+		queryArgs = append(queryArgs, `"`+arch+`"`)
+	}
+	if bootMAC != "" {
+		queryStrings = append(queryStrings, " json_extract(data, '$.boot_mac')::text = ? ")
+		queryArgs = append(queryArgs, `"`+bootMAC+`"`)
+	}
+	if bmcMAC != "" {
+		queryStrings = append(queryStrings, " json_extract(data, '$.bmc.mac_address')::text = ? ")
+		queryArgs = append(queryArgs, `"`+bmcMAC+`"`)
+	}
+
+	query := buildQuery("AND", queryStrings...)
+
+	log.WithFields(log.Fields{
+		"query": query,
+		"args":  queryArgs,
+	}).Info("Searching compute nodes")
+	rows, err := d.db.Query(query, queryArgs...)
+	if err != nil {
+		log.WithError(err).Error("Error querying DuckDB for ComputeNodes")
+		return nil, err
+	}
+	defer rows.Close()
+	var foundNodes []nodes.ComputeNode
+	for rows.Next() {
+		var data string
+		if err := rows.Scan(&data); err != nil {
+			return nil, err
+		}
+		var node nodes.ComputeNode
+		if err := json.Unmarshal([]byte(data), &node); err != nil {
+			return nil, err
+		}
+		foundNodes = append(foundNodes, node)
+	}
+	return foundNodes, nil
 }
 
 func (d *DuckDBStorage) LookupComputeNodeByMACAddress(mac string) (nodes.ComputeNode, error) {
