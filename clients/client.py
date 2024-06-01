@@ -80,14 +80,19 @@ def create(object, data, file):
         click.echo("Error: No data provided for creation.", err=True)
         return
     if isinstance(data, list):
-        print(data)
         for obj in data:
             if cli.schema_dir:
-                validate_json(cli.schema_dir, object, obj)
+                try:
+                    validate_json(cli.schema_dir, object, obj)
+                except ValidationError:
+                    click.echo(f"Error validating object: {obj}")
+                    continue
+                
             try:
                 response = api_call('POST', cli.url, object, None, obj, cli.jwt)
                 if response.status_code in [200, 201]:
-                    click.echo(f"Created object: {obj}")
+                    continue
+                    #click.echo(f"Created object: {obj}")
                 elif response.status_code == 400:
                     click.echo(f"Error creating object: {obj}, {response.content}")
                 else:
