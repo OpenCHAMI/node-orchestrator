@@ -44,10 +44,14 @@ func (d *DuckDBStorage) initTables() error {
 	queries := []string{
 		`CREATE TABLE IF NOT EXISTS compute_nodes (
 			id UUID PRIMARY KEY,
+			added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			xname TEXT UNIQUE,
 			data JSON
 		)`,
 		`CREATE TABLE IF NOT EXISTS bmcs (
 			id UUID PRIMARY KEY,
+			xname TEXT UNIQUE,
+			added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			data JSON
 		)`,
 	}
@@ -64,8 +68,8 @@ func (d *DuckDBStorage) SaveComputeNode(nodeID uuid.UUID, node nodes.ComputeNode
 	if err != nil {
 		return err
 	}
-	_, err = d.db.Exec(`INSERT INTO compute_nodes (id, data) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data`,
-		nodeID, string(data))
+	_, err = d.db.Exec(`INSERT INTO compute_nodes (id, xname, data) VALUES (?, ?, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data`,
+		nodeID, node.XName.Value, string(data))
 	return err
 }
 

@@ -11,7 +11,7 @@ def generate_compute_node():
     network_interfaces = []
     for _ in range(num_interfaces):
         interface = {
-            "interface_name": fake.word(),
+            "interface_name": random.choice(["eth0", "eth1", "ib0", "ib1", "ip2", "ip3"]),
             "ipv4_address": fake.ipv4(),
             "ipv6_address": fake.ipv6(),
             "mac_address": fake.mac_address(),
@@ -30,7 +30,7 @@ def generate_compute_node():
         }
     
     payload = {
-        "hostname": fake.hostname(),
+        "hostname": fake.hostname(0),
         "xname": f"x{random.randint(10000, 99999)}c{random.randint(1, 60)}s{random.randint(1, 10)}b{random.randint(1, 3)}n{random.randint(1, 8)}",
         "architecture": random.choice(["x86_64", "arm64"]),
         "boot_mac": fake.mac_address(),
