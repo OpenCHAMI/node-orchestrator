@@ -26,14 +26,12 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var newNode nodes.ComputeNode
 
-		// Decode the request body into the new node
 		if err := render.DecodeJSON(r.Body, &newNode); err != nil {
 			log.WithError(err).Error("Error decoding request body")
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		// If the XName is supplied, confirm that it is valid and not a duplicate
 		if newNode.XName.String() != "" {
 			if _, err := newNode.XName.Valid(); err != nil {
 				log.Print("Invalid XName ", newNode.XName.String(), err)
@@ -41,61 +39,57 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 				return
 			}
 
-			// If the xname isn't empty, check for duplicates which are not allowed
-			_, err := storage.LookupComputeNodeByXName(newNode.XName.String())
-			if err == nil {
+			if _, err := storage.LookupComputeNodeByXName(newNode.XName.String()); err == nil {
 				log.Print("Duplicate XName", newNode.XName.String())
 				http.Error(w, "Compute Node with the same XName already exists", http.StatusBadRequest)
 				return
 			}
 		}
 
-		// If a BMC is supplied, add it to the system
+		// Deal with the BMC. If it has been provided already, check if it is valid
 		if newNode.BMC != nil {
 			if newNode.BMC.XName != "" && !xnames.IsValidBMCXName(newNode.BMC.XName) {
 				http.Error(w, "invalid BMC XName", http.StatusBadRequest)
 				return
 			}
-			// Check if the BMC already exists via MAC or XName
-			existingBMC, err := storage.LookupBMCByXName(newNode.BMC.XName)
-			if err == nil {
+
+			if existingBMC, err := storage.LookupBMCByXName(newNode.BMC.XName); err == nil {
+				newNode.BMC.ID = existingBMC.ID
+			} else if existingBMC, err := storage.LookupBMCByMACAddress(newNode.BMC.MACAddress); err == nil {
 				newNode.BMC.ID = existingBMC.ID
 			}
-			existingBMC, err = storage.LookupBMCByMACAddress(newNode.BMC.MACAddress)
-			if err == nil {
-				newNode.BMC.ID = existingBMC.ID
-			}
-			// If the BMC doesn't exist, create a new one
+
 			if newNode.BMC.ID == uuid.Nil {
 				newNode.BMC.ID = uuid.New()
 				storage.SaveBMC(newNode.BMC.ID, *newNode.BMC)
 			}
 		}
 
-		// If the BMC is not specified and we have an xname, we know enough to at least add the xname
+		// If the BMC has not been provided, check to see if it can be inferred from the XName and create it if necessary
 		if newNode.BMC == nil && newNode.XName.String() != "" {
-			// Construct the xname for the BMC
-			bmcXname := fmt.Sprintf("x%ic%is%ib%i",
+			bmcXname := fmt.Sprintf("x%dc%ds%db%d",
 				mustInt(newNode.XName.Cabinet()),
 				mustInt(newNode.XName.Chassis()),
 				mustInt(newNode.XName.Slot()),
 				mustInt(newNode.XName.BMCPosition()),
 			)
-			newNode.BMC = &nodes.BMC{
-				XName: bmcXname,
-				ID:    uuid.New(),
+			if existingBMC, err := storage.LookupBMCByXName(bmcXname); err == nil {
+				newNode.BMC = &existingBMC
 			}
+			newNode.BMC = &nodes.BMC{
+				ID:    uuid.New(),
+				XName: bmcXname,
+			}
+			storage.SaveBMC(newNode.BMC.ID, *newNode.BMC)
 		}
 
 		newNode.ID = uuid.New()
-		err := storage.SaveComputeNode(newNode.ID, newNode)
-		if err != nil {
+		if err := storage.SaveComputeNode(newNode.ID, newNode); err != nil {
 			log.Print("Error saving node", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		// Log the full details once and only once. This is the "event" of creating a node.
 		logFields := log.Fields{
 			"node_id":       newNode.ID,
 			"node_xname":    newNode.XName.String(),
