@@ -2,6 +2,10 @@ package storage
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
+	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	_ "github.com/marcboeker/go-duckdb"
@@ -132,16 +136,13 @@ func (d *DuckDBStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMA
 
 	query := buildQuery("AND", queryStrings...)
 
-	log.WithFields(log.Fields{
-		"query": query,
-		"args":  queryArgs,
-	}).Info("Searching compute nodes")
 	rows, err := d.db.Query(query, queryArgs...)
 	if err != nil {
 		log.WithError(err).Error("Error querying DuckDB for ComputeNodes")
 		return nil, err
 	}
 	defer rows.Close()
+
 	var foundNodes []nodes.ComputeNode
 	for rows.Next() {
 		var data string
@@ -154,6 +155,12 @@ func (d *DuckDBStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMA
 		}
 		foundNodes = append(foundNodes, node)
 	}
+	// Log the query and number of rows returned
+	log.WithFields(log.Fields{
+		"query": query,
+		"args":  queryArgs,
+		"count": len(foundNodes),
+	}).Info("Searching compute nodes")
 	return foundNodes, nil
 }
 
@@ -222,4 +229,34 @@ func (d *DuckDBStorage) LookupBMCByMACAddress(mac string) (nodes.BMC, error) {
 
 func (d *DuckDBStorage) Close() error {
 	return d.db.Close()
+}
+
+func (d *DuckDBStorage) SnapshotParquet(path string) error {
+	// Ensure the path is escaped properly
+	escapedPath := strings.ReplaceAll(path, "'", "''")
+	// Add a trailing slash if it is missing
+	if !strings.HasSuffix(escapedPath, "/") {
+		escapedPath += "/"
+	}
+	// Add a date and time to the path
+	escapedPath += time.Now().Format("2006-01-02T15-04-05")
+	if !strings.HasSuffix(escapedPath, "/") {
+		escapedPath += "/"
+	}
+	// Ensure the directory exists
+	os.MkdirAll(escapedPath, 0755)
+
+	// Construct the SQL statement
+	sql := fmt.Sprintf(`INSTALL parquet;
+	LOAD parquet;
+	EXPORT DATABASE '%s' (FORMAT PARQUET);`, escapedPath)
+
+	// Execute the SQL statement
+	result, err := d.db.Exec(sql)
+	if err != nil {
+		log.WithError(err).Error("Error exporting DuckDB database to Parquet format")
+		return err
+	}
+	log.WithField("result", result).Info("SnapshotParquet")
+	return nil
 }

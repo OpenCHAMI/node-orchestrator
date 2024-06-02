@@ -21,9 +21,11 @@ import (
 )
 
 var (
-	serveCmd   = flag.NewFlagSet("serve", flag.ExitOnError)
-	schemaCmd  = flag.NewFlagSet("schemas", flag.ExitOnError)
-	schemaPath = schemaCmd.String("dir", "schemas/", "directory to store JSON schemas")
+	serveCmd     = flag.NewFlagSet("serve", flag.ExitOnError)
+	schemaCmd    = flag.NewFlagSet("schemas", flag.ExitOnError)
+	snapshotCmd  = flag.NewFlagSet("snapshot", flag.ExitOnError)
+	snapshotPath = snapshotCmd.String("dir", "snapshots/", "directory to store snapshots")
+	schemaPath   = schemaCmd.String("dir", "schemas/", "directory to store JSON schemas")
 )
 
 type Config struct {
@@ -55,8 +57,11 @@ func main() {
 	case "schemas":
 		schemaCmd.Parse(os.Args[2:])
 		generateAndWriteSchemas(*schemaPath)
+	case "snapshot":
+		snapshotCmd.Parse(os.Args[2:])
+		snapshot()
 	default:
-		fmt.Println("expected 'serve' or 'schemas' subcommands")
+		fmt.Println("expected 'serve', 'snapshot', or 'schemas' subcommands")
 		os.Exit(1)
 	}
 }
@@ -152,4 +157,16 @@ func serveAPI() {
 	})
 
 	log.Fatal(http.ListenAndServe(":8080", r))
+}
+
+func snapshot() {
+	log.Info("Taking snapshot")
+	myStorage, err := storage.NewDuckDBStorage("data.db")
+	if err != nil {
+		log.WithError(err).Fatal("Error creating storage")
+	}
+	err = myStorage.SnapshotParquet(*snapshotPath)
+	if err != nil {
+		log.WithError(err).Fatal("Error taking snapshot")
+	}
 }
