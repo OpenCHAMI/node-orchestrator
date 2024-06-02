@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -13,6 +14,13 @@ import (
 	"github.com/openchami/node-orchestrator/pkg/xnames"
 	log "github.com/sirupsen/logrus"
 )
+
+func mustInt(i int, e error) int {
+	if e != nil {
+		return 0
+	}
+	return i
+}
 
 func postNode(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -64,6 +72,21 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 			}
 		}
 
+		// If the BMC is not specified and we have an xname, we know enough to at least add the xname
+		if newNode.BMC == nil && newNode.XName.String() != "" {
+			// Construct the xname for the BMC
+			bmcXname := fmt.Sprintf("x%ic%is%ib%i",
+				mustInt(newNode.XName.Cabinet()),
+				mustInt(newNode.XName.Chassis()),
+				mustInt(newNode.XName.Slot()),
+				mustInt(newNode.XName.BMCPosition()),
+			)
+			newNode.BMC = &nodes.BMC{
+				XName: bmcXname,
+				ID:    uuid.New(),
+			}
+		}
+
 		newNode.ID = uuid.New()
 		err := storage.SaveComputeNode(newNode.ID, newNode)
 		if err != nil {
@@ -73,17 +96,20 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 		}
 
 		// Log the full details once and only once. This is the "event" of creating a node.
-		log.WithFields(log.Fields{
+		logFields := log.Fields{
 			"node_id":       newNode.ID,
 			"node_xname":    newNode.XName.String(),
 			"node_hostname": newNode.Hostname,
 			"node_arch":     newNode.Architecture,
 			"node_boot_mac": newNode.BootMac,
-			"bmc_mac":       newNode.BMC.MACAddress,
-			"bmc_xname":     newNode.BMC.XName,
-			"bmc_id":        newNode.BMC.ID,
 			"request_id":    middleware.GetReqID(r.Context()),
-		}).Info("Node created")
+		}
+		if newNode.BMC != nil {
+			logFields["bmc_mac"] = newNode.BMC.MACAddress
+			logFields["bmc_xname"] = newNode.BMC.XName
+			logFields["bmc_id"] = newNode.BMC.ID
+		}
+		log.WithFields(logFields).Info("Node created")
 
 		render.Status(r, http.StatusCreated)
 		render.JSON(w, r, newNode)

@@ -1,0 +1,3343 @@
+[
+    {
+        "hostname": "srv-53.combs.com",
+        "xname": "x48435c4s3b1n1",
+        "architecture": "x86_64",
+        "boot_mac": "ee:5b:52:55:40:fa",
+        "network_interfaces": [
+            {
+                "interface_name": "deal",
+                "ipv4_address": "176.45.196.46",
+                "ipv6_address": "30c1:4343:9040:4f30:35d3:eafc:7842:fd69",
+                "mac_address": "b2:75:df:33:97:01",
+                "description": "Many break difference."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "143.183.229.90",
+            "mac_address": "2a:1e:58:08:43:47"
+        },
+        "description": "Year a seem."
+    },
+    {
+        "hostname": "srv-16.jones.com",
+        "xname": "x34275c31s10b3n3",
+        "architecture": "x86_64",
+        "boot_mac": "6a:ef:da:a8:d6:63",
+        "network_interfaces": [
+            {
+                "interface_name": "charge",
+                "ipv4_address": "120.58.27.107",
+                "ipv6_address": "248b:bd63:5624:1477:86f8:3ece:f7cf:4d29",
+                "mac_address": "d8:65:5b:aa:63:3e",
+                "description": "Environment ball travel."
+            },
+            {
+                "interface_name": "difference",
+                "ipv4_address": "181.74.197.41",
+                "ipv6_address": "50de:562d:ea88:e594:ac3c:8694:1644:7b5d",
+                "mac_address": "2c:82:fc:f1:39:e4",
+                "description": "Number trial thought person create strategy."
+            },
+            {
+                "interface_name": "feeling",
+                "ipv4_address": "215.248.65.172",
+                "ipv6_address": "c2cc:d750:989b:34b:2b0e:d:5787:bc12",
+                "mac_address": "be:a3:20:41:d1:be",
+                "description": "Hundred yes event table star because."
+            },
+            {
+                "interface_name": "standard",
+                "ipv4_address": "95.135.89.42",
+                "ipv6_address": "9082:9b44:8fc6:a3c3:4e3e:5c8a:c813:ed89",
+                "mac_address": "66:44:b7:5c:0b:41",
+                "description": "Amount price think go us career coach."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "113.92.24.83",
+            "mac_address": "94:e6:99:8d:32:6d"
+        },
+        "description": "Home culture its difference black."
+    },
+    {
+        "hostname": "db-11.garcia.org",
+        "xname": "x16219c6s5b2n7",
+        "architecture": "arm64",
+        "boot_mac": "e0:fd:f7:a3:63:e6",
+        "network_interfaces": [
+            {
+                "interface_name": "money",
+                "ipv4_address": "107.71.14.253",
+                "ipv6_address": "7f42:1c80:2f2e:3032:ffa1:b02:94ca:b2c3",
+                "mac_address": "48:da:b6:9d:db:e2",
+                "description": "Official smile performance field."
+            },
+            {
+                "interface_name": "travel",
+                "ipv4_address": "111.47.233.97",
+                "ipv6_address": "83c6:e3c5:5640:310e:5065:34c8:beaa:93b6",
+                "mac_address": "4a:9f:8d:22:6f:1b",
+                "description": "Well century yourself five tell rule discover national."
+            },
+            {
+                "interface_name": "next",
+                "ipv4_address": "26.228.249.177",
+                "ipv6_address": "a1e9:25ab:5a2c:fb97:8fda:9bc4:e91e:527a",
+                "mac_address": "72:7d:45:2c:9e:bf",
+                "description": "Approach manager party throughout."
+            },
+            {
+                "interface_name": "certain",
+                "ipv4_address": "9.24.1.211",
+                "ipv6_address": "5c13:bedd:e1cd:bd94:d7bc:d24d:c89e:59f3",
+                "mac_address": "64:22:6b:f6:bf:ca",
+                "description": "Might serve opportunity stage dog."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "60.140.110.191",
+            "mac_address": "ae:cb:09:65:f4:ab"
+        },
+        "description": "Page personal technology show who."
+    },
+    {
+        "hostname": "srv-38.walter.info",
+        "xname": "x65304c42s10b1n5",
+        "architecture": "x86_64",
+        "boot_mac": "e8:ce:c2:0f:da:56",
+        "network_interfaces": [
+            {
+                "interface_name": "president",
+                "ipv4_address": "135.209.255.176",
+                "ipv6_address": "62b6:c22f:959c:e46a:fb7:77dd:f1c6:5367",
+                "mac_address": "8a:51:13:be:d0:26",
+                "description": "Thing stand daughter finish inside recent."
+            },
+            {
+                "interface_name": "government",
+                "ipv4_address": "76.205.56.253",
+                "ipv6_address": "449c:87f:daec:ed33:f150:4550:209d:8337",
+                "mac_address": "48:1b:04:43:7f:15",
+                "description": "Hold win easy health front."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "56.10.10.39",
+            "mac_address": "6a:00:89:db:2d:8b"
+        },
+        "description": "Able yeah article action billion land."
+    },
+    {
+        "hostname": "srv-07.bell-lopez.org",
+        "xname": "x15919c40s1b3n6",
+        "architecture": "x86_64",
+        "boot_mac": "86:cf:6b:87:51:86",
+        "network_interfaces": [
+            {
+                "interface_name": "interview",
+                "ipv4_address": "35.47.213.57",
+                "ipv6_address": "7177:4bda:a181:d192:fdc6:e735:3cb6:57b6",
+                "mac_address": "e8:01:a5:80:37:7e",
+                "description": "Career heart author game."
+            },
+            {
+                "interface_name": "professor",
+                "ipv4_address": "196.202.207.53",
+                "ipv6_address": "946e:b7bb:445:bafc:3e64:e58c:b30f:4e95",
+                "mac_address": "9c:c3:60:a9:81:df",
+                "description": "Moment thing standard sister big."
+            },
+            {
+                "interface_name": "tough",
+                "ipv4_address": "3.249.2.74",
+                "ipv6_address": "3bf:179a:9f33:7d8e:6de5:955a:9e90:3ebf",
+                "mac_address": "68:f7:c3:a8:c1:02",
+                "description": "More whom evidence different."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "179.75.91.40",
+            "mac_address": "fc:0e:04:20:f8:78"
+        },
+        "description": "Prepare ground physical whether expect evidence might short."
+    },
+    {
+        "hostname": "srv-07.weaver-lee.com",
+        "xname": "x92970c45s10b1n3",
+        "architecture": "x86_64",
+        "boot_mac": "7c:6c:fb:cf:99:68",
+        "network_interfaces": [
+            {
+                "interface_name": "concern",
+                "ipv4_address": "99.233.178.13",
+                "ipv6_address": "bb32:d388:3de4:e66b:8ddb:f284:85cb:dcec",
+                "mac_address": "d6:aa:a6:9c:19:c9",
+                "description": "Purpose anyone mission bad dark."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "92.231.1.139",
+            "mac_address": "5e:62:3b:8b:13:d8"
+        },
+        "description": "Big prepare city mother."
+    },
+    {
+        "hostname": "web-40.ross-townsend.com",
+        "xname": "x56682c5s2b2n4",
+        "architecture": "arm64",
+        "boot_mac": "b6:0b:ab:79:3c:a9",
+        "network_interfaces": [
+            {
+                "interface_name": "realize",
+                "ipv4_address": "41.73.15.206",
+                "ipv6_address": "8533:8695:3681:7cd3:8d89:1113:1de0:16e7",
+                "mac_address": "28:13:92:09:6e:1f",
+                "description": "Candidate right feeling something."
+            },
+            {
+                "interface_name": "brother",
+                "ipv4_address": "34.146.144.248",
+                "ipv6_address": "54cb:5888:71f2:3c6f:1fe3:2b7:ee02:531d",
+                "mac_address": "da:2b:3b:f8:53:e9",
+                "description": "Walk nice community star middle."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "12.77.247.117",
+            "mac_address": "26:9a:d0:31:9c:c5"
+        },
+        "description": "Organization usually car discuss these."
+    },
+    {
+        "hostname": "desktop-41.briggs.net",
+        "xname": "x12212c16s3b3n3",
+        "architecture": "arm64",
+        "boot_mac": "58:33:0c:bf:1a:7e",
+        "network_interfaces": [
+            {
+                "interface_name": "authority",
+                "ipv4_address": "139.242.183.197",
+                "ipv6_address": "f187:f645:e189:2554:6a22:eb9c:cc68:7d57",
+                "mac_address": "54:88:fe:de:93:8f",
+                "description": "Course without boy have."
+            },
+            {
+                "interface_name": "reason",
+                "ipv4_address": "182.203.78.221",
+                "ipv6_address": "eac3:de70:f688:4a36:d074:580d:f529:7e7c",
+                "mac_address": "98:a6:05:cf:41:fa",
+                "description": "Ready institution must as cell change window."
+            },
+            {
+                "interface_name": "economic",
+                "ipv4_address": "166.157.248.196",
+                "ipv6_address": "9aea:4378:4e62:bfa1:e14:822f:74f1:34c",
+                "mac_address": "8a:6b:61:7b:c7:fb",
+                "description": "Foreign real such so bar to sport building."
+            },
+            {
+                "interface_name": "nation",
+                "ipv4_address": "6.39.211.254",
+                "ipv6_address": "9617:9e7d:5681:f20a:b362:2af7:dd09:c292",
+                "mac_address": "16:3e:16:8f:ed:3a",
+                "description": "Top sister fly if relationship market herself."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "116.130.217.71",
+            "mac_address": "c6:45:9c:5b:47:53"
+        },
+        "description": "Pattern president throughout other quite none."
+    },
+    {
+        "hostname": "email-73.frank.info",
+        "xname": "x92043c19s1b1n5",
+        "architecture": "arm64",
+        "boot_mac": "00:6c:7d:35:ea:33",
+        "network_interfaces": [
+            {
+                "interface_name": "population",
+                "ipv4_address": "178.22.13.22",
+                "ipv6_address": "2c7b:71fb:5e4:2de7:a7e6:5d8e:91cb:f8e",
+                "mac_address": "82:f8:4f:50:a6:c2",
+                "description": "Pull expect new this race home."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "172.162.90.113",
+            "mac_address": "60:07:3c:db:1d:69"
+        },
+        "description": "Begin option wife travel collection."
+    },
+    {
+        "hostname": "db-71.mendoza.org",
+        "xname": "x87090c39s5b3n3",
+        "architecture": "arm64",
+        "boot_mac": "76:7f:c3:71:c0:ae",
+        "network_interfaces": [
+            {
+                "interface_name": "argue",
+                "ipv4_address": "135.79.56.191",
+                "ipv6_address": "6972:601a:d119:f78b:1fa5:e01f:6064:13a1",
+                "mac_address": "2e:bc:71:2a:a6:4e",
+                "description": "Then people floor great involve necessary new."
+            },
+            {
+                "interface_name": "analysis",
+                "ipv4_address": "110.165.4.188",
+                "ipv6_address": "624a:a657:93e0:574:1897:c977:7669:96fc",
+                "mac_address": "28:8b:d3:1d:60:68",
+                "description": "National attention newspaper line world."
+            },
+            {
+                "interface_name": "they",
+                "ipv4_address": "171.186.170.73",
+                "ipv6_address": "e235:f8e2:f091:6688:ff90:b1d3:b043:ea91",
+                "mac_address": "aa:44:63:86:b2:ea",
+                "description": "Positive author body argue."
+            },
+            {
+                "interface_name": "positive",
+                "ipv4_address": "144.44.112.149",
+                "ipv6_address": "9ca9:b9f:8cc0:f8af:772f:130:3ac0:6705",
+                "mac_address": "ee:1d:2d:16:25:45",
+                "description": "Often factor young girl plan task enjoy."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "27.12.122.72",
+            "mac_address": "ac:30:a5:af:fe:4b"
+        },
+        "description": "Still course student local employee side."
+    },
+    {
+        "hostname": "desktop-98.davis.com",
+        "xname": "x51073c5s1b2n1",
+        "architecture": "x86_64",
+        "boot_mac": "34:5d:27:7a:38:d6",
+        "network_interfaces": [
+            {
+                "interface_name": "last",
+                "ipv4_address": "104.55.60.165",
+                "ipv6_address": "f095:101d:35f7:f9f9:bcf3:110e:43a4:e346",
+                "mac_address": "66:6a:a9:47:0f:31",
+                "description": "Good claim college between month."
+            },
+            {
+                "interface_name": "record",
+                "ipv4_address": "203.181.204.109",
+                "ipv6_address": "ee31:68c0:61cd:4817:8a2e:afee:baff:aeee",
+                "mac_address": "6c:a0:3d:21:7f:15",
+                "description": "Door generation new."
+            },
+            {
+                "interface_name": "often",
+                "ipv4_address": "14.135.35.111",
+                "ipv6_address": "8fb2:945c:3a6e:2f39:cb91:d381:150b:db4b",
+                "mac_address": "66:64:5f:06:c8:4d",
+                "description": "Under house prepare go matter sport."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "93.119.53.163",
+            "mac_address": "9a:54:7d:ea:24:f0"
+        },
+        "description": "Growth feel pretty car individual."
+    },
+    {
+        "hostname": "email-31.swanson.info",
+        "xname": "x69701c28s1b3n2",
+        "architecture": "arm64",
+        "boot_mac": "28:83:cd:f8:19:10",
+        "network_interfaces": [
+            {
+                "interface_name": "person",
+                "ipv4_address": "101.101.190.12",
+                "ipv6_address": "9545:e1d5:9b2f:4d81:2236:305c:b7a8:10aa",
+                "mac_address": "72:91:fc:c1:7f:5d",
+                "description": "Fast both admit add yeah."
+            },
+            {
+                "interface_name": "prove",
+                "ipv4_address": "83.210.36.153",
+                "ipv6_address": "69ff:3e5f:18ed:9392:17a6:aa18:e753:3592",
+                "mac_address": "2e:4b:92:13:9c:db",
+                "description": "Clear glass occur interview organization."
+            },
+            {
+                "interface_name": "ask",
+                "ipv4_address": "92.120.101.237",
+                "ipv6_address": "394f:116c:f38d:661d:ec60:bdb1:ed37:3f2c",
+                "mac_address": "3e:2a:86:82:f5:7a",
+                "description": "Middle democratic her word body financial interest."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "78.159.58.30",
+            "mac_address": "50:7e:49:c8:d8:b3"
+        },
+        "description": "Measure head its coach."
+    },
+    {
+        "hostname": "email-24.ayala.info",
+        "xname": "x76077c51s5b1n1",
+        "architecture": "x86_64",
+        "boot_mac": "e4:39:5e:09:eb:58",
+        "network_interfaces": [
+            {
+                "interface_name": "like",
+                "ipv4_address": "121.140.168.175",
+                "ipv6_address": "6e60:e41:b243:985c:9d18:90d8:be4e:a57f",
+                "mac_address": "40:12:47:73:1f:35",
+                "description": "Process important professional."
+            },
+            {
+                "interface_name": "sense",
+                "ipv4_address": "134.82.99.190",
+                "ipv6_address": "157f:5239:4159:5ff4:fe9e:e49d:7329:104e",
+                "mac_address": "80:c8:8a:35:fc:6e",
+                "description": "Arm official and protect."
+            },
+            {
+                "interface_name": "writer",
+                "ipv4_address": "36.168.28.64",
+                "ipv6_address": "1003:4719:bdfb:c8bb:13d7:a5e1:7688:aeb3",
+                "mac_address": "16:f8:fb:b9:07:bd",
+                "description": "Rate drive throughout water radio."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "29.204.209.147",
+            "mac_address": "86:3f:f1:3f:f4:01"
+        },
+        "description": "Speech study hospital third impact natural."
+    },
+    {
+        "hostname": "laptop-76.fernandez.com",
+        "xname": "x20767c30s3b3n1",
+        "architecture": "x86_64",
+        "boot_mac": "7c:c2:7d:cf:9a:93",
+        "network_interfaces": [
+            {
+                "interface_name": "military",
+                "ipv4_address": "163.73.78.206",
+                "ipv6_address": "9ae4:7d57:b9c2:8590:f236:b822:9ccf:57bb",
+                "mac_address": "38:b4:a7:32:4f:97",
+                "description": "Night feeling Mr others card."
+            },
+            {
+                "interface_name": "democratic",
+                "ipv4_address": "59.85.210.58",
+                "ipv6_address": "953b:8914:b67a:8404:cce1:5cc2:5bd9:e313",
+                "mac_address": "92:8c:18:2e:42:8d",
+                "description": "Someone behind event compare pay center important."
+            },
+            {
+                "interface_name": "management",
+                "ipv4_address": "121.181.244.130",
+                "ipv6_address": "9dcf:30a0:d8a:d00e:282d:e9a4:3e8b:26b0",
+                "mac_address": "b6:d3:bc:5a:26:78",
+                "description": "Do culture out region past develop hand."
+            },
+            {
+                "interface_name": "time",
+                "ipv4_address": "212.188.105.160",
+                "ipv6_address": "f1a3:d25:9fd8:edc7:a292:8468:a265:d7ca",
+                "mac_address": "7c:dc:bf:0d:65:90",
+                "description": "Shake might catch everyone tend our father."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "32.147.73.231",
+            "mac_address": "64:5e:a9:77:14:64"
+        },
+        "description": "Entire prove property think movement turn."
+    },
+    {
+        "hostname": "lt-53.rodriguez.com",
+        "xname": "x67592c43s7b3n1",
+        "architecture": "arm64",
+        "boot_mac": "aa:93:6f:3c:65:28",
+        "network_interfaces": [
+            {
+                "interface_name": "respond",
+                "ipv4_address": "186.172.22.65",
+                "ipv6_address": "b21:9c55:15ed:1d66:6e4d:afea:8523:d57f",
+                "mac_address": "72:e6:2a:5c:8d:ef",
+                "description": "Behavior myself available."
+            },
+            {
+                "interface_name": "quality",
+                "ipv4_address": "152.71.135.253",
+                "ipv6_address": "87c:4a0e:5794:716c:18d7:1d09:bcec:7c8e",
+                "mac_address": "6a:47:e8:4f:8d:5a",
+                "description": "Mother pay far son fact."
+            },
+            {
+                "interface_name": "camera",
+                "ipv4_address": "39.144.169.238",
+                "ipv6_address": "bad6:f6cd:a93:7132:562e:23c8:65bc:3f58",
+                "mac_address": "44:44:ef:1b:85:36",
+                "description": "Mr country live game food top."
+            },
+            {
+                "interface_name": "rise",
+                "ipv4_address": "186.71.231.166",
+                "ipv6_address": "5d03:a389:405f:4e0f:b023:3bff:53f8:ae5a",
+                "mac_address": "56:cb:d3:f9:e7:4a",
+                "description": "Prove others well back very morning modern."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "129.43.187.178",
+            "mac_address": "c0:aa:68:53:fc:5e"
+        },
+        "description": "Professor final resource real room adult all."
+    },
+    {
+        "hostname": "laptop-25.smith-pruitt.info",
+        "xname": "x38649c22s1b2n5",
+        "architecture": "arm64",
+        "boot_mac": "46:d6:15:93:8f:28",
+        "network_interfaces": [
+            {
+                "interface_name": "degree",
+                "ipv4_address": "214.132.159.249",
+                "ipv6_address": "9337:4097:8a69:12b:b637:7019:f70b:b40",
+                "mac_address": "2e:1f:1f:8b:93:ee",
+                "description": "Tonight strategy rise concern myself science wind."
+            },
+            {
+                "interface_name": "may",
+                "ipv4_address": "20.174.180.112",
+                "ipv6_address": "a648:fd77:adf0:246c:90ef:900b:dd57:da77",
+                "mac_address": "30:ea:61:f5:ac:78",
+                "description": "Finish coach candidate discover room wife."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "68.252.0.221",
+            "mac_address": "34:23:c4:6c:67:d7"
+        },
+        "description": "Turn soon southern increase reality vote."
+    },
+    {
+        "hostname": "desktop-50.blackwell.com",
+        "xname": "x90173c38s7b1n8",
+        "architecture": "arm64",
+        "boot_mac": "76:21:c8:a2:b8:e5",
+        "network_interfaces": [
+            {
+                "interface_name": "discussion",
+                "ipv4_address": "111.232.131.31",
+                "ipv6_address": "bb3e:cfe5:12a0:ab9e:57ac:6261:b96d:342b",
+                "mac_address": "80:f6:87:ae:09:3c",
+                "description": "Require debate reveal how place read."
+            },
+            {
+                "interface_name": "want",
+                "ipv4_address": "34.151.237.145",
+                "ipv6_address": "de01:51f8:a68e:3973:dde2:bcdc:f4ab:460b",
+                "mac_address": "24:31:c4:59:88:e5",
+                "description": "Total environment late different."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "63.223.247.224",
+            "mac_address": "7c:e9:70:ef:64:1a"
+        },
+        "description": "Authority woman artist series quickly."
+    },
+    {
+        "hostname": "web-16.johnson-kelly.biz",
+        "xname": "x45894c56s1b3n1",
+        "architecture": "arm64",
+        "boot_mac": "c4:a0:a9:22:9d:c6",
+        "network_interfaces": [
+            {
+                "interface_name": "inside",
+                "ipv4_address": "185.3.222.200",
+                "ipv6_address": "faef:ab2c:6863:aec4:7856:a2b8:b42d:e784",
+                "mac_address": "98:a9:a4:62:0a:9e",
+                "description": "List benefit thousand force laugh image notice."
+            },
+            {
+                "interface_name": "with",
+                "ipv4_address": "150.108.93.232",
+                "ipv6_address": "cc6c:1a3c:7465:4b5f:c05b:6ed1:7fc5:e3f",
+                "mac_address": "ee:a6:d0:93:e4:8d",
+                "description": "Artist country article bad."
+            },
+            {
+                "interface_name": "assume",
+                "ipv4_address": "13.94.239.56",
+                "ipv6_address": "761e:4d67:bb58:b46f:79c3:8b66:b3da:9e83",
+                "mac_address": "60:32:52:ea:73:f1",
+                "description": "Show standard employee early."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "56.38.57.139",
+            "mac_address": "cc:8b:6b:b3:9c:94"
+        },
+        "description": "Though conference can within right your test."
+    },
+    {
+        "hostname": "email-31.johnson-ramirez.biz",
+        "xname": "x73771c31s2b1n3",
+        "architecture": "x86_64",
+        "boot_mac": "68:8f:59:31:f9:2e",
+        "network_interfaces": [
+            {
+                "interface_name": "bag",
+                "ipv4_address": "32.99.209.214",
+                "ipv6_address": "9a9e:4723:4d3e:596f:eb66:4e5d:1981:f64e",
+                "mac_address": "a4:cf:d7:8c:ba:d9",
+                "description": "During yes gas able."
+            },
+            {
+                "interface_name": "them",
+                "ipv4_address": "126.84.176.224",
+                "ipv6_address": "6a5f:9aa:5ea0:b98a:19db:d16c:3935:9b78",
+                "mac_address": "b8:83:bc:fd:21:d1",
+                "description": "Major another mention tend."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "105.190.29.4",
+            "mac_address": "c4:c1:74:62:d1:ad"
+        },
+        "description": "Against campaign whom small might even small behavior."
+    },
+    {
+        "hostname": "laptop-73.marquez.net",
+        "xname": "x81779c9s7b2n2",
+        "architecture": "arm64",
+        "boot_mac": "d6:bf:d9:35:5c:69",
+        "network_interfaces": [
+            {
+                "interface_name": "kitchen",
+                "ipv4_address": "39.128.208.87",
+                "ipv6_address": "15d7:ea6f:5fbc:4141:5d9e:c6d4:47e9:4660",
+                "mac_address": "f8:c9:44:52:32:61",
+                "description": "Both test question."
+            },
+            {
+                "interface_name": "base",
+                "ipv4_address": "59.160.20.95",
+                "ipv6_address": "4a71:3a4:1cb3:d67e:32d4:fa14:a96:5487",
+                "mac_address": "be:ff:d7:60:79:0b",
+                "description": "Day table air gas where apply travel capital."
+            },
+            {
+                "interface_name": "fact",
+                "ipv4_address": "179.82.20.125",
+                "ipv6_address": "b806:4d63:160b:b4c6:4ebc:a:30e2:82ad",
+                "mac_address": "da:2a:8e:a7:56:fb",
+                "description": "Agreement safe several collection traditional democratic sometimes."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "21.185.239.127",
+            "mac_address": "d4:d3:6c:3c:eb:34"
+        },
+        "description": "Education goal paper among lead decision music."
+    },
+    {
+        "hostname": "db-47.howard.com",
+        "xname": "x36649c28s6b3n8",
+        "architecture": "arm64",
+        "boot_mac": "90:c9:e2:40:36:c9",
+        "network_interfaces": [
+            {
+                "interface_name": "huge",
+                "ipv4_address": "35.173.10.218",
+                "ipv6_address": "6135:3dcf:2f46:6e84:b8f7:d7e3:c661:f32",
+                "mac_address": "7e:3d:73:2a:0e:8f",
+                "description": "Necessary like black at dinner choose accept."
+            },
+            {
+                "interface_name": "national",
+                "ipv4_address": "106.52.121.84",
+                "ipv6_address": "2d03:47cd:b29e:8bc8:928:e55e:c491:eddf",
+                "mac_address": "a8:dd:61:02:bc:3b",
+                "description": "Half development behind black heavy."
+            },
+            {
+                "interface_name": "yourself",
+                "ipv4_address": "86.148.124.54",
+                "ipv6_address": "b5c4:a978:aa11:e612:d021:4b4d:3a00:b800",
+                "mac_address": "42:53:03:cd:2e:d1",
+                "description": "Save wear of half central wait."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "197.186.64.12",
+            "mac_address": "ca:91:38:ea:4f:06"
+        },
+        "description": "Time all traditional stay."
+    },
+    {
+        "hostname": "srv-35.welch.com",
+        "xname": "x24561c27s5b2n1",
+        "architecture": "x86_64",
+        "boot_mac": "cc:9c:78:64:05:59",
+        "network_interfaces": [
+            {
+                "interface_name": "apply",
+                "ipv4_address": "44.220.112.43",
+                "ipv6_address": "4a00:53dc:594a:9faf:1fa5:8696:f8e4:c54c",
+                "mac_address": "e8:a8:be:ca:fb:19",
+                "description": "Agreement nor interview new available also."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "168.176.27.154",
+            "mac_address": "06:9e:ab:58:e8:b0"
+        },
+        "description": "Responsibility sort join past police near lawyer either."
+    },
+    {
+        "hostname": "web-62.carrillo.com",
+        "xname": "x18785c25s1b1n2",
+        "architecture": "x86_64",
+        "boot_mac": "e8:7a:39:fb:d0:9b",
+        "network_interfaces": [
+            {
+                "interface_name": "subject",
+                "ipv4_address": "186.116.161.10",
+                "ipv6_address": "b829:7779:b282:6d9e:94f7:7b0:89e2:13d5",
+                "mac_address": "e2:4d:4e:a2:d6:ff",
+                "description": "Really edge answer candidate experience."
+            },
+            {
+                "interface_name": "policy",
+                "ipv4_address": "206.66.35.122",
+                "ipv6_address": "99ac:5f67:ec6a:6456:9a8:32bd:91ef:7b4b",
+                "mac_address": "0c:7e:79:70:8a:1e",
+                "description": "Particular herself me dog."
+            },
+            {
+                "interface_name": "share",
+                "ipv4_address": "130.145.167.62",
+                "ipv6_address": "78f5:10c2:b13a:ebe2:d68a:d5b9:db25:7689",
+                "mac_address": "00:98:87:93:ab:fd",
+                "description": "Discover from sense."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "82.92.138.166",
+            "mac_address": "72:70:42:b4:d4:1a"
+        },
+        "description": "Blood increase ever process change decision."
+    },
+    {
+        "hostname": "db-22.oconnor.com",
+        "xname": "x67521c34s4b1n8",
+        "architecture": "arm64",
+        "boot_mac": "b8:52:dc:f8:b7:1d",
+        "network_interfaces": [
+            {
+                "interface_name": "at",
+                "ipv4_address": "174.162.252.0",
+                "ipv6_address": "41c5:380:db1b:54e7:e13c:d846:be79:4e32",
+                "mac_address": "46:3c:34:60:d7:7a",
+                "description": "Environment position how director despite."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "125.47.103.240",
+            "mac_address": "cc:ad:d1:83:42:53"
+        },
+        "description": "Soon everybody wind doctor camera sea quite."
+    },
+    {
+        "hostname": "lt-85.turner-johnson.biz",
+        "xname": "x86666c42s10b2n4",
+        "architecture": "x86_64",
+        "boot_mac": "4c:3b:8b:41:de:09",
+        "network_interfaces": [
+            {
+                "interface_name": "against",
+                "ipv4_address": "66.250.4.56",
+                "ipv6_address": "9dad:4041:3e63:f69c:87bf:b89e:2a41:66b4",
+                "mac_address": "e6:eb:c2:68:3c:df",
+                "description": "Oil when special reduce."
+            },
+            {
+                "interface_name": "skill",
+                "ipv4_address": "108.30.158.42",
+                "ipv6_address": "ff07:a673:c2e5:d91b:6d00:eff4:cea3:fba1",
+                "mac_address": "5c:b7:98:7a:ed:5a",
+                "description": "Accept bit soon all single evening development."
+            },
+            {
+                "interface_name": "lawyer",
+                "ipv4_address": "104.113.141.109",
+                "ipv6_address": "2bd5:f0bb:67e8:96f8:dba0:24e4:d67c:1b2b",
+                "mac_address": "4a:4f:15:8d:59:98",
+                "description": "Much study road close."
+            },
+            {
+                "interface_name": "stop",
+                "ipv4_address": "138.140.194.158",
+                "ipv6_address": "7fc8:698:6d60:abbc:1b33:ce0e:d6f9:aa89",
+                "mac_address": "46:3c:37:61:72:7d",
+                "description": "South product right without body."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "48.210.167.219",
+            "mac_address": "6a:a0:84:b8:62:b1"
+        },
+        "description": "Bank person option bank could."
+    },
+    {
+        "hostname": "email-56.baker.org",
+        "xname": "x60636c22s5b3n7",
+        "architecture": "arm64",
+        "boot_mac": "e8:fe:83:dc:d4:c2",
+        "network_interfaces": [
+            {
+                "interface_name": "or",
+                "ipv4_address": "134.203.166.231",
+                "ipv6_address": "9e1e:2c42:3378:6f97:c9b5:8bfe:b665:d027",
+                "mac_address": "2a:48:a1:d3:b8:36",
+                "description": "Beyond various factor though share."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "148.172.169.158",
+            "mac_address": "98:de:79:8c:f3:c1"
+        },
+        "description": "Population seven security share lot."
+    },
+    {
+        "hostname": "email-92.davis.com",
+        "xname": "x59884c38s4b2n8",
+        "architecture": "x86_64",
+        "boot_mac": "60:5b:2a:99:e9:90",
+        "network_interfaces": [
+            {
+                "interface_name": "note",
+                "ipv4_address": "19.92.92.183",
+                "ipv6_address": "c528:b79d:616f:e12:9a39:d8f5:b85f:2ff8",
+                "mac_address": "0a:ee:e4:63:3b:1b",
+                "description": "What station care cell energy free brother."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "185.252.133.114",
+            "mac_address": "ea:79:47:f6:99:75"
+        },
+        "description": "Together paper south age science treat rest."
+    },
+    {
+        "hostname": "laptop-27.garcia-perez.org",
+        "xname": "x11932c49s8b3n7",
+        "architecture": "x86_64",
+        "boot_mac": "f8:1e:89:94:ab:e3",
+        "network_interfaces": [
+            {
+                "interface_name": "idea",
+                "ipv4_address": "57.176.44.194",
+                "ipv6_address": "c77e:1907:ff40:28c2:c271:36f1:d955:ac7c",
+                "mac_address": "88:a1:26:09:81:10",
+                "description": "Nice message design actually indicate."
+            },
+            {
+                "interface_name": "note",
+                "ipv4_address": "23.62.82.135",
+                "ipv6_address": "de1f:75e0:4c8a:5cf2:d9f2:56fb:8ed0:ff5c",
+                "mac_address": "82:ea:e7:67:8c:08",
+                "description": "Protect girl treatment specific lose responsibility."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "141.76.33.114",
+            "mac_address": "1a:59:41:8c:4d:63"
+        },
+        "description": "Project reveal hotel."
+    },
+    {
+        "hostname": "email-59.campbell-sanchez.com",
+        "xname": "x51262c49s7b3n5",
+        "architecture": "arm64",
+        "boot_mac": "68:e8:c0:eb:96:9d",
+        "network_interfaces": [
+            {
+                "interface_name": "any",
+                "ipv4_address": "211.71.177.200",
+                "ipv6_address": "7c28:4af6:2550:b745:a7a8:c250:28df:70ba",
+                "mac_address": "80:a3:09:e6:b5:1e",
+                "description": "End investment believe walk might may."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "50.9.137.119",
+            "mac_address": "2a:1e:4b:88:d0:fa"
+        },
+        "description": "Contain position stay wind first pass federal."
+    },
+    {
+        "hostname": "email-50.smith.com",
+        "xname": "x30028c48s10b3n3",
+        "architecture": "x86_64",
+        "boot_mac": "0c:5a:42:06:85:d3",
+        "network_interfaces": [
+            {
+                "interface_name": "security",
+                "ipv4_address": "43.152.85.135",
+                "ipv6_address": "9e77:c24:d052:23d5:338e:a3af:e6e:6539",
+                "mac_address": "24:9e:80:5a:d3:aa",
+                "description": "Pm music building travel lay candidate."
+            },
+            {
+                "interface_name": "opportunity",
+                "ipv4_address": "204.23.145.233",
+                "ipv6_address": "9c9c:18dd:3330:cb5a:49de:b9da:c806:e1c7",
+                "mac_address": "5c:5d:ae:79:e1:dd",
+                "description": "Morning yard finally."
+            },
+            {
+                "interface_name": "evening",
+                "ipv4_address": "40.91.70.118",
+                "ipv6_address": "991f:e888:f439:df4a:8bd4:3305:464a:f5a7",
+                "mac_address": "58:48:61:9c:01:c3",
+                "description": "Health authority break finally relate."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "61.167.11.111",
+            "mac_address": "36:dc:16:50:36:8c"
+        },
+        "description": "Law commercial by bad week professor process social."
+    },
+    {
+        "hostname": "db-79.jones.com",
+        "xname": "x87647c37s8b1n2",
+        "architecture": "x86_64",
+        "boot_mac": "02:df:8a:79:3c:6d",
+        "network_interfaces": [
+            {
+                "interface_name": "media",
+                "ipv4_address": "52.159.98.1",
+                "ipv6_address": "5a4:d4f6:1b99:3fd:821a:a4b9:5a8d:81c7",
+                "mac_address": "d6:00:ee:6c:b8:ce",
+                "description": "Page style its member."
+            },
+            {
+                "interface_name": "might",
+                "ipv4_address": "119.89.106.13",
+                "ipv6_address": "4b9:57c:6451:701c:4e08:ecac:7fe4:b52a",
+                "mac_address": "98:ea:ee:c6:5c:91",
+                "description": "Lose entire loss decision."
+            },
+            {
+                "interface_name": "thus",
+                "ipv4_address": "183.185.58.59",
+                "ipv6_address": "4da4:b57b:fbf9:1541:be82:3ef8:2104:8c6f",
+                "mac_address": "6c:65:ff:7a:2d:4e",
+                "description": "Technology head hear health occur benefit new consider."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "92.211.42.104",
+            "mac_address": "18:27:80:b7:31:9f"
+        },
+        "description": "Since control yourself education stage natural show."
+    },
+    {
+        "hostname": "desktop-75.johnson-campos.com",
+        "xname": "x23324c18s6b2n3",
+        "architecture": "x86_64",
+        "boot_mac": "e0:c4:00:aa:ed:ab",
+        "network_interfaces": [
+            {
+                "interface_name": "wind",
+                "ipv4_address": "39.94.69.74",
+                "ipv6_address": "c987:312d:7819:6c5d:a7fe:ac1c:a516:6b3b",
+                "mac_address": "32:76:0e:23:3d:ca",
+                "description": "Order who away whole."
+            },
+            {
+                "interface_name": "measure",
+                "ipv4_address": "99.112.61.163",
+                "ipv6_address": "a576:fdff:4ed0:46f6:ea6b:8c09:ec1f:8568",
+                "mac_address": "90:4e:85:a7:55:1b",
+                "description": "With accept far TV artist traditional light."
+            },
+            {
+                "interface_name": "school",
+                "ipv4_address": "170.223.137.185",
+                "ipv6_address": "3faa:d1d2:2db5:e1d8:c53a:4cf1:2c7d:f1ea",
+                "mac_address": "f2:fa:6c:98:16:46",
+                "description": "Question million cost including image thought."
+            },
+            {
+                "interface_name": "develop",
+                "ipv4_address": "142.136.76.156",
+                "ipv6_address": "8495:60e5:41cd:651c:123e:8588:acb:49ce",
+                "mac_address": "b8:b3:a8:3d:47:1d",
+                "description": "Help we middle itself."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "218.140.227.39",
+            "mac_address": "bc:d8:62:7f:2d:37"
+        },
+        "description": "Sister mouth else."
+    },
+    {
+        "hostname": "email-74.maxwell-stewart.com",
+        "xname": "x32034c19s5b3n3",
+        "architecture": "x86_64",
+        "boot_mac": "10:cc:b1:3c:9e:7f",
+        "network_interfaces": [
+            {
+                "interface_name": "black",
+                "ipv4_address": "137.73.77.21",
+                "ipv6_address": "d82e:72ec:3b1d:b0f8:7a69:1cfc:38fa:f7e6",
+                "mac_address": "1c:1e:44:60:00:13",
+                "description": "Allow western century than."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "39.171.112.240",
+            "mac_address": "8a:04:79:ef:01:93"
+        },
+        "description": "Debate wife site collection board Congress every."
+    },
+    {
+        "hostname": "srv-82.mosley-mayo.biz",
+        "xname": "x93867c49s9b3n2",
+        "architecture": "arm64",
+        "boot_mac": "de:b9:49:68:4f:38",
+        "network_interfaces": [
+            {
+                "interface_name": "season",
+                "ipv4_address": "203.65.160.80",
+                "ipv6_address": "c675:f6b4:bf03:71f1:211:c111:c0c0:deba",
+                "mac_address": "10:85:91:31:6a:5c",
+                "description": "Officer woman authority."
+            },
+            {
+                "interface_name": "list",
+                "ipv4_address": "2.166.148.93",
+                "ipv6_address": "9779:ac48:e6c:f681:7ca6:8a0f:c39b:437d",
+                "mac_address": "36:c6:88:4a:ba:82",
+                "description": "Maintain down those use goal."
+            },
+            {
+                "interface_name": "fact",
+                "ipv4_address": "91.91.106.153",
+                "ipv6_address": "615:affa:fe51:a282:8c8b:f0f1:991a:b628",
+                "mac_address": "b6:6b:67:39:15:96",
+                "description": "Recognize down might key ground."
+            },
+            {
+                "interface_name": "space",
+                "ipv4_address": "123.192.209.139",
+                "ipv6_address": "f5d0:5b99:f14a:5807:82e6:b237:5504:c5ff",
+                "mac_address": "e8:09:21:bc:01:6c",
+                "description": "Camera red grow government data back us a."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "58.205.83.212",
+            "mac_address": "2a:22:5a:4d:5c:e8"
+        },
+        "description": "Remember color feeling while."
+    },
+    {
+        "hostname": "web-90.howell.info",
+        "xname": "x20628c45s8b2n1",
+        "architecture": "x86_64",
+        "boot_mac": "4e:3a:1d:32:a7:e6",
+        "network_interfaces": [
+            {
+                "interface_name": "offer",
+                "ipv4_address": "148.171.171.23",
+                "ipv6_address": "2a0c:cdcd:8421:6097:6c61:d462:2def:5cf3",
+                "mac_address": "da:a2:a1:63:7e:44",
+                "description": "Myself lawyer although study bring."
+            },
+            {
+                "interface_name": "strong",
+                "ipv4_address": "37.118.75.121",
+                "ipv6_address": "7d28:e22d:e666:119c:b983:1d87:9019:149b",
+                "mac_address": "e6:0d:fc:06:16:53",
+                "description": "Will ago risk health forget must it."
+            },
+            {
+                "interface_name": "first",
+                "ipv4_address": "105.62.34.236",
+                "ipv6_address": "7e1:12fa:8127:7400:3f50:b773:51af:13bc",
+                "mac_address": "dc:ad:62:12:6d:7d",
+                "description": "Population television Mrs way film."
+            },
+            {
+                "interface_name": "throw",
+                "ipv4_address": "125.119.255.118",
+                "ipv6_address": "21f1:4b50:32bf:3ff1:5f8f:1b50:1e12:404b",
+                "mac_address": "c0:a3:4e:5e:8c:8b",
+                "description": "Expect offer reduce tough."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "219.228.237.119",
+            "mac_address": "12:cd:3d:c3:24:cb"
+        },
+        "description": "Reason air member official federal."
+    },
+    {
+        "hostname": "lt-50.gardner.com",
+        "xname": "x52825c24s8b3n8",
+        "architecture": "arm64",
+        "boot_mac": "b0:c2:71:fa:f7:25",
+        "network_interfaces": [
+            {
+                "interface_name": "word",
+                "ipv4_address": "196.180.169.201",
+                "ipv6_address": "cf4:6197:e1ee:e17d:3cf7:f365:aa4:bee1",
+                "mac_address": "50:a6:b5:63:4f:84",
+                "description": "Remember join course."
+            },
+            {
+                "interface_name": "situation",
+                "ipv4_address": "222.236.15.143",
+                "ipv6_address": "8c3c:d78e:ec61:258b:aef1:61a7:5181:89d0",
+                "mac_address": "a2:da:16:db:75:09",
+                "description": "Firm inside player learn health agree director."
+            },
+            {
+                "interface_name": "hand",
+                "ipv4_address": "72.74.49.240",
+                "ipv6_address": "f644:8d4f:1f0c:1fa2:18a:4bee:a0af:423b",
+                "mac_address": "28:6b:1a:aa:77:4d",
+                "description": "Able create student high record thousand image."
+            },
+            {
+                "interface_name": "pay",
+                "ipv4_address": "171.88.49.57",
+                "ipv6_address": "fba6:2eb2:e354:e37f:70dc:69e6:42b0:663d",
+                "mac_address": "ba:bd:32:6c:7f:c3",
+                "description": "Mean no suggest my."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "35.138.39.124",
+            "mac_address": "d8:0e:79:22:79:68"
+        },
+        "description": "Kind do bag a soon."
+    },
+    {
+        "hostname": "email-40.edwards.org",
+        "xname": "x34936c15s7b3n2",
+        "architecture": "arm64",
+        "boot_mac": "98:ea:8a:3b:b3:f8",
+        "network_interfaces": [
+            {
+                "interface_name": "without",
+                "ipv4_address": "31.99.23.109",
+                "ipv6_address": "5bd3:f99d:48a0:71b4:bbe8:e565:d6f1:6b84",
+                "mac_address": "8a:5c:cc:c5:17:af",
+                "description": "Can property thousand per country water various."
+            },
+            {
+                "interface_name": "face",
+                "ipv4_address": "106.45.146.39",
+                "ipv6_address": "6554:8e8c:9f2a:b67:8753:2171:e80d:1c67",
+                "mac_address": "b2:c4:a9:04:22:41",
+                "description": "Building market organization any hospital century."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "20.7.251.190",
+            "mac_address": "9c:f3:a7:54:71:3b"
+        },
+        "description": "As goal family too project son decision."
+    },
+    {
+        "hostname": "desktop-11.cooper-stuart.com",
+        "xname": "x30598c25s6b3n4",
+        "architecture": "x86_64",
+        "boot_mac": "6a:2e:2b:9a:d9:ed",
+        "network_interfaces": [
+            {
+                "interface_name": "affect",
+                "ipv4_address": "175.156.162.196",
+                "ipv6_address": "e919:e546:8974:3d6b:c673:f4f8:6409:c612",
+                "mac_address": "e6:14:10:0a:ca:24",
+                "description": "Smile early ago character."
+            },
+            {
+                "interface_name": "minute",
+                "ipv4_address": "220.89.68.168",
+                "ipv6_address": "e9c0:466a:e2b8:52d7:7dd3:e5d1:2913:5ae5",
+                "mac_address": "3c:84:06:1e:18:dc",
+                "description": "With lose practice magazine bag."
+            },
+            {
+                "interface_name": "friend",
+                "ipv4_address": "165.89.252.48",
+                "ipv6_address": "8eb6:fb32:4497:9af:3fa8:fedf:4568:bf38",
+                "mac_address": "94:a6:6d:cc:d5:c0",
+                "description": "Music management try put natural most."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "123.125.172.8",
+            "mac_address": "06:78:21:07:99:76"
+        },
+        "description": "Source author really from watch job chance whole."
+    },
+    {
+        "hostname": "desktop-85.montgomery.com",
+        "xname": "x22463c6s2b3n6",
+        "architecture": "arm64",
+        "boot_mac": "7e:24:bc:6d:e4:48",
+        "network_interfaces": [
+            {
+                "interface_name": "everything",
+                "ipv4_address": "97.16.139.250",
+                "ipv6_address": "a7e1:4129:7228:f71a:f6db:daed:9e9a:3cee",
+                "mac_address": "86:0c:34:2d:eb:ea",
+                "description": "Professional unit want memory type decade."
+            },
+            {
+                "interface_name": "example",
+                "ipv4_address": "212.199.229.26",
+                "ipv6_address": "4019:2e0:32fe:1bec:227a:b217:45c4:81a5",
+                "mac_address": "9c:83:99:a8:91:12",
+                "description": "Group son model minute life."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "69.121.235.26",
+            "mac_address": "9a:96:61:97:50:ba"
+        },
+        "description": "Million travel push side."
+    },
+    {
+        "hostname": "web-54.meyers.com",
+        "xname": "x24265c31s7b2n8",
+        "architecture": "x86_64",
+        "boot_mac": "ec:ef:c8:bf:57:71",
+        "network_interfaces": [
+            {
+                "interface_name": "budget",
+                "ipv4_address": "87.172.165.199",
+                "ipv6_address": "bd8f:c0ec:502a:2674:b244:cbbe:68fc:1e07",
+                "mac_address": "e8:6a:0d:4a:b1:7f",
+                "description": "Also who hair major find look without."
+            },
+            {
+                "interface_name": "care",
+                "ipv4_address": "219.49.39.99",
+                "ipv6_address": "ca76:22d8:2a4:b1ea:8c3d:9791:c4cc:c02d",
+                "mac_address": "2c:c5:6d:27:fb:f7",
+                "description": "Firm possible lot party shake hundred dark."
+            },
+            {
+                "interface_name": "rather",
+                "ipv4_address": "213.127.16.134",
+                "ipv6_address": "b31b:a03b:63a3:666e:88c8:4a35:241d:dcc3",
+                "mac_address": "fa:68:68:83:0a:15",
+                "description": "Often sell safe court nature market."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "190.10.232.147",
+            "mac_address": "9a:7c:51:b8:27:29"
+        },
+        "description": "Produce risk threat cold."
+    },
+    {
+        "hostname": "lt-69.flores.net",
+        "xname": "x38852c51s7b3n4",
+        "architecture": "arm64",
+        "boot_mac": "f2:e6:3e:d6:d6:46",
+        "network_interfaces": [
+            {
+                "interface_name": "discuss",
+                "ipv4_address": "208.118.72.96",
+                "ipv6_address": "9fc7:23a2:f3de:2c66:a127:5012:a800:d8be",
+                "mac_address": "6e:b6:6c:52:84:0c",
+                "description": "Less phone think wife effort brother."
+            },
+            {
+                "interface_name": "do",
+                "ipv4_address": "197.159.239.112",
+                "ipv6_address": "46ef:bb72:e6e7:1290:c1de:e2f5:626c:45fd",
+                "mac_address": "64:74:67:6c:4c:57",
+                "description": "Subject wind charge common person size company spend."
+            },
+            {
+                "interface_name": "his",
+                "ipv4_address": "212.202.122.175",
+                "ipv6_address": "cfda:66a4:452b:7fa6:638:4740:723:8bd1",
+                "mac_address": "14:48:a8:12:44:5f",
+                "description": "Assume learn figure color along."
+            },
+            {
+                "interface_name": "sound",
+                "ipv4_address": "68.206.105.76",
+                "ipv6_address": "9d1f:5aeb:fa06:61dc:3bb3:eb0f:2c68:2767",
+                "mac_address": "2c:51:7d:62:d1:c8",
+                "description": "Anyone star pay from later."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "125.230.230.184",
+            "mac_address": "b2:75:b7:4a:87:05"
+        },
+        "description": "Ability ask when world every."
+    },
+    {
+        "hostname": "laptop-29.velez-dixon.com",
+        "xname": "x78894c41s10b2n5",
+        "architecture": "x86_64",
+        "boot_mac": "b4:34:5e:9e:9b:4e",
+        "network_interfaces": [
+            {
+                "interface_name": "hot",
+                "ipv4_address": "89.178.50.99",
+                "ipv6_address": "eabd:1778:599a:5254:5b:9772:95b:deeb",
+                "mac_address": "d8:d7:52:8c:0d:de",
+                "description": "Trial society recognize build."
+            },
+            {
+                "interface_name": "real",
+                "ipv4_address": "61.81.199.41",
+                "ipv6_address": "6696:28a1:378b:3294:7fe7:8e94:9329:acbd",
+                "mac_address": "f4:b3:79:38:58:3c",
+                "description": "Sense month want question."
+            },
+            {
+                "interface_name": "might",
+                "ipv4_address": "49.49.93.6",
+                "ipv6_address": "5b16:8efa:c447:b6d2:b02d:e2d4:35cf:eb8f",
+                "mac_address": "64:bd:7e:61:63:a8",
+                "description": "Network build they everything wonder."
+            },
+            {
+                "interface_name": "sound",
+                "ipv4_address": "100.185.143.231",
+                "ipv6_address": "6788:f4ef:63bf:6c6d:1a48:c37e:67d6:821c",
+                "mac_address": "42:4c:fa:1a:06:e2",
+                "description": "Lead fine upon today college likely include."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "7.181.37.92",
+            "mac_address": "d4:88:16:c8:ac:97"
+        },
+        "description": "Writer fear there."
+    },
+    {
+        "hostname": "desktop-36.spencer.biz",
+        "xname": "x50083c17s6b1n3",
+        "architecture": "x86_64",
+        "boot_mac": "10:76:8b:ee:1d:d6",
+        "network_interfaces": [
+            {
+                "interface_name": "gun",
+                "ipv4_address": "71.99.87.49",
+                "ipv6_address": "40ae:ed87:146a:2ceb:6032:9015:acc7:46f4",
+                "mac_address": "c2:45:50:d4:43:e2",
+                "description": "Have crime line off."
+            },
+            {
+                "interface_name": "gun",
+                "ipv4_address": "80.17.89.200",
+                "ipv6_address": "2405:5371:678f:3a14:12b:ebf9:ac78:36dd",
+                "mac_address": "92:b4:6a:33:93:01",
+                "description": "Stay lay condition serve clear cut."
+            },
+            {
+                "interface_name": "become",
+                "ipv4_address": "188.80.174.13",
+                "ipv6_address": "eddd:4b40:74c:97a6:f020:788c:7108:32ae",
+                "mac_address": "52:63:2c:17:e3:44",
+                "description": "Behind central unit firm lose."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "104.90.34.238",
+            "mac_address": "2e:f7:6b:4f:c8:b9"
+        },
+        "description": "Effect bad then husband leg action."
+    },
+    {
+        "hostname": "laptop-08.graham.com",
+        "xname": "x61667c55s5b2n5",
+        "architecture": "arm64",
+        "boot_mac": "1e:4b:a8:0d:d5:af",
+        "network_interfaces": [
+            {
+                "interface_name": "bank",
+                "ipv4_address": "78.110.44.236",
+                "ipv6_address": "2006:1b29:1b88:782b:2ae9:3167:aae7:6d92",
+                "mac_address": "32:43:1c:80:42:b8",
+                "description": "Meet wait among campaign election successful alone onto."
+            },
+            {
+                "interface_name": "serve",
+                "ipv4_address": "93.39.195.251",
+                "ipv6_address": "af92:4652:e28f:504:75c6:afa2:2be7:f8bb",
+                "mac_address": "44:de:3f:b8:06:03",
+                "description": "Stage few small on until."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "141.53.41.32",
+            "mac_address": "1e:25:13:10:6a:98"
+        },
+        "description": "Speech factor dream."
+    },
+    {
+        "hostname": "srv-73.kaiser-lee.biz",
+        "xname": "x24664c43s4b1n3",
+        "architecture": "x86_64",
+        "boot_mac": "24:01:e0:99:3c:3f",
+        "network_interfaces": [
+            {
+                "interface_name": "however",
+                "ipv4_address": "72.55.161.138",
+                "ipv6_address": "610b:4c21:f02b:6134:9c7a:21a5:a208:b616",
+                "mac_address": "1c:06:e8:58:19:5a",
+                "description": "World everything example dream relate."
+            },
+            {
+                "interface_name": "each",
+                "ipv4_address": "170.197.164.19",
+                "ipv6_address": "3855:be27:7661:fe60:e574:97f7:bd6b:4ad9",
+                "mac_address": "8c:07:99:69:b5:1b",
+                "description": "Staff later upon last gas perhaps interesting pressure."
+            },
+            {
+                "interface_name": "according",
+                "ipv4_address": "214.194.35.72",
+                "ipv6_address": "9bc:b27:9da1:2987:1e41:e2a0:af91:4df",
+                "mac_address": "14:63:23:b3:36:87",
+                "description": "Morning cut hour base be."
+            },
+            {
+                "interface_name": "book",
+                "ipv4_address": "222.57.126.222",
+                "ipv6_address": "2d40:4d3f:b651:c166:6675:7bab:c90e:8a19",
+                "mac_address": "36:f2:9f:ed:3d:ab",
+                "description": "Off both enjoy."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "207.52.246.125",
+            "mac_address": "96:5a:38:15:ee:d0"
+        },
+        "description": "People including better bill rather left road."
+    },
+    {
+        "hostname": "web-77.little-harris.biz",
+        "xname": "x76318c20s7b1n4",
+        "architecture": "x86_64",
+        "boot_mac": "92:6d:48:f4:c1:86",
+        "network_interfaces": [
+            {
+                "interface_name": "then",
+                "ipv4_address": "159.38.188.173",
+                "ipv6_address": "5181:e1a:513b:f12b:bb3e:a618:8aaf:1734",
+                "mac_address": "22:8f:79:db:43:d7",
+                "description": "Most in rather."
+            },
+            {
+                "interface_name": "expert",
+                "ipv4_address": "171.218.178.204",
+                "ipv6_address": "4005:b5d6:4f1c:44eb:9f68:4ffa:f86e:d9fb",
+                "mac_address": "44:71:e1:19:6c:46",
+                "description": "Upon produce truth case."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "153.109.115.29",
+            "mac_address": "6a:b1:97:0a:78:4a"
+        },
+        "description": "Various senior risk hot story west."
+    },
+    {
+        "hostname": "email-99.howard.net",
+        "xname": "x37899c26s3b2n1",
+        "architecture": "arm64",
+        "boot_mac": "6e:64:5d:55:19:60",
+        "network_interfaces": [
+            {
+                "interface_name": "human",
+                "ipv4_address": "125.91.116.0",
+                "ipv6_address": "f66d:bfc1:486c:cb0a:9485:ef11:43e8:10fd",
+                "mac_address": "3c:15:06:9d:c7:c5",
+                "description": "Discuss environment myself such."
+            },
+            {
+                "interface_name": "job",
+                "ipv4_address": "59.163.211.90",
+                "ipv6_address": "8e21:6ca4:d105:7051:61ee:7d0d:4b3d:a904",
+                "mac_address": "56:8b:39:87:a3:30",
+                "description": "For include individual while wait purpose arrive."
+            },
+            {
+                "interface_name": "majority",
+                "ipv4_address": "119.72.194.25",
+                "ipv6_address": "d5ff:fca:736:97c4:4f3:946f:24d9:4bde",
+                "mac_address": "e2:4d:33:42:c8:af",
+                "description": "Enough attorney quickly firm."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "83.93.225.153",
+            "mac_address": "ae:e3:b8:d2:c6:27"
+        },
+        "description": "Surface others dream detail office arrive off."
+    },
+    {
+        "hostname": "desktop-40.byrd-rogers.com",
+        "xname": "x10966c21s1b3n5",
+        "architecture": "x86_64",
+        "boot_mac": "80:24:4d:f4:14:4f",
+        "network_interfaces": [
+            {
+                "interface_name": "language",
+                "ipv4_address": "115.119.180.16",
+                "ipv6_address": "d78a:7e3a:97e4:5f13:9cbb:1761:7839:5fe4",
+                "mac_address": "b0:8f:9d:ad:3d:14",
+                "description": "Across assume play quickly."
+            },
+            {
+                "interface_name": "expert",
+                "ipv4_address": "80.75.103.218",
+                "ipv6_address": "c575:340a:c9f0:ef9b:1f0f:c7e5:3a66:6ca1",
+                "mac_address": "ca:9d:9b:5c:11:b3",
+                "description": "Language respond former necessary."
+            },
+            {
+                "interface_name": "treatment",
+                "ipv4_address": "98.145.108.157",
+                "ipv6_address": "7461:56dc:51a9:5462:3b1d:3323:511c:c16f",
+                "mac_address": "2a:38:e9:8b:7f:dd",
+                "description": "Sell often significant environmental stock what pick."
+            },
+            {
+                "interface_name": "result",
+                "ipv4_address": "158.106.13.89",
+                "ipv6_address": "fc19:37a9:5528:83b4:8170:50ec:45a5:bb17",
+                "mac_address": "e6:be:a4:41:5d:d5",
+                "description": "House good dinner source price write majority."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "184.119.149.16",
+            "mac_address": "b0:14:8a:5b:ad:5a"
+        },
+        "description": "Budget member single authority college as."
+    },
+    {
+        "hostname": "desktop-62.bass.com",
+        "xname": "x77581c8s2b1n3",
+        "architecture": "arm64",
+        "boot_mac": "04:1a:34:d2:a7:2b",
+        "network_interfaces": [
+            {
+                "interface_name": "goal",
+                "ipv4_address": "210.187.5.147",
+                "ipv6_address": "68a1:56cc:227c:3d93:23be:6d4a:71a9:d1b2",
+                "mac_address": "94:49:65:71:db:a2",
+                "description": "Country hundred weight."
+            },
+            {
+                "interface_name": "service",
+                "ipv4_address": "201.0.96.97",
+                "ipv6_address": "b2:5809:44b5:c477:44f1:53b9:9dd8:c9",
+                "mac_address": "86:71:d8:80:31:9f",
+                "description": "Former station whom single."
+            },
+            {
+                "interface_name": "strong",
+                "ipv4_address": "68.168.227.164",
+                "ipv6_address": "9fba:877:18b8:4522:7ec6:51a5:5320:b330",
+                "mac_address": "38:c8:c2:09:bd:1f",
+                "description": "Class understand change address."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "167.152.31.208",
+            "mac_address": "8e:90:94:d2:59:d7"
+        },
+        "description": "Station choose at manager happy science."
+    },
+    {
+        "hostname": "srv-30.russell.com",
+        "xname": "x45132c3s7b2n2",
+        "architecture": "x86_64",
+        "boot_mac": "b2:61:4f:8a:86:3e",
+        "network_interfaces": [
+            {
+                "interface_name": "fear",
+                "ipv4_address": "119.245.52.47",
+                "ipv6_address": "9f93:5c30:766e:54b1:7b17:9632:a095:95d0",
+                "mac_address": "1a:f9:f3:63:71:dd",
+                "description": "Subject while wish least."
+            },
+            {
+                "interface_name": "third",
+                "ipv4_address": "59.39.52.22",
+                "ipv6_address": "bc78:358a:4fca:5c:ad8f:5992:26a2:e278",
+                "mac_address": "5a:7c:6f:37:48:b0",
+                "description": "Nor start radio big peace world night."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "92.83.64.104",
+            "mac_address": "56:7e:99:15:27:db"
+        },
+        "description": "Explain debate impact nearly."
+    },
+    {
+        "hostname": "web-36.perez.com",
+        "xname": "x66081c47s4b1n2",
+        "architecture": "arm64",
+        "boot_mac": "94:95:da:e3:c4:d2",
+        "network_interfaces": [
+            {
+                "interface_name": "safe",
+                "ipv4_address": "200.98.250.175",
+                "ipv6_address": "9521:ac26:2b6b:5edc:341:bfdf:eb8:4e28",
+                "mac_address": "1e:6b:f9:04:b1:c5",
+                "description": "Man better use relationship through ground first."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "24.158.204.51",
+            "mac_address": "14:1c:2e:cd:de:83"
+        },
+        "description": "Add your source market blue next law."
+    },
+    {
+        "hostname": "lt-03.kramer.com",
+        "xname": "x11449c36s6b3n4",
+        "architecture": "arm64",
+        "boot_mac": "2e:dd:15:3b:7d:d8",
+        "network_interfaces": [
+            {
+                "interface_name": "them",
+                "ipv4_address": "189.116.178.181",
+                "ipv6_address": "65a0:1666:14d5:9f1d:bd39:bdc3:ace7:59ea",
+                "mac_address": "ca:46:06:5c:68:12",
+                "description": "Case order what them begin board sure green."
+            },
+            {
+                "interface_name": "go",
+                "ipv4_address": "106.37.165.10",
+                "ipv6_address": "c571:7eed:79b5:963b:1d9c:cb35:4171:6827",
+                "mac_address": "7c:35:b8:43:a4:c4",
+                "description": "Us truth so beyond reality lay western."
+            },
+            {
+                "interface_name": "likely",
+                "ipv4_address": "7.165.124.211",
+                "ipv6_address": "bbe1:5f4a:2a55:197f:e44c:6e44:6a1e:3248",
+                "mac_address": "ea:4d:63:10:f3:81",
+                "description": "Magazine professor major tend."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "15.197.253.164",
+            "mac_address": "ee:21:f2:a8:86:28"
+        },
+        "description": "Wait camera spend will son."
+    },
+    {
+        "hostname": "email-78.lynch-benitez.biz",
+        "xname": "x17563c13s8b3n7",
+        "architecture": "x86_64",
+        "boot_mac": "04:f9:72:d8:a2:5d",
+        "network_interfaces": [
+            {
+                "interface_name": "table",
+                "ipv4_address": "137.91.187.219",
+                "ipv6_address": "fa0c:1dc0:b364:3e34:ec73:d9e7:771e:82d8",
+                "mac_address": "9e:89:fe:b8:0e:9f",
+                "description": "Total run size."
+            },
+            {
+                "interface_name": "attorney",
+                "ipv4_address": "148.23.49.83",
+                "ipv6_address": "19fb:3287:8d7:88b:ea39:c3a8:e907:182d",
+                "mac_address": "56:8e:1b:ca:28:12",
+                "description": "Suddenly different we."
+            },
+            {
+                "interface_name": "drug",
+                "ipv4_address": "92.147.209.195",
+                "ipv6_address": "ea92:3411:dbe1:b3e5:8f7c:d0e0:7fd8:cbf3",
+                "mac_address": "96:a3:5f:58:c6:18",
+                "description": "Fact product question hold hour."
+            },
+            {
+                "interface_name": "me",
+                "ipv4_address": "102.167.159.192",
+                "ipv6_address": "61c1:b969:7ff0:f48c:96bd:b1f8:e994:dcaf",
+                "mac_address": "04:f4:ca:2d:39:ec",
+                "description": "Make unit save."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "215.44.163.42",
+            "mac_address": "98:d3:06:48:e8:0d"
+        },
+        "description": "Radio sport experience guy threat Congress action."
+    },
+    {
+        "hostname": "lt-19.lopez.org",
+        "xname": "x65987c31s4b1n5",
+        "architecture": "x86_64",
+        "boot_mac": "a0:a8:7f:a9:2b:10",
+        "network_interfaces": [
+            {
+                "interface_name": "skill",
+                "ipv4_address": "4.55.32.173",
+                "ipv6_address": "6f99:8ad0:f3d7:32cf:fe4c:c636:5879:c6b4",
+                "mac_address": "04:5d:02:8a:9a:96",
+                "description": "Citizen challenge although actually."
+            },
+            {
+                "interface_name": "can",
+                "ipv4_address": "126.174.195.232",
+                "ipv6_address": "8a23:9a7e:ec91:c18b:cdb8:f4b5:1c1e:e207",
+                "mac_address": "54:35:47:15:ca:74",
+                "description": "Power significant seek in."
+            },
+            {
+                "interface_name": "everything",
+                "ipv4_address": "111.68.243.255",
+                "ipv6_address": "7ff1:314c:656:f39c:76d:5f73:a83b:4222",
+                "mac_address": "5c:5e:dc:34:9f:c0",
+                "description": "Able question mention inside product material."
+            },
+            {
+                "interface_name": "box",
+                "ipv4_address": "26.122.92.79",
+                "ipv6_address": "b1fe:e106:8655:5e5:f2b5:a52b:a591:5643",
+                "mac_address": "56:68:56:99:84:72",
+                "description": "North view people pay cause center country."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "200.68.128.219",
+            "mac_address": "14:cc:09:a3:e7:2f"
+        },
+        "description": "Cause hot quickly rule."
+    },
+    {
+        "hostname": "db-69.gutierrez.com",
+        "xname": "x26624c56s8b2n8",
+        "architecture": "x86_64",
+        "boot_mac": "6e:a0:da:68:03:af",
+        "network_interfaces": [
+            {
+                "interface_name": "baby",
+                "ipv4_address": "201.14.105.77",
+                "ipv6_address": "cf0a:117d:2680:3ab7:c29:8e78:7a9d:c327",
+                "mac_address": "62:4b:16:16:f5:14",
+                "description": "Effect will science issue ahead four."
+            },
+            {
+                "interface_name": "my",
+                "ipv4_address": "113.98.93.35",
+                "ipv6_address": "ca31:a9e5:33f:acb2:1108:734d:20e8:7a5c",
+                "mac_address": "dc:24:6d:50:e5:2b",
+                "description": "Change know card not blood."
+            },
+            {
+                "interface_name": "meet",
+                "ipv4_address": "29.66.252.127",
+                "ipv6_address": "37f1:fb31:d9e5:cf02:2d47:e96:6b89:e915",
+                "mac_address": "78:58:22:30:ad:4b",
+                "description": "Campaign area special feel while."
+            },
+            {
+                "interface_name": "may",
+                "ipv4_address": "88.169.131.172",
+                "ipv6_address": "2e3d:bb9a:352:2a18:849f:4151:b862:2d64",
+                "mac_address": "ae:62:de:be:63:c2",
+                "description": "Door who attorney relationship pay."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "148.226.214.63",
+            "mac_address": "2c:04:cb:97:64:90"
+        },
+        "description": "Member him now everyone lose."
+    },
+    {
+        "hostname": "laptop-30.singleton.biz",
+        "xname": "x53853c42s6b3n4",
+        "architecture": "x86_64",
+        "boot_mac": "e4:66:aa:40:c6:06",
+        "network_interfaces": [
+            {
+                "interface_name": "machine",
+                "ipv4_address": "44.238.206.18",
+                "ipv6_address": "c9b3:a95e:b3f5:24a9:d6a1:7de8:c3fe:a66f",
+                "mac_address": "9a:cd:e8:d2:69:51",
+                "description": "Life kitchen yourself."
+            },
+            {
+                "interface_name": "deal",
+                "ipv4_address": "174.110.23.73",
+                "ipv6_address": "8527:562c:4b0:4226:fee:7834:bca7:5ed9",
+                "mac_address": "b0:69:0f:72:c5:c6",
+                "description": "Point finally also clearly visit defense knowledge story."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "107.128.32.168",
+            "mac_address": "8a:27:bb:58:95:90"
+        },
+        "description": "Open leave always position nearly."
+    },
+    {
+        "hostname": "db-86.bush.com",
+        "xname": "x22315c44s6b3n1",
+        "architecture": "x86_64",
+        "boot_mac": "38:99:81:c0:13:34",
+        "network_interfaces": [
+            {
+                "interface_name": "idea",
+                "ipv4_address": "2.240.246.44",
+                "ipv6_address": "732f:897e:9cfe:3bd2:fb54:718e:1a37:4f4c",
+                "mac_address": "e4:a8:f7:9b:0b:f6",
+                "description": "Old test know return."
+            },
+            {
+                "interface_name": "culture",
+                "ipv4_address": "106.240.33.196",
+                "ipv6_address": "38c7:e494:3e33:a5c3:f9c4:337f:e5ae:2ab8",
+                "mac_address": "ae:43:75:46:ff:96",
+                "description": "Throughout no company subject ago statement director."
+            },
+            {
+                "interface_name": "author",
+                "ipv4_address": "95.215.87.94",
+                "ipv6_address": "c9f5:2542:eb9a:70de:6cc4:4a37:e8c9:11d1",
+                "mac_address": "be:be:c5:84:4b:c7",
+                "description": "Life should student defense can."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "155.166.79.194",
+            "mac_address": "76:1c:83:c7:5b:f6"
+        },
+        "description": "Director quickly manager us just over."
+    },
+    {
+        "hostname": "email-89.carroll.com",
+        "xname": "x51028c48s9b2n4",
+        "architecture": "x86_64",
+        "boot_mac": "f4:b9:d3:d0:59:74",
+        "network_interfaces": [
+            {
+                "interface_name": "common",
+                "ipv4_address": "7.123.238.148",
+                "ipv6_address": "6254:da9c:d046:ab12:e47f:7b95:ed7f:526b",
+                "mac_address": "16:de:f4:64:5f:2a",
+                "description": "College defense article where."
+            },
+            {
+                "interface_name": "throw",
+                "ipv4_address": "66.230.201.4",
+                "ipv6_address": "1f8e:c295:2ad8:67e3:48d0:9b11:87ae:b308",
+                "mac_address": "90:16:42:ae:de:8b",
+                "description": "Candidate rate age bag."
+            },
+            {
+                "interface_name": "take",
+                "ipv4_address": "33.91.35.22",
+                "ipv6_address": "3a94:cfe7:6cf6:1cf2:d658:888f:a1f8:e166",
+                "mac_address": "00:e8:63:df:7b:97",
+                "description": "Already others something responsibility must sit need member."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "103.198.13.199",
+            "mac_address": "dc:19:73:6b:ed:db"
+        },
+        "description": "President wear staff."
+    },
+    {
+        "hostname": "lt-24.wood.org",
+        "xname": "x27612c2s3b3n1",
+        "architecture": "x86_64",
+        "boot_mac": "14:0d:bb:0f:0c:73",
+        "network_interfaces": [
+            {
+                "interface_name": "civil",
+                "ipv4_address": "167.200.152.23",
+                "ipv6_address": "b4e:7873:8ca5:2774:26de:6b10:df43:50cc",
+                "mac_address": "fc:22:24:95:58:12",
+                "description": "Finally military project authority exist."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "132.8.164.112",
+            "mac_address": "b4:a1:4e:85:cc:14"
+        },
+        "description": "Team no age cultural."
+    },
+    {
+        "hostname": "srv-78.scott.biz",
+        "xname": "x44388c36s8b2n1",
+        "architecture": "arm64",
+        "boot_mac": "46:60:a4:5c:e5:9e",
+        "network_interfaces": [
+            {
+                "interface_name": "hope",
+                "ipv4_address": "124.4.65.108",
+                "ipv6_address": "d176:b6b5:2bf5:7734:1da4:f38f:3934:82b9",
+                "mac_address": "0a:49:4b:10:a8:0d",
+                "description": "Same entire central fill nor kitchen."
+            },
+            {
+                "interface_name": "table",
+                "ipv4_address": "104.111.199.117",
+                "ipv6_address": "f85c:65dd:be47:2622:7b9c:6dfa:ac32:497b",
+                "mac_address": "c0:5a:4d:35:bd:89",
+                "description": "Threat approach know industry whether."
+            },
+            {
+                "interface_name": "station",
+                "ipv4_address": "202.200.238.110",
+                "ipv6_address": "d44f:c60f:cfe2:1270:2d52:47d9:3db2:8f7c",
+                "mac_address": "54:50:d3:cb:7d:fd",
+                "description": "Tough whether recognize most indeed or."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "40.208.15.107",
+            "mac_address": "de:96:47:0c:49:38"
+        },
+        "description": "Yes all stage lot address enter."
+    },
+    {
+        "hostname": "laptop-15.walker-newman.com",
+        "xname": "x36173c1s2b1n8",
+        "architecture": "x86_64",
+        "boot_mac": "06:57:f5:65:a3:42",
+        "network_interfaces": [
+            {
+                "interface_name": "building",
+                "ipv4_address": "13.227.252.86",
+                "ipv6_address": "ee15:82e:6416:eba2:bf43:4e4f:f0e3:a5a3",
+                "mac_address": "f8:aa:8a:9d:12:a3",
+                "description": "Mr heart field my."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "158.159.82.109",
+            "mac_address": "5a:ee:0a:bf:6f:6a"
+        },
+        "description": "Education religious themselves."
+    },
+    {
+        "hostname": "desktop-91.gibbs.biz",
+        "xname": "x32698c47s4b3n1",
+        "architecture": "arm64",
+        "boot_mac": "da:46:66:e0:34:3f",
+        "network_interfaces": [
+            {
+                "interface_name": "suddenly",
+                "ipv4_address": "197.213.202.248",
+                "ipv6_address": "c541:184f:5794:46c7:7363:48b2:4452:54e8",
+                "mac_address": "86:6f:0d:22:cb:6a",
+                "description": "Movement face question sometimes buy continue."
+            },
+            {
+                "interface_name": "idea",
+                "ipv4_address": "210.114.201.40",
+                "ipv6_address": "311f:669c:f285:243:1ad0:b606:20d7:30c3",
+                "mac_address": "ba:7f:b3:9c:a2:97",
+                "description": "Through lay fish parent value."
+            },
+            {
+                "interface_name": "employee",
+                "ipv4_address": "20.71.92.45",
+                "ipv6_address": "6739:58dd:a80a:8e05:9d6c:94a1:e670:cb6d",
+                "mac_address": "7a:a5:fc:23:bf:b1",
+                "description": "Pull upon wonder none bar."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "63.58.90.201",
+            "mac_address": "1c:d7:1d:fc:d7:8e"
+        },
+        "description": "Win someone any hour over civil building."
+    },
+    {
+        "hostname": "email-40.shelton-schmidt.org",
+        "xname": "x75572c21s8b3n1",
+        "architecture": "arm64",
+        "boot_mac": "fc:28:74:85:c6:05",
+        "network_interfaces": [
+            {
+                "interface_name": "day",
+                "ipv4_address": "59.63.79.144",
+                "ipv6_address": "8bc7:2708:efd0:acd3:b49e:b213:c6b2:311b",
+                "mac_address": "7a:f1:2c:3c:85:46",
+                "description": "Nature check also suddenly entire consumer start."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "73.230.246.158",
+            "mac_address": "dc:15:e4:5f:db:81"
+        },
+        "description": "Lead ahead pretty full drop keep study."
+    },
+    {
+        "hostname": "desktop-73.weaver-wiggins.org",
+        "xname": "x55503c4s4b2n2",
+        "architecture": "arm64",
+        "boot_mac": "56:39:f3:57:65:d9",
+        "network_interfaces": [
+            {
+                "interface_name": "really",
+                "ipv4_address": "7.57.76.132",
+                "ipv6_address": "b289:9980:352c:127:3390:b814:f9f0:7663",
+                "mac_address": "96:0e:2b:4d:98:09",
+                "description": "Long close education answer."
+            },
+            {
+                "interface_name": "natural",
+                "ipv4_address": "166.187.45.18",
+                "ipv6_address": "2294:5653:954d:7fb8:cafa:9da5:170f:f35e",
+                "mac_address": "78:d0:12:b3:99:df",
+                "description": "Food could allow individual significant."
+            },
+            {
+                "interface_name": "enough",
+                "ipv4_address": "30.229.158.138",
+                "ipv6_address": "19d9:afc9:a668:2624:b230:74b0:6cc7:b99d",
+                "mac_address": "00:c5:10:f0:4b:dd",
+                "description": "This suggest allow so network."
+            },
+            {
+                "interface_name": "sit",
+                "ipv4_address": "95.154.126.112",
+                "ipv6_address": "62bb:1ccf:8dbd:98ae:9991:537c:5b9f:9d17",
+                "mac_address": "24:b6:58:9c:69:ea",
+                "description": "Focus husband fast today vote later of."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "160.140.204.192",
+            "mac_address": "ca:9e:fd:ee:cd:ec"
+        },
+        "description": "Of model center suffer carry view."
+    },
+    {
+        "hostname": "laptop-95.hodge.org",
+        "xname": "x85651c50s6b1n3",
+        "architecture": "arm64",
+        "boot_mac": "d6:e0:cd:a5:ad:84",
+        "network_interfaces": [
+            {
+                "interface_name": "author",
+                "ipv4_address": "164.83.106.139",
+                "ipv6_address": "346b:fd1a:5e4c:46f6:541d:f8aa:f908:b250",
+                "mac_address": "a0:32:8c:7e:a7:f3",
+                "description": "A maybe become already none."
+            },
+            {
+                "interface_name": "add",
+                "ipv4_address": "211.7.111.44",
+                "ipv6_address": "558a:94c:4fec:88d7:e196:b1bd:c57a:1bc0",
+                "mac_address": "fa:08:36:0a:fa:1f",
+                "description": "Consumer free lay arrive investment important."
+            },
+            {
+                "interface_name": "really",
+                "ipv4_address": "68.84.30.55",
+                "ipv6_address": "8e2e:f213:8853:b038:98fc:2006:c986:ab2e",
+                "mac_address": "02:62:7b:c4:17:54",
+                "description": "Point speech direction within bad ok main."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "111.137.7.187",
+            "mac_address": "f6:c4:ae:9c:1a:55"
+        },
+        "description": "Heavy almost our force."
+    },
+    {
+        "hostname": "lt-20.miller.biz",
+        "xname": "x35933c18s4b2n2",
+        "architecture": "x86_64",
+        "boot_mac": "76:3f:17:6e:cf:83",
+        "network_interfaces": [
+            {
+                "interface_name": "than",
+                "ipv4_address": "149.114.170.213",
+                "ipv6_address": "ff55:2a93:fa0c:b2ef:53b5:ab16:4cbe:98e5",
+                "mac_address": "be:a7:ef:88:08:99",
+                "description": "Recognize this assume."
+            },
+            {
+                "interface_name": "team",
+                "ipv4_address": "77.184.173.66",
+                "ipv6_address": "b7d7:34e7:13be:8821:4acc:eff8:367:e24",
+                "mac_address": "18:53:89:a6:48:8c",
+                "description": "Chance middle physical individual through determine police."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "216.91.13.4",
+            "mac_address": "bc:db:0a:28:ac:0f"
+        },
+        "description": "Third professional person democratic choose bill position."
+    },
+    {
+        "hostname": "laptop-44.french-guerra.com",
+        "xname": "x81859c40s5b1n2",
+        "architecture": "arm64",
+        "boot_mac": "8c:0c:46:a9:5c:8a",
+        "network_interfaces": [
+            {
+                "interface_name": "upon",
+                "ipv4_address": "118.102.59.148",
+                "ipv6_address": "603b:2fab:e702:228a:8ad4:73fb:f43e:5dab",
+                "mac_address": "a4:bb:64:42:42:0b",
+                "description": "Best opportunity their management all."
+            },
+            {
+                "interface_name": "she",
+                "ipv4_address": "17.45.101.109",
+                "ipv6_address": "f0ba:54c5:22ac:ea0a:e315:22bd:8a53:1380",
+                "mac_address": "30:73:b8:36:f7:7e",
+                "description": "You however mission six hold form."
+            },
+            {
+                "interface_name": "vote",
+                "ipv4_address": "86.79.48.101",
+                "ipv6_address": "ff51:8e25:9f15:642b:c4a9:2288:9880:7afc",
+                "mac_address": "30:6e:aa:07:6e:e7",
+                "description": "American nature pass accept unit stop she."
+            },
+            {
+                "interface_name": "perhaps",
+                "ipv4_address": "144.110.152.209",
+                "ipv6_address": "404c:8f91:63d6:7169:91a:fa05:f22d:7400",
+                "mac_address": "84:88:cb:07:26:af",
+                "description": "Baby hit nor boy person so sea."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "204.220.112.234",
+            "mac_address": "f6:2e:61:96:4d:e8"
+        },
+        "description": "Phone radio doctor road yard career indicate."
+    },
+    {
+        "hostname": "laptop-37.kim-johnson.com",
+        "xname": "x58637c24s5b2n2",
+        "architecture": "x86_64",
+        "boot_mac": "2a:bd:24:e8:ed:ea",
+        "network_interfaces": [
+            {
+                "interface_name": "message",
+                "ipv4_address": "13.240.8.39",
+                "ipv6_address": "3454:9635:7f51:3229:5203:1c38:8167:367c",
+                "mac_address": "d4:13:3e:0e:e1:f6",
+                "description": "Three tonight become grow physical look over."
+            },
+            {
+                "interface_name": "hour",
+                "ipv4_address": "196.20.252.28",
+                "ipv6_address": "ff7:4183:7253:4393:aaa5:2a3c:a3ae:cf2d",
+                "mac_address": "56:ec:c6:22:d5:ea",
+                "description": "Professional choose effort ability."
+            },
+            {
+                "interface_name": "visit",
+                "ipv4_address": "138.167.91.112",
+                "ipv6_address": "8a9c:4d89:2523:ddf6:2cd7:ed4b:7d61:b91e",
+                "mac_address": "a8:5b:ec:5d:d6:ab",
+                "description": "Late agree miss create matter."
+            },
+            {
+                "interface_name": "state",
+                "ipv4_address": "141.183.110.198",
+                "ipv6_address": "c88a:b047:bde7:62d2:d95:c04a:59ff:285d",
+                "mac_address": "ac:f5:aa:15:18:46",
+                "description": "Power all but although different different deal."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "139.217.214.133",
+            "mac_address": "d2:d0:6d:85:de:a9"
+        },
+        "description": "Office bar fish next say south."
+    },
+    {
+        "hostname": "laptop-20.collier-robertson.com",
+        "xname": "x74722c48s4b2n5",
+        "architecture": "x86_64",
+        "boot_mac": "06:db:5d:fa:cc:f2",
+        "network_interfaces": [
+            {
+                "interface_name": "teacher",
+                "ipv4_address": "48.37.178.132",
+                "ipv6_address": "c601:db91:b88f:4d05:725:195b:3843:46b2",
+                "mac_address": "64:ce:51:be:57:72",
+                "description": "Plan start look century cut agency south."
+            },
+            {
+                "interface_name": "past",
+                "ipv4_address": "204.180.29.219",
+                "ipv6_address": "ab6d:f261:868a:517:9932:c87b:ea89:2aa7",
+                "mac_address": "40:6b:34:e1:3a:2b",
+                "description": "Paper form debate ball last bag throughout entire."
+            },
+            {
+                "interface_name": "attorney",
+                "ipv4_address": "46.167.197.83",
+                "ipv6_address": "39ee:59a7:e583:ad56:788:3f67:81df:f06c",
+                "mac_address": "fa:e2:81:5a:c5:12",
+                "description": "Wind leave such ten relationship effort."
+            },
+            {
+                "interface_name": "hour",
+                "ipv4_address": "114.135.240.0",
+                "ipv6_address": "e67b:5bd2:f016:3d79:b5fa:28b4:171c:a0dd",
+                "mac_address": "22:23:82:62:ee:4f",
+                "description": "Pass to save range practice beautiful."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "30.163.70.126",
+            "mac_address": "64:66:d5:6c:c8:5c"
+        },
+        "description": "Meeting senior themselves deep even agency."
+    },
+    {
+        "hostname": "lt-30.mcknight-price.com",
+        "xname": "x50151c21s4b1n6",
+        "architecture": "arm64",
+        "boot_mac": "68:da:c6:7d:c6:cf",
+        "network_interfaces": [
+            {
+                "interface_name": "appear",
+                "ipv4_address": "177.186.74.249",
+                "ipv6_address": "3025:47f5:6ce7:6d55:cafd:23d9:d816:4b4e",
+                "mac_address": "8e:06:4f:8f:25:2d",
+                "description": "Report there our enough fact board standard."
+            },
+            {
+                "interface_name": "bad",
+                "ipv4_address": "215.56.133.226",
+                "ipv6_address": "ce4b:1dc1:4706:b024:7db0:b590:e82:5f1",
+                "mac_address": "2a:25:40:5a:eb:d4",
+                "description": "Rule and especially identify suddenly."
+            },
+            {
+                "interface_name": "plant",
+                "ipv4_address": "19.139.245.212",
+                "ipv6_address": "9f03:fbf0:d837:5a45:ec94:97b4:8469:799b",
+                "mac_address": "d4:33:8b:1d:b7:ce",
+                "description": "Point and event."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "29.80.42.5",
+            "mac_address": "f4:4e:a8:d9:44:54"
+        },
+        "description": "Until bad help measure beat."
+    },
+    {
+        "hostname": "laptop-97.bright.com",
+        "xname": "x65277c60s10b3n1",
+        "architecture": "x86_64",
+        "boot_mac": "52:bf:7d:af:08:81",
+        "network_interfaces": [
+            {
+                "interface_name": "team",
+                "ipv4_address": "187.140.149.41",
+                "ipv6_address": "8e86:f2e:5433:2117:63a9:40ce:e7c7:1f8",
+                "mac_address": "40:a6:64:b2:fa:e7",
+                "description": "Key since necessary answer attention since toward."
+            },
+            {
+                "interface_name": "remain",
+                "ipv4_address": "10.122.100.42",
+                "ipv6_address": "9bcf:7337:5d9f:31e0:da56:d232:e845:80a4",
+                "mac_address": "f4:bd:14:7d:5b:4e",
+                "description": "Threat easy television threat alone."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "106.240.162.205",
+            "mac_address": "0e:73:e7:13:a6:b6"
+        },
+        "description": "Performance voice lot positive now stay."
+    },
+    {
+        "hostname": "web-65.turner.com",
+        "xname": "x50947c13s4b3n4",
+        "architecture": "x86_64",
+        "boot_mac": "ba:59:e9:8d:eb:73",
+        "network_interfaces": [
+            {
+                "interface_name": "social",
+                "ipv4_address": "29.197.179.69",
+                "ipv6_address": "961f:bba2:6ba0:e6e4:66b5:3b91:f5df:f8d3",
+                "mac_address": "e0:7b:29:75:30:5a",
+                "description": "Country throughout find situation several suddenly."
+            },
+            {
+                "interface_name": "simple",
+                "ipv4_address": "145.146.90.135",
+                "ipv6_address": "a24d:f585:ee5c:4644:479f:269f:8bab:5717",
+                "mac_address": "9c:13:c5:b3:34:4b",
+                "description": "Team protect poor maybe decide well body."
+            },
+            {
+                "interface_name": "use",
+                "ipv4_address": "135.168.208.209",
+                "ipv6_address": "a4d1:a7b3:a3dd:5dcd:1e97:c8be:9955:c661",
+                "mac_address": "00:6f:5f:e0:5d:1b",
+                "description": "Edge meet as realize right medical age."
+            },
+            {
+                "interface_name": "politics",
+                "ipv4_address": "138.123.110.159",
+                "ipv6_address": "7730:81e0:3c27:a77b:1d36:871e:4365:bb46",
+                "mac_address": "4e:a2:63:34:4f:4a",
+                "description": "Perhaps apply indeed as trouble."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "44.51.14.70",
+            "mac_address": "82:e2:cf:3a:08:3d"
+        },
+        "description": "Perhaps education color run impact."
+    },
+    {
+        "hostname": "lt-97.davis.biz",
+        "xname": "x18023c33s5b1n4",
+        "architecture": "arm64",
+        "boot_mac": "1a:a6:77:31:4d:34",
+        "network_interfaces": [
+            {
+                "interface_name": "should",
+                "ipv4_address": "110.118.22.58",
+                "ipv6_address": "67fc:c9d4:5b8:e6e9:968d:43ec:19e5:ff6a",
+                "mac_address": "8c:51:e2:48:ac:41",
+                "description": "Fund plant hot clear apply live factor face."
+            },
+            {
+                "interface_name": "long",
+                "ipv4_address": "190.158.71.21",
+                "ipv6_address": "3212:fabd:c5c1:f7e6:1b7a:b240:152e:e5b0",
+                "mac_address": "f4:63:52:75:7a:f4",
+                "description": "Language site wind range industry land hand."
+            },
+            {
+                "interface_name": "garden",
+                "ipv4_address": "136.208.224.180",
+                "ipv6_address": "690f:286b:6a2d:9f95:26f4:55a4:1deb:358f",
+                "mac_address": "84:92:a8:7c:a9:66",
+                "description": "Especially government method officer."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "155.32.140.106",
+            "mac_address": "22:c9:28:d2:0d:1d"
+        },
+        "description": "Operation travel continue ball thousand fish generation."
+    },
+    {
+        "hostname": "email-15.jones.com",
+        "xname": "x99509c25s9b3n5",
+        "architecture": "x86_64",
+        "boot_mac": "92:8e:36:c5:5a:20",
+        "network_interfaces": [
+            {
+                "interface_name": "about",
+                "ipv4_address": "48.6.217.246",
+                "ipv6_address": "8c90:3745:aebf:374c:476e:ccf6:77fd:ac12",
+                "mac_address": "88:f1:3a:71:a5:26",
+                "description": "Decision explain wear."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "17.59.241.3",
+            "mac_address": "b0:81:fb:85:18:4a"
+        },
+        "description": "Contain suggest very you."
+    },
+    {
+        "hostname": "db-51.morse.com",
+        "xname": "x26879c2s10b3n5",
+        "architecture": "arm64",
+        "boot_mac": "3c:d7:8d:0b:f2:be",
+        "network_interfaces": [
+            {
+                "interface_name": "themselves",
+                "ipv4_address": "214.176.29.203",
+                "ipv6_address": "b9ac:68b0:b3be:63:573b:b74:6cb8:562d",
+                "mac_address": "d6:a9:71:c0:89:d2",
+                "description": "Despite rest worry lay recently challenge kind."
+            },
+            {
+                "interface_name": "test",
+                "ipv4_address": "222.38.167.172",
+                "ipv6_address": "9a26:a666:1e5a:c0b3:5315:2084:2f75:6786",
+                "mac_address": "2e:83:91:c1:23:76",
+                "description": "Bit ago score project cold society down."
+            },
+            {
+                "interface_name": "option",
+                "ipv4_address": "178.108.71.32",
+                "ipv6_address": "3237:4ba9:7e54:2e91:1227:3d0c:3ec4:93d2",
+                "mac_address": "cc:0e:8d:59:f4:34",
+                "description": "Theory they level voice president member majority."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "77.143.144.223",
+            "mac_address": "02:4d:bc:0d:41:02"
+        },
+        "description": "Into hit store condition key seek."
+    },
+    {
+        "hostname": "email-58.mason.com",
+        "xname": "x91516c13s5b1n7",
+        "architecture": "arm64",
+        "boot_mac": "0a:26:d6:5b:e2:e3",
+        "network_interfaces": [
+            {
+                "interface_name": "whatever",
+                "ipv4_address": "183.76.142.73",
+                "ipv6_address": "6783:b7ab:829d:5269:503d:4a84:8b09:de09",
+                "mac_address": "8c:35:b3:ce:59:66",
+                "description": "Owner wrong all less financial name remain."
+            },
+            {
+                "interface_name": "argue",
+                "ipv4_address": "80.19.137.168",
+                "ipv6_address": "c869:1daa:1638:53e2:5df0:ba36:da55:bcea",
+                "mac_address": "68:e4:71:34:a7:a9",
+                "description": "Watch stock which need."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "112.112.207.161",
+            "mac_address": "b2:6d:e7:16:d3:c9"
+        },
+        "description": "Low anything rich chair water painting."
+    },
+    {
+        "hostname": "web-16.ramirez.info",
+        "xname": "x94715c37s3b1n3",
+        "architecture": "x86_64",
+        "boot_mac": "38:35:8c:f0:2b:e1",
+        "network_interfaces": [
+            {
+                "interface_name": "space",
+                "ipv4_address": "89.81.118.6",
+                "ipv6_address": "f362:7935:c0d4:611c:d304:e1a2:29f6:5eec",
+                "mac_address": "b8:18:37:dd:6b:db",
+                "description": "Instead significant take teacher note water."
+            },
+            {
+                "interface_name": "development",
+                "ipv4_address": "140.27.86.168",
+                "ipv6_address": "224c:89e6:8f65:fc86:a75:f549:7957:460f",
+                "mac_address": "a2:7c:56:61:f6:11",
+                "description": "Cup night small manage each knowledge common military."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "135.47.136.22",
+            "mac_address": "aa:17:6d:47:19:fa"
+        },
+        "description": "Stock drop institution maintain office threat its."
+    },
+    {
+        "hostname": "desktop-13.lee.com",
+        "xname": "x63639c43s7b1n3",
+        "architecture": "x86_64",
+        "boot_mac": "00:a5:8e:3a:d4:58",
+        "network_interfaces": [
+            {
+                "interface_name": "whom",
+                "ipv4_address": "35.49.8.129",
+                "ipv6_address": "728c:8a07:3415:4950:a6b3:12ea:2619:de36",
+                "mac_address": "0e:70:e3:7c:c6:90",
+                "description": "Lay of cell tend work sometimes either."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "105.231.193.7",
+            "mac_address": "34:45:0a:02:b3:b2"
+        },
+        "description": "Television worry writer our along process."
+    },
+    {
+        "hostname": "email-38.white.com",
+        "xname": "x65940c37s10b1n1",
+        "architecture": "arm64",
+        "boot_mac": "0e:c1:9e:5b:2b:f3",
+        "network_interfaces": [
+            {
+                "interface_name": "occur",
+                "ipv4_address": "124.95.81.98",
+                "ipv6_address": "5a9b:dce5:30a8:c229:6cf1:6cdf:7014:4cb5",
+                "mac_address": "3e:91:b6:2e:e9:71",
+                "description": "Everyone people huge sense measure cultural option."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "154.241.139.30",
+            "mac_address": "ec:32:4a:68:67:ce"
+        },
+        "description": "Within individual wall someone."
+    },
+    {
+        "hostname": "srv-25.cisneros.com",
+        "xname": "x98308c24s6b3n2",
+        "architecture": "x86_64",
+        "boot_mac": "52:f4:6d:8f:a6:23",
+        "network_interfaces": [
+            {
+                "interface_name": "respond",
+                "ipv4_address": "189.156.154.49",
+                "ipv6_address": "db81:3406:43c7:82c4:fdb:cba5:8988:7e89",
+                "mac_address": "62:15:c5:71:69:8b",
+                "description": "Enjoy blood process until."
+            },
+            {
+                "interface_name": "there",
+                "ipv4_address": "68.142.111.228",
+                "ipv6_address": "630b:b1f0:4bc6:7a9:3e9:9b4a:4ab1:14ea",
+                "mac_address": "d4:ea:29:94:10:5c",
+                "description": "Someone partner scene line."
+            },
+            {
+                "interface_name": "power",
+                "ipv4_address": "25.88.31.231",
+                "ipv6_address": "e101:3413:ec0e:21db:f19b:633b:af50:8a83",
+                "mac_address": "ca:9c:f0:5b:e9:64",
+                "description": "Maintain word around act six natural parent pretty."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "58.250.131.142",
+            "mac_address": "b4:de:33:8e:d3:ec"
+        },
+        "description": "Simple responsibility police."
+    },
+    {
+        "hostname": "srv-91.ortiz.com",
+        "xname": "x96198c8s7b3n4",
+        "architecture": "arm64",
+        "boot_mac": "d8:32:f4:8d:45:23",
+        "network_interfaces": [
+            {
+                "interface_name": "challenge",
+                "ipv4_address": "187.225.64.166",
+                "ipv6_address": "2765:9980:8c9e:e802:61ba:fa6b:b0f7:6cd5",
+                "mac_address": "2e:be:e7:66:5e:ed",
+                "description": "Already none population cut take black nice."
+            },
+            {
+                "interface_name": "add",
+                "ipv4_address": "180.35.103.107",
+                "ipv6_address": "40e1:c545:8f0e:56fa:ea12:b504:1f5:f097",
+                "mac_address": "bc:2e:05:a7:76:d5",
+                "description": "Space true speech stay new cultural stand."
+            },
+            {
+                "interface_name": "which",
+                "ipv4_address": "62.223.100.248",
+                "ipv6_address": "78bf:4e54:25e9:60f4:211a:ff15:a691:2299",
+                "mac_address": "9e:a2:ea:bc:08:7f",
+                "description": "Good senior part young different may that fight."
+            },
+            {
+                "interface_name": "hope",
+                "ipv4_address": "115.35.23.190",
+                "ipv6_address": "61fc:de15:bd03:4660:da4a:d852:aead:7fa9",
+                "mac_address": "16:2e:7a:5f:51:61",
+                "description": "Up difference sing minute threat western table season."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "209.69.110.31",
+            "mac_address": "74:36:e4:54:19:d7"
+        },
+        "description": "Player line we."
+    },
+    {
+        "hostname": "laptop-25.johnston.com",
+        "xname": "x35393c32s7b2n8",
+        "architecture": "x86_64",
+        "boot_mac": "8e:c9:51:b8:7d:55",
+        "network_interfaces": [
+            {
+                "interface_name": "movie",
+                "ipv4_address": "181.77.186.177",
+                "ipv6_address": "ce87:7f6:593d:a612:9e94:5af:af00:a5fd",
+                "mac_address": "8a:bb:7b:c5:06:f4",
+                "description": "Then central both few."
+            },
+            {
+                "interface_name": "occur",
+                "ipv4_address": "43.89.222.74",
+                "ipv6_address": "16cd:5aec:11b0:f65:1b49:fe50:ab57:667d",
+                "mac_address": "48:14:5d:a2:e1:29",
+                "description": "Professor participant too race particularly arrive activity."
+            },
+            {
+                "interface_name": "north",
+                "ipv4_address": "116.169.92.163",
+                "ipv6_address": "44cb:cfca:7818:9f6e:9311:77b6:ea19:dcb7",
+                "mac_address": "a6:cb:28:33:4b:d8",
+                "description": "System stay there speech."
+            },
+            {
+                "interface_name": "lose",
+                "ipv4_address": "81.160.15.57",
+                "ipv6_address": "2479:9bd4:ae15:69d7:1f38:7e61:dfa0:fcc5",
+                "mac_address": "48:9f:d6:30:4e:7e",
+                "description": "Prepare parent material animal meet."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "220.69.132.236",
+            "mac_address": "a0:71:b6:8d:42:0f"
+        },
+        "description": "Business heart though production."
+    },
+    {
+        "hostname": "laptop-08.smith-stevens.com",
+        "xname": "x25459c35s6b2n2",
+        "architecture": "x86_64",
+        "boot_mac": "a8:32:bd:0f:63:81",
+        "network_interfaces": [
+            {
+                "interface_name": "career",
+                "ipv4_address": "75.22.42.84",
+                "ipv6_address": "9571:dd30:4349:80fc:f848:9197:8b12:3a36",
+                "mac_address": "18:47:0a:a5:26:dc",
+                "description": "Help eight citizen out local Democrat."
+            },
+            {
+                "interface_name": "picture",
+                "ipv4_address": "208.55.85.95",
+                "ipv6_address": "b645:cdf2:fc9b:661f:a4a3:f9f5:7ded:b6ae",
+                "mac_address": "6c:a5:26:7c:f8:19",
+                "description": "Two professor authority including second price side charge."
+            },
+            {
+                "interface_name": "report",
+                "ipv4_address": "89.237.186.176",
+                "ipv6_address": "d5d0:e48d:2150:1550:d494:306c:4a8c:fbf6",
+                "mac_address": "d8:f7:48:36:4d:28",
+                "description": "Record turn however fear cover."
+            },
+            {
+                "interface_name": "identify",
+                "ipv4_address": "101.189.248.206",
+                "ipv6_address": "8602:314a:7af3:595a:e822:b70a:2cb2:7e6b",
+                "mac_address": "56:54:f2:f2:b1:1c",
+                "description": "Town ask until look teacher."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "54.90.78.185",
+            "mac_address": "5e:3c:e1:59:5a:11"
+        },
+        "description": "Film want mean."
+    },
+    {
+        "hostname": "laptop-10.owens.com",
+        "xname": "x42717c36s8b1n7",
+        "architecture": "arm64",
+        "boot_mac": "64:9d:b2:2f:82:a8",
+        "network_interfaces": [
+            {
+                "interface_name": "effect",
+                "ipv4_address": "4.172.225.165",
+                "ipv6_address": "cb29:e912:35ba:b9d5:1364:876f:6963:a3e8",
+                "mac_address": "a6:70:35:70:53:ff",
+                "description": "After baby list score game his."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "78.100.84.234",
+            "mac_address": "7c:ce:7c:29:ca:83"
+        },
+        "description": "Standard total professional recently large against."
+    },
+    {
+        "hostname": "lt-43.raymond.com",
+        "xname": "x61158c8s9b2n8",
+        "architecture": "x86_64",
+        "boot_mac": "ee:77:c1:a6:c4:5c",
+        "network_interfaces": [
+            {
+                "interface_name": "rise",
+                "ipv4_address": "211.160.70.204",
+                "ipv6_address": "ca52:8a12:b921:809d:a4d1:4fa7:7144:e3ec",
+                "mac_address": "e2:06:72:e1:54:f2",
+                "description": "Low measure young."
+            },
+            {
+                "interface_name": "question",
+                "ipv4_address": "89.119.18.217",
+                "ipv6_address": "561e:c073:36df:2e0c:59b6:d11f:6688:bec2",
+                "mac_address": "fa:9a:78:24:af:c9",
+                "description": "Whatever enough rather economic successful seat."
+            },
+            {
+                "interface_name": "member",
+                "ipv4_address": "111.197.36.77",
+                "ipv6_address": "1f98:16e6:8ada:29ee:ae61:592c:fcd3:7272",
+                "mac_address": "52:cd:a2:01:5e:d1",
+                "description": "Television method one current common down."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "192.120.94.156",
+            "mac_address": "c6:c9:6e:bb:a0:56"
+        },
+        "description": "Easy indeed picture black much where modern."
+    },
+    {
+        "hostname": "db-20.flowers.com",
+        "xname": "x69735c21s1b2n1",
+        "architecture": "arm64",
+        "boot_mac": "66:c1:65:e2:b7:49",
+        "network_interfaces": [
+            {
+                "interface_name": "month",
+                "ipv4_address": "116.222.145.163",
+                "ipv6_address": "c1c:c34:1a56:fd60:27d0:8e2c:fa8d:8617",
+                "mac_address": "02:61:0e:69:47:6c",
+                "description": "Card win may interview the pressure little."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "50.162.28.208",
+            "mac_address": "aa:31:f7:e7:fa:4c"
+        },
+        "description": "Energy civil center reach information win."
+    },
+    {
+        "hostname": "srv-99.nichols.com",
+        "xname": "x90362c13s10b3n1",
+        "architecture": "x86_64",
+        "boot_mac": "6c:c8:77:22:b7:81",
+        "network_interfaces": [
+            {
+                "interface_name": "modern",
+                "ipv4_address": "36.61.200.58",
+                "ipv6_address": "4e74:5dcd:5f44:86ea:70b8:964d:255e:3ef8",
+                "mac_address": "44:50:78:7d:21:1a",
+                "description": "During assume create character indeed amount."
+            },
+            {
+                "interface_name": "south",
+                "ipv4_address": "198.234.175.65",
+                "ipv6_address": "9f41:2ac7:7da6:9869:6dc4:5ae4:a40b:def6",
+                "mac_address": "02:6f:54:93:4d:2b",
+                "description": "Stuff hotel coach despite blue operation."
+            },
+            {
+                "interface_name": "political",
+                "ipv4_address": "105.27.155.84",
+                "ipv6_address": "86f7:734d:5f32:8023:604b:54b:521f:a918",
+                "mac_address": "82:88:c3:f9:a1:6d",
+                "description": "Arm pick reach."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "218.179.187.7",
+            "mac_address": "78:03:5f:81:84:5b"
+        },
+        "description": "Customer attention fear daughter operation."
+    },
+    {
+        "hostname": "lt-37.anderson-odom.com",
+        "xname": "x25778c57s8b2n3",
+        "architecture": "arm64",
+        "boot_mac": "30:1a:fb:83:07:1d",
+        "network_interfaces": [
+            {
+                "interface_name": "unit",
+                "ipv4_address": "156.4.200.154",
+                "ipv6_address": "e673:26c4:f950:5f3a:5f9d:494d:e08:28d6",
+                "mac_address": "b6:10:9c:df:61:0f",
+                "description": "Road stage race full eat."
+            },
+            {
+                "interface_name": "year",
+                "ipv4_address": "40.249.234.142",
+                "ipv6_address": "bf75:185b:bcf6:71e2:98f5:7357:7db0:d23b",
+                "mac_address": "58:3c:bf:23:36:cf",
+                "description": "Onto magazine fly book plan police in how."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "102.171.11.163",
+            "mac_address": "9e:4e:95:f3:f3:32"
+        },
+        "description": "She walk under customer."
+    },
+    {
+        "hostname": "email-91.dalton.com",
+        "xname": "x74960c3s10b2n6",
+        "architecture": "x86_64",
+        "boot_mac": "a6:f7:91:6c:42:ed",
+        "network_interfaces": [
+            {
+                "interface_name": "can",
+                "ipv4_address": "150.109.231.210",
+                "ipv6_address": "8020:f776:a5d1:35bf:d1c3:9128:8602:2151",
+                "mac_address": "86:59:d8:e8:88:d9",
+                "description": "Economy study in."
+            },
+            {
+                "interface_name": "pay",
+                "ipv4_address": "58.179.13.203",
+                "ipv6_address": "7239:2c0:944c:b201:6846:a7c1:ba3:6dba",
+                "mac_address": "02:98:25:3a:24:68",
+                "description": "Tonight at degree discussion."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "146.107.25.230",
+            "mac_address": "8a:9e:b4:ac:a3:1c"
+        },
+        "description": "Measure message world care pay we."
+    },
+    {
+        "hostname": "laptop-60.miller-brewer.org",
+        "xname": "x53858c56s8b2n8",
+        "architecture": "x86_64",
+        "boot_mac": "3a:d0:ae:20:80:e2",
+        "network_interfaces": [
+            {
+                "interface_name": "state",
+                "ipv4_address": "6.232.190.109",
+                "ipv6_address": "c341:df26:52be:368d:2c96:f448:7d22:a018",
+                "mac_address": "16:81:39:9a:60:b5",
+                "description": "Exactly grow small teach action look public."
+            },
+            {
+                "interface_name": "star",
+                "ipv4_address": "87.63.33.245",
+                "ipv6_address": "c547:feed:8638:17c4:21f5:b67c:def4:59f6",
+                "mac_address": "c4:f2:32:71:5b:c7",
+                "description": "Eye protect hair in your."
+            },
+            {
+                "interface_name": "drop",
+                "ipv4_address": "191.203.34.79",
+                "ipv6_address": "dcb1:186a:495:caa9:d693:ad06:1d04:62a2",
+                "mac_address": "90:b8:8e:6d:4d:c7",
+                "description": "Sign billion you."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "219.18.249.183",
+            "mac_address": "9e:d5:4a:ce:91:ae"
+        },
+        "description": "Rather also party world."
+    },
+    {
+        "hostname": "laptop-23.miller.com",
+        "xname": "x24509c27s6b3n5",
+        "architecture": "arm64",
+        "boot_mac": "08:a2:ab:b0:4f:81",
+        "network_interfaces": [
+            {
+                "interface_name": "campaign",
+                "ipv4_address": "107.119.114.135",
+                "ipv6_address": "f711:3d02:c74b:a766:584c:b42:cf99:2db3",
+                "mac_address": "5a:bd:a1:2e:20:28",
+                "description": "East probably what little."
+            },
+            {
+                "interface_name": "church",
+                "ipv4_address": "152.113.230.7",
+                "ipv6_address": "ed39:86af:4d3a:45bc:8697:d7d7:8117:a568",
+                "mac_address": "d8:0c:be:ae:72:fc",
+                "description": "Back wrong discussion could black process its."
+            },
+            {
+                "interface_name": "trade",
+                "ipv4_address": "108.233.87.23",
+                "ipv6_address": "9a3b:3189:a2f1:7a04:9c15:da45:1f77:4f7d",
+                "mac_address": "4e:99:8d:a1:ac:50",
+                "description": "Maybe interesting amount all eat card less."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "173.77.237.219",
+            "mac_address": "a4:80:c8:28:ed:de"
+        },
+        "description": "Television yes main point expert answer star."
+    },
+    {
+        "hostname": "srv-97.crawford.com",
+        "xname": "x60444c26s7b2n6",
+        "architecture": "x86_64",
+        "boot_mac": "e8:d3:c8:6b:21:2c",
+        "network_interfaces": [
+            {
+                "interface_name": "organization",
+                "ipv4_address": "199.51.185.250",
+                "ipv6_address": "c01f:8ff4:4507:cc67:8a35:a670:87a5:ef08",
+                "mac_address": "54:94:8f:12:7d:e0",
+                "description": "Water school stay coach film guy."
+            },
+            {
+                "interface_name": "standard",
+                "ipv4_address": "35.152.47.208",
+                "ipv6_address": "fc2f:c02e:f09a:2727:6b2:a843:4ff:153d",
+                "mac_address": "24:48:87:57:80:36",
+                "description": "Military tax heavy better finish yeah fight."
+            },
+            {
+                "interface_name": "plant",
+                "ipv4_address": "5.80.172.242",
+                "ipv6_address": "f634:2b51:1aaf:808c:fb89:ed1e:67e2:c4b1",
+                "mac_address": "94:87:8e:23:6e:8b",
+                "description": "Yes occur your kitchen result nor fact."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "92.170.42.140",
+            "mac_address": "a0:35:98:fc:ab:d3"
+        },
+        "description": "Congress her smile fill do."
+    },
+    {
+        "hostname": "laptop-83.cole.com",
+        "xname": "x56096c19s6b3n3",
+        "architecture": "x86_64",
+        "boot_mac": "38:69:c6:36:f0:65",
+        "network_interfaces": [
+            {
+                "interface_name": "into",
+                "ipv4_address": "195.174.201.112",
+                "ipv6_address": "f732:37d9:efe8:9468:25a1:c0c6:782c:7115",
+                "mac_address": "c2:80:4a:66:85:17",
+                "description": "Mission past special traditional."
+            },
+            {
+                "interface_name": "opportunity",
+                "ipv4_address": "62.233.162.233",
+                "ipv6_address": "47df:dac6:840f:6b64:5e4:10a8:fc2d:42b4",
+                "mac_address": "ec:6f:0b:54:88:e8",
+                "description": "Light and enough discussion."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "120.204.246.21",
+            "mac_address": "3a:20:d3:fe:a5:90"
+        },
+        "description": "Set where drive mention clearly."
+    },
+    {
+        "hostname": "srv-55.olson.info",
+        "xname": "x99220c33s3b3n3",
+        "architecture": "x86_64",
+        "boot_mac": "c2:b5:49:b2:e0:11",
+        "network_interfaces": [
+            {
+                "interface_name": "book",
+                "ipv4_address": "171.238.110.209",
+                "ipv6_address": "41ec:3242:ea8d:e3d6:1353:a5c0:abd9:9acd",
+                "mac_address": "16:fe:1a:43:0b:64",
+                "description": "Investment all training decision often."
+            },
+            {
+                "interface_name": "improve",
+                "ipv4_address": "95.59.74.2",
+                "ipv6_address": "b018:cde8:8b62:b44f:f4c2:d7d5:ae91:1576",
+                "mac_address": "4a:f9:c2:80:c9:08",
+                "description": "Into black Democrat worry whatever card get."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "140.27.237.234",
+            "mac_address": "aa:38:04:fd:e1:7c"
+        },
+        "description": "Low yes hold study also sense."
+    },
+    {
+        "hostname": "desktop-74.jones.com",
+        "xname": "x12495c25s2b2n1",
+        "architecture": "arm64",
+        "boot_mac": "54:ca:cf:da:eb:93",
+        "network_interfaces": [
+            {
+                "interface_name": "especially",
+                "ipv4_address": "125.140.5.33",
+                "ipv6_address": "3516:4508:7b33:db4:81b:4ff7:5902:bbab",
+                "mac_address": "82:03:39:56:ca:22",
+                "description": "Decide under Mrs able no."
+            },
+            {
+                "interface_name": "impact",
+                "ipv4_address": "200.87.37.90",
+                "ipv6_address": "7f80:b302:ef88:7801:748c:cdf0:8325:afed",
+                "mac_address": "5e:2d:90:7b:91:09",
+                "description": "Collection single card rate."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "159.49.246.12",
+            "mac_address": "80:6e:72:fd:5c:f1"
+        },
+        "description": "Technology until wear attack."
+    },
+    {
+        "hostname": "lt-44.mendoza.com",
+        "xname": "x64186c11s1b3n5",
+        "architecture": "arm64",
+        "boot_mac": "1a:42:2a:4c:b1:4e",
+        "network_interfaces": [
+            {
+                "interface_name": "family",
+                "ipv4_address": "157.239.35.221",
+                "ipv6_address": "304:b81b:a9c8:ef08:c2cd:4d4a:f61f:2930",
+                "mac_address": "d0:33:96:ec:66:bb",
+                "description": "Table investment perhaps player."
+            },
+            {
+                "interface_name": "size",
+                "ipv4_address": "145.188.123.1",
+                "ipv6_address": "59f4:e5ae:2b51:5eb7:ee7c:a0a8:fc57:1b0c",
+                "mac_address": "fc:f8:a2:54:92:72",
+                "description": "Population human subject notice stock foreign everybody item."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "185.138.60.141",
+            "mac_address": "00:59:4f:9d:e2:72"
+        },
+        "description": "Church skin clear character kind."
+    },
+    {
+        "hostname": "web-30.rodriguez-roberts.com",
+        "xname": "x81153c43s7b2n1",
+        "architecture": "arm64",
+        "boot_mac": "1a:2a:f7:65:09:4e",
+        "network_interfaces": [
+            {
+                "interface_name": "trial",
+                "ipv4_address": "182.181.123.117",
+                "ipv6_address": "ce8a:182a:90c8:ca34:d127:f36a:dba2:6e61",
+                "mac_address": "2c:ae:97:7f:8a:56",
+                "description": "Matter concern project your trip mean."
+            },
+            {
+                "interface_name": "organization",
+                "ipv4_address": "178.43.38.91",
+                "ipv6_address": "100c:700f:253c:2b4c:de55:2d3:405a:e7e1",
+                "mac_address": "c6:4d:34:ba:f1:86",
+                "description": "Language sometimes western focus."
+            },
+            {
+                "interface_name": "prevent",
+                "ipv4_address": "123.176.124.43",
+                "ipv6_address": "1008:bc6:71e8:be80:1dfe:3727:da1a:4cbf",
+                "mac_address": "78:a4:3f:1e:2f:5c",
+                "description": "Analysis large billion thus help thought customer."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "170.96.211.121",
+            "mac_address": "98:53:1e:a5:76:f7"
+        },
+        "description": "Into shake good win writer."
+    },
+    {
+        "hostname": "email-91.ward.com",
+        "xname": "x53507c43s3b1n3",
+        "architecture": "arm64",
+        "boot_mac": "fc:b3:06:66:f6:12",
+        "network_interfaces": [
+            {
+                "interface_name": "institution",
+                "ipv4_address": "215.170.47.130",
+                "ipv6_address": "6f6e:d755:f541:4b70:a5ca:32c6:5d2e:e078",
+                "mac_address": "b8:b1:a6:e8:64:8b",
+                "description": "Inside form raise goal without key."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "102.31.114.92",
+            "mac_address": "ee:84:84:35:f3:2c"
+        },
+        "description": "Want value summer step there."
+    },
+    {
+        "hostname": "db-54.todd.com",
+        "xname": "x15676c28s5b3n4",
+        "architecture": "arm64",
+        "boot_mac": "cc:3e:82:2f:75:32",
+        "network_interfaces": [
+            {
+                "interface_name": "mission",
+                "ipv4_address": "68.52.133.28",
+                "ipv6_address": "62e3:3d14:68e7:348:255e:ec5f:3950:b227",
+                "mac_address": "80:e8:93:0e:d2:63",
+                "description": "Within when production."
+            },
+            {
+                "interface_name": "play",
+                "ipv4_address": "174.148.112.174",
+                "ipv6_address": "cd8c:dceb:f05e:6090:5312:4f69:f4b9:4a64",
+                "mac_address": "24:a7:b6:e4:eb:34",
+                "description": "Only drug whom meeting tend fill assume huge."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "76.161.162.134",
+            "mac_address": "bc:bf:1a:e1:a7:24"
+        },
+        "description": "Eat building development point stock what."
+    },
+    {
+        "hostname": "email-67.scott.com",
+        "xname": "x74272c30s4b1n6",
+        "architecture": "x86_64",
+        "boot_mac": "d4:30:0f:dd:6a:00",
+        "network_interfaces": [
+            {
+                "interface_name": "matter",
+                "ipv4_address": "158.216.54.208",
+                "ipv6_address": "ff18:f6f1:8223:57ec:f61a:c4ef:ef40:149a",
+                "mac_address": "c2:b9:0f:ec:20:01",
+                "description": "Free without note explain whose decade."
+            }
+        ],
+        "bmc": {
+            "username": "admin",
+            "password": "admin",
+            "ipv4_address": "55.152.244.162",
+            "mac_address": "b0:98:21:15:44:0a"
+        },
+        "description": "Center similar general."
+    }
+]

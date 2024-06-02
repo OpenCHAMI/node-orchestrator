@@ -29,15 +29,17 @@ def generate_compute_node():
             "mac_address": fake.mac_address()
         }
     
-    return {
+    payload = {
         "hostname": fake.hostname(),
         "xname": f"x{random.randint(10000, 99999)}c{random.randint(1, 60)}s{random.randint(1, 10)}b{random.randint(1, 3)}n{random.randint(1, 8)}",
         "architecture": random.choice(["x86_64", "arm64"]),
         "boot_mac": fake.mac_address(),
         "network_interfaces": network_interfaces,
-        "bmc": bmc,
         "description": fake.sentence(),
     }
+    if bmc is not None:
+        payload["bmc"] = bmc
+    return payload
 
 def main():
     if len(sys.argv) != 2:
