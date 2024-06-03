@@ -4,9 +4,12 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
+	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -45,8 +48,8 @@ func main() {
 
 	// Setup logger
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
-	// logger := log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	// logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	logger := log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'serve' or 'schemas' subcommands")
@@ -63,6 +66,9 @@ func main() {
 	case "snapshot":
 		snapshotCmd.Parse(os.Args[2:])
 		snapshot()
+	case "restore":
+		snapshotCmd.Parse(os.Args[2:])
+		restore()
 	default:
 		fmt.Println("expected 'serve', 'snapshot', or 'schemas' subcommands")
 		os.Exit(1)
@@ -142,6 +148,53 @@ func snapshot() {
 	if err != nil {
 		log.Fatal()
 	}
+}
+
+func restore() {
+	log.Info().Msg("Restoring snapshot")
+	myStorage, err := storage.NewDuckDBStorageForRestore("data.db")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Error creating storage")
+	}
+
+	// Find the most recent snapshot directory
+	snapshotDir, err := findMostRecentSnapshotDir(*snapshotPath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Error finding snapshot directory")
+	}
+
+	err = myStorage.RestoreParquet(snapshotDir)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Error restoring snapshot")
+	}
+}
+
+// findMostRecentSnapshotDir finds the most recent directory under the given path
+func findMostRecentSnapshotDir(path string) (string, error) {
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return "", err
+	}
+
+	var dirs []os.FileInfo
+	for _, file := range files {
+		if file.IsDir() {
+			dirs = append(dirs, file)
+		}
+	}
+
+	if len(dirs) == 0 {
+		return "", fmt.Errorf("no snapshot directories found")
+	}
+
+	// Sort directories by name (assuming they are named by date)
+	sort.Slice(dirs, func(i, j int) bool {
+		return dirs[i].Name() > dirs[j].Name() // descending order
+	})
+
+	// Return the most recent directory
+	mostRecentDir := filepath.Join(path, dirs[0].Name())
+	return mostRecentDir, nil
 }
 
 func AuthenticatorWithRequiredClaims(ja *jwtauth.JWTAuth, requiredClaims []string) func(http.Handler) http.Handler {

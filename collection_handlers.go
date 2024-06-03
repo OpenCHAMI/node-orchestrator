@@ -11,24 +11,25 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/openchami/node-orchestrator/pkg/nodes"
-	log "github.com/sirupsen/logrus"
+	"github.com/openchami/node-orchestrator/pkg/xnames"
+	"github.com/rs/zerolog/log"
 )
 
 func createCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var collection nodes.NodeCollection
 		if err := json.NewDecoder(r.Body).Decode(&collection); err != nil {
-			log.WithFields(log.Fields{
-				"error": fmt.Errorf("error binding collection: %v", err),
-			}).Error("Error binding collection")
+			log.Error().
+				Err(fmt.Errorf("error binding collection: %v", err)).
+				Msg("Error binding collection")
 			render.Render(w, r, ErrInvalidRequest(err))
 			return
 		}
 		claims, err := extract_claims(r)
 		if err != nil {
-			log.WithFields(log.Fields{
-				"error": fmt.Errorf("error extracting claims: %v", err),
-			}).Error("Error extracting claims")
+			log.Error().
+				Err(fmt.Errorf("error extracting claims: %w", err)).
+				Msg("Error extracting claims")
 		}
 
 		collection.Owner = uuid.MustParse(claims["sub"].(string))
@@ -38,18 +39,19 @@ func createCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 			render.Render(w, r, ErrInvalidRequest(err))
 			return
 		}
-		log.WithFields(log.Fields{
-			"collection_id": collection.ID,
-			"owner":         collection.Owner,
-			"creator":       collection.CreatorSubject,
-			"description":   collection.Description,
-			"name":          collection.Name,
-			"type":          collection.Type,
-			"nodes":         collection.Nodes,
-			"alias":         collection.Alias,
-			"request_id":    middleware.GetReqID(r.Context()),
-			"jwt_subject":   claims["sub"],
-		}).Info("Collection created")
+		log.Info().
+			Str("collection_id", collection.ID.String()).
+			Str("owner", collection.Owner.String()).
+			Str("creator", collection.CreatorSubject).
+			Str("description", collection.Description).
+			Str("name", collection.Name).
+			Str("type", collection.Type.String()).
+			Strs("nodes", xnames.XnameSliceString(collection.Nodes)).
+			Str("alias", collection.Alias).
+			Str("request_id", middleware.GetReqID(r.Context())).
+			Str("request_uri", r.RequestURI).
+			Str("jwt_subject", claims["sub"].(string)).
+			Msg("Collection created")
 
 		render.Status(r, http.StatusCreated)
 		render.JSON(w, r, collection)
@@ -81,9 +83,7 @@ func updateCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 		identifier := chi.URLParam(r, "identifier")
 		claims, err := extract_claims(r)
 		if err != nil {
-			log.WithFields(log.Fields{
-				"error": fmt.Errorf("error extracting claims: %v", err),
-			}).Error("Error extracting claims")
+			log.Error().Err(err).Msg("Error extracting claims")
 		}
 		var collection nodes.NodeCollection
 		if err := render.Bind(r, &collection); err != nil {
@@ -103,18 +103,19 @@ func updateCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 			render.Render(w, r, ErrInvalidRequest(err))
 			return
 		}
-		log.WithFields(log.Fields{
-			"collection_id": collection.ID,
-			"owner":         collection.Owner,
-			"creator":       collection.CreatorSubject,
-			"description":   collection.Description,
-			"name":          collection.Name,
-			"type":          collection.Type,
-			"nodes":         collection.Nodes,
-			"alias":         collection.Alias,
-			"request_id":    middleware.GetReqID(r.Context()),
-			"jwt_subject":   claims["sub"].(string),
-		}).Info("Collection updated")
+		log.Info().
+			Str("collection_id", collection.ID.String()).
+			Str("owner", collection.Owner.String()).
+			Str("creator", collection.CreatorSubject).
+			Str("description", collection.Description).
+			Str("name", collection.Name).
+			Str("type", collection.Type.String()).
+			Strs("nodes", xnames.XnameSliceString(collection.Nodes)).
+			Str("alias", collection.Alias).
+			Str("request_id", middleware.GetReqID(r.Context())).
+			Str("request_uri", r.RequestURI).
+			Str("jwt_subject", claims["sub"].(string)).
+			Msg("Collection updated")
 
 		render.Status(r, http.StatusOK)
 		render.JSON(w, r, collection)
@@ -126,18 +127,13 @@ func deleteCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 		identifier := chi.URLParam(r, "identifier")
 		identifierUUID, err := uuid.Parse(identifier)
 		if err != nil {
-			log.WithFields(log.Fields{
-				"error": fmt.Errorf("error parsing identifier: %v", err),
-			}).Error(fmt.Printf("Error parsing identifier: %v", err))
+			log.Error().Err(err).Msg("Error parsing identifier")
 			render.Render(w, r, ErrInvalidRequest(err))
 			return
 		}
 
 		if err := manager.DeleteCollection(identifierUUID); err != nil {
-			log.WithFields(log.Fields{
-				"error": fmt.Errorf("error deleting collection: %v", err),
-			}).Error(fmt.Printf("Error deleting collection: %v", err))
-
+			log.Error().Err(err).Msg("Error deleting collection")
 			render.Render(w, r, ErrInternalServer)
 			return
 		}

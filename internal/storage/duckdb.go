@@ -1,9 +1,11 @@
 package storage
 
 import (
+	"bufio"
 	"database/sql"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -36,6 +38,20 @@ func NewDuckDBStorage(path string) (*DuckDBStorage, error) {
 	if err := d.initTables(); err != nil {
 		return nil, err
 	}
+
+	return d, nil
+}
+
+func NewDuckDBStorageForRestore(path string) (*DuckDBStorage, error) {
+	db, err := sql.Open("duckdb", path)
+	if err != nil {
+		return nil, err
+	}
+
+	d := &DuckDBStorage{db: db}
+
+	// load extensions
+	d.db.Exec("INSTALL json; LOAD json")
 
 	return d, nil
 }
@@ -269,27 +285,47 @@ func (d *DuckDBStorage) SnapshotParquet(path string) error {
 }
 
 func (d *DuckDBStorage) RestoreParquet(path string) error {
-	// Ensure the path is escaped properly
-	escapedPath := strings.ReplaceAll(path, "'", "''")
-	// Add a trailing slash if it is missing
-	if !strings.HasSuffix(escapedPath, "/") {
-		escapedPath += "/"
+	// Read and execute schema.sql to set up the database schema
+	schemaFile := filepath.Join(path, "schema.sql")
+	if err := d.executeSQLFile(schemaFile); err != nil {
+		return fmt.Errorf("error executing schema.sql: %w", err)
 	}
+	log.Info().Str("file", schemaFile).Msg("Executed schema.sql")
 
-	// Construct the SQL statement
-	sql := fmt.Sprintf(`INSTALL parquet;
-	LOAD parquet;
-	IMPORT DATABASE '%s' (FORMAT PARQUET);`, escapedPath)
+	// Read and execute load.sql to load Parquet files
+	loadFile := filepath.Join(path, "load.sql")
+	if err := d.executeSQLFile(loadFile); err != nil {
+		return fmt.Errorf("error executing load.sql: %w", err)
+	}
+	log.Info().Str("file", loadFile).Msg("Executed load.sql")
 
-	// Execute the SQL statement
-	_, err := d.db.Exec(sql)
+	return nil
+}
+
+func (d *DuckDBStorage) executeSQLFile(filePath string) error {
+	file, err := os.Open(filePath)
 	if err != nil {
-		log.Error().Err(err).Msg("Error importing DuckDB database from Parquet format")
 		return err
 	}
-	log.Info().
-		Str("path", escapedPath).
-		Msg("RestoreParquet")
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	var sb strings.Builder
+	for scanner.Scan() {
+		line := scanner.Text()
+		sb.WriteString(line)
+		if strings.HasSuffix(strings.TrimSpace(line), ";") {
+			_, err := d.db.Exec(sb.String())
+			if err != nil {
+				return err
+			}
+			sb.Reset()
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return err
+	}
 
 	return nil
 }
