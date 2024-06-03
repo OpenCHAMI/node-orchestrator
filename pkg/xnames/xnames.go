@@ -125,6 +125,15 @@ func (xname NodeXname) Valid() (bool, error) {
 	return true, nil
 }
 
+// XnameSliceString converts a slice of NodeCollectionType to a slice of strings.
+func XnameSliceString(slice []NodeXname) []string {
+	strSlice := make([]string, len(slice))
+	for i, v := range slice {
+		strSlice[i] = v.String()
+	}
+	return strSlice
+}
+
 func NewNodeXname(xname string) NodeXname {
 	return NodeXname{Value: xname}
 }

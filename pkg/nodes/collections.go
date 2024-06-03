@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -21,6 +21,11 @@ const (
 	JobType       NodeCollectionType = "job"
 	PartitionType NodeCollectionType = "partition"
 )
+
+// String returns the string representation of NodeCollectionType.
+func (n NodeCollectionType) String() string {
+	return string(n)
+}
 
 // JSONSchema for NodeCollectionType to enforce enum and description.
 func (NodeCollectionType) JSONSchema() *jsonschema.Schema {
@@ -46,9 +51,7 @@ type NodeCollection struct {
 
 func (c *NodeCollection) Bind(r *http.Request) error {
 	if err := render.DecodeJSON(r.Body, &c); err != nil {
-		log.WithFields(log.Fields{
-			"error": fmt.Errorf("error decoding request body: %v", err),
-		}).Error(fmt.Printf("Error decoding request body: %v", err))
+		log.Error().Err(err).Msg("Error binding collection")
 		return err
 	}
 	return nil

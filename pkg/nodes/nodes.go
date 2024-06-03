@@ -3,7 +3,7 @@ package nodes
 import (
 	"database/sql"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 
 	"github.com/google/uuid"
 	"github.com/openchami/node-orchestrator/pkg/xnames"
@@ -53,33 +53,33 @@ type ComputeNodeEvent struct {
 
 func CreateNodeTables(db *sql.DB) {
 	if err := db.Ping(); err != nil {
-		log.WithError(err).Fatal("Error connecting to database")
+		log.Fatal().Err(err).Msg("Error connecting to database")
 	}
-	result, err := db.Exec(createCloudInitDataTableSQL())
+	_, err := db.Exec(createCloudInitDataTableSQL())
 	if err != nil {
-		log.WithError(err).Fatal("Error creating cloud_init_data table")
+		log.Fatal().Err(err).Msg("Error creating cloud_init_data table")
 	}
-	log.Info(result)
+	log.Info().Msg("Created cloud_init_data table")
 
 	if _, err := db.Exec(createBootDataTableSQL()); err != nil {
-		log.WithError(err).Fatal("Error creating boot_data table")
+		log.Fatal().Err(err).Msg("Error creating boot_data table")
 	}
-	log.Info("Created boot_data table")
+	log.Info().Msg("Created boot_data table")
 
 	if _, err := db.Exec(createComputeNodeTableSQL()); err != nil {
-		log.WithError(err).Fatal("Error creating compute_node table")
+		log.Fatal().Err(err).Msg("Error creating compute_node table")
 	}
-	log.Info("Created compute_node table")
+	log.Info().Msg("Created compute_node table")
 
 	if _, err := db.Exec(createNetworkInterfaceTableSQL()); err != nil {
-		log.WithError(err).Fatal("Error creating network_interface table")
+		log.Fatal().Err(err).Msg("Error creating network_interface table")
 	}
-	log.Info("Created network_interface table")
+	log.Info().Msg("Created network_interface table")
 
 	if _, err := db.Exec(createComputeNodeEventTableSQL()); err != nil {
-		log.WithError(err).Fatal("Error creating compute_node_event table")
+		log.Fatal().Err(err).Msg("Error creating compute_node_event table")
 	}
-	log.Info("Created compute_node_event table")
+	log.Info().Msg("Created compute_node_event table")
 }
 
 func createCloudInitDataTableSQL() string {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"os"
 	"path/filepath"
@@ -10,7 +9,7 @@ import (
 	base "github.com/Cray-HPE/hms-base"
 	"github.com/invopop/jsonschema"
 	nodes "github.com/openchami/node-orchestrator/pkg/nodes"
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 func generateAndWriteSchemas(path string) {
@@ -23,19 +22,19 @@ func generateAndWriteSchemas(path string) {
 	}
 
 	if err := os.MkdirAll(path, 0755); err != nil {
-		log.WithError(err).Error("Failed to create schema directory")
+		log.Fatal().Err(err).Str("path", path).Msg("Failed to create schema directory")
 	}
 
 	for filename, model := range schemas {
 		schema := jsonschema.Reflect(model)
 		data, err := json.MarshalIndent(schema, "", "  ")
 		if err != nil {
-			log.Fatalf("Failed to generate JSON schema for %v: %v", filename, err)
+			log.Fatal().Err(err).Str("filename", filename).Msg("Failed to generate JSON schema")
 		}
 		fullpath := filepath.Join(path, filename)
 		if err := os.WriteFile(fullpath, data, 0644); err != nil {
-			log.Fatalf("Failed to write JSON schema to file %v: %v", fullpath, err)
+			log.Fatal().Err(err).Str("filename", filename).Msg("Failed to write JSON schema to file")
 		}
-		fmt.Printf("Schema written to %s\n", fullpath)
+		log.Info().Str("fullpath", fullpath).Msg("Schema written")
 	}
 }

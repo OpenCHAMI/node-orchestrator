@@ -13,7 +13,7 @@ import (
 	"encoding/json"
 
 	"github.com/openchami/node-orchestrator/pkg/nodes"
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 // DuckDBStorage is a storage backend that uses DuckDB
@@ -142,7 +142,7 @@ func (d *DuckDBStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMA
 
 	rows, err := d.db.Query(query, queryArgs...)
 	if err != nil {
-		log.WithError(err).Error("Error querying DuckDB for ComputeNodes")
+		log.Error().Err(err).Msg("Error querying DuckDB for ComputeNodes")
 		return nil, err
 	}
 	defer rows.Close()
@@ -160,11 +160,11 @@ func (d *DuckDBStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMA
 		foundNodes = append(foundNodes, node)
 	}
 	// Log the query and number of rows returned
-	log.WithFields(log.Fields{
-		"query": query,
-		"args":  queryArgs,
-		"count": len(foundNodes),
-	}).Info("Searching compute nodes")
+	log.Info().
+		Str("query", query).
+		Interface("args", queryArgs).
+		Int("count", len(foundNodes)).
+		Msg("Searching compute nodes")
 	return foundNodes, nil
 }
 
@@ -256,11 +256,14 @@ func (d *DuckDBStorage) SnapshotParquet(path string) error {
 	EXPORT DATABASE '%s' (FORMAT PARQUET);`, escapedPath)
 
 	// Execute the SQL statement
-	result, err := d.db.Exec(sql)
+	_, err := d.db.Exec(sql)
 	if err != nil {
-		log.WithError(err).Error("Error exporting DuckDB database to Parquet format")
+		log.Error().Err(err).Msg("Error exporting DuckDB database to Parquet format")
 		return err
 	}
-	log.WithField("result", result).Info("SnapshotParquet")
+	log.Info().
+		Str("path", escapedPath).
+		Msg("SnapshotParquet")
+
 	return nil
 }

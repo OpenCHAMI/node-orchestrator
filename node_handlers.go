@@ -12,7 +12,7 @@ import (
 	"github.com/openchami/node-orchestrator/internal/storage"
 	"github.com/openchami/node-orchestrator/pkg/nodes"
 	"github.com/openchami/node-orchestrator/pkg/xnames"
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 func mustInt(i int, e error) int {
@@ -27,7 +27,7 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 		var newNode nodes.ComputeNode
 
 		if err := render.DecodeJSON(r.Body, &newNode); err != nil {
-			log.WithError(err).Error("Error decoding request body")
+			log.Error().Err(err).Msg("Error decoding request body")
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
@@ -90,20 +90,22 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 			return
 		}
 
-		logFields := log.Fields{
-			"node_id":       newNode.ID,
-			"node_xname":    newNode.XName.String(),
-			"node_hostname": newNode.Hostname,
-			"node_arch":     newNode.Architecture,
-			"node_boot_mac": newNode.BootMac,
-			"request_id":    middleware.GetReqID(r.Context()),
-		}
+		sublog := log.With().
+			Str("node_id", newNode.ID.String()).
+			Str("xname", newNode.XName.String()).
+			Str("hostname", newNode.Hostname).
+			Str("arch", newNode.Architecture).
+			Str("boot_mac", newNode.BootMac).
+			Str("request_id", middleware.GetReqID(r.Context())).
+			Logger()
+
 		if newNode.BMC != nil {
-			logFields["bmc_mac"] = newNode.BMC.MACAddress
-			logFields["bmc_xname"] = newNode.BMC.XName
-			logFields["bmc_id"] = newNode.BMC.ID
+			sublog.With().
+				Str("bmc_mac", newNode.BMC.MACAddress).
+				Str("bmc_xname", newNode.BMC.XName).
+				Str("bmc_id", newNode.BMC.ID.String())
 		}
-		log.WithFields(logFields).Info("Node created")
+		sublog.Info().Msg("Node created")
 
 		render.Status(r, http.StatusCreated)
 		render.JSON(w, r, newNode)
@@ -114,7 +116,7 @@ func getNode(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		nodeID, err := uuid.Parse(chi.URLParam(r, "nodeID"))
 		if err != nil {
-			log.WithError(err).Error("Error parsing node ID")
+			log.Error().Err(err).Msg("Error parsing node ID")
 			http.Error(w, "malformed node ID", http.StatusBadRequest)
 			return
 		}
@@ -135,18 +137,19 @@ func searchNodes(storage storage.Storage) http.HandlerFunc {
 		arch := query.Get("arch")
 		bootMac := query.Get("boot_mac")
 		bmcMac := query.Get("bmc_mac")
-		log.WithFields(log.Fields{
-			"xname":      xname,
-			"hostname":   hostname,
-			"arch":       arch,
-			"boot_mac":   bootMac,
-			"request_id": middleware.GetReqID(r.Context()),
-			"path":       r.URL.Path,
-			"query":      r.URL.RawQuery,
-		}).Info("Searching nodes")
+		log.Info().
+			Str("xname", xname).
+			Str("hostname", hostname).
+			Str("arch", arch).
+			Str("boot_mac", bootMac).
+			Str("request_id", middleware.GetReqID(r.Context())).
+			Str("path", r.URL.Path).
+			Str("query", r.URL.RawQuery).
+			Msg("Searching nodes")
+
 		nodes, err := storage.SearchComputeNodes(xname, hostname, arch, bootMac, bmcMac)
 		if err != nil {
-			log.WithError(err).Error("Error searching nodes")
+			log.Error().Err(err).Msg("Error searching nodes")
 			http.Error(w, "error searching nodes", http.StatusInternalServerError)
 			return
 		}
@@ -182,17 +185,18 @@ func updateNode(storage storage.Storage) http.HandlerFunc {
 			render.JSON(w, r, "node not found")
 			return
 		}
-		log.WithFields(log.Fields{
-			"node_id":       updateNode.ID,
-			"node_xname":    updateNode.XName.String(),
-			"node_hostname": updateNode.Hostname,
-			"node_arch":     updateNode.Architecture,
-			"node_boot_mac": updateNode.BootMac,
-			"bmc_mac":       updateNode.BMC.MACAddress,
-			"bmc_xname":     updateNode.BMC.XName,
-			"bmc_id":        updateNode.BMC.ID,
-			"request_id":    middleware.GetReqID(r.Context()),
-		}).Info("Node updated")
+
+		log.Info().
+			Str("node_id", updateNode.ID.String()).
+			Str("node_xname", updateNode.XName.String()).
+			Str("node_hostname", updateNode.Hostname).
+			Str("node_arch", updateNode.Architecture).
+			Str("node_boot_mac", updateNode.BootMac).
+			Str("bmc_mac", updateNode.BMC.MACAddress).
+			Str("bmc_xname", updateNode.BMC.XName).
+			Str("bmc_id", updateNode.BMC.ID.String()).
+			Str("request_id", middleware.GetReqID(r.Context())).
+			Msg("Node updated")
 
 		render.Status(r, http.StatusOK)
 		render.JSON(w, r, updateNode)

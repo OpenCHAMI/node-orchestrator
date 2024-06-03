@@ -15,7 +15,8 @@ import (
 	"github.com/openchami/node-orchestrator/internal/storage"
 	"github.com/openchami/node-orchestrator/pkg/nodes"
 	"github.com/openchami/node-orchestrator/pkg/xnames"
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/google/uuid"
 )
@@ -41,9 +42,8 @@ type App struct {
 
 func main() {
 
-	log.SetFormatter(&log.JSONFormatter{})
-	log.SetOutput(os.Stdout)
-	log.SetLevel(log.InfoLevel)
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'serve' or 'schemas' subcommands")
@@ -84,7 +84,7 @@ func AuthenticatorWithRequiredClaims(ja *jwtauth.JWTAuth, requiredClaims []strin
 			for _, claim := range requiredClaims {
 				if _, ok := claims[claim]; !ok {
 					err := fmt.Errorf("missing required claim %s", claim)
-					log.WithError(err).Error("Missing required claim")
+					log.Error().Err(err).Msg("Missing required claim")
 					http.Error(w, "missing required claim", http.StatusUnauthorized)
 					return
 				}
@@ -105,7 +105,7 @@ func serveAPI() {
 	r.Use(middleware.Recoverer)
 	myStorage, err := storage.NewDuckDBStorage("data.db")
 	if err != nil {
-		log.WithError(err).Fatal("Error creating storage")
+		log.Fatal().Err(err).Msg("Error creating storage")
 	}
 
 	app := &App{
@@ -150,23 +150,23 @@ func serveAPI() {
 	r.Get("/bmc/{bmcID}", getBMC(app.Storage))
 	r.Get("/NodeCollection/{identifier}", getCollection(manager))
 
-	log.Info("Starting server on :8080")
+	log.Info().Msg("Starting server on :8080")
 	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		fmt.Printf("[%s]: '%s' has %d middlewares\n", method, route, len(middlewares))
 		return nil
 	})
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Fatal().Err(http.ListenAndServe(":8080", r))
 }
 
 func snapshot() {
-	log.Info("Taking snapshot")
+	log.Info().Msg("Taking snapshot")
 	myStorage, err := storage.NewDuckDBStorage("data.db")
 	if err != nil {
-		log.WithError(err).Fatal("Error creating storage")
+		log.Fatal().Err(err).Msg("Error creating storage")
 	}
 	err = myStorage.SnapshotParquet(*snapshotPath)
 	if err != nil {
-		log.WithError(err).Fatal("Error taking snapshot")
+		log.Fatal()
 	}
 }
