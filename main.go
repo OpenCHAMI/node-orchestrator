@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"net"
@@ -42,8 +43,10 @@ type App struct {
 
 func main() {
 
+	// Setup logger
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	// logger := log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'serve' or 'schemas' subcommands")
@@ -53,7 +56,7 @@ func main() {
 	switch os.Args[1] {
 	case "serve":
 		serveCmd.Parse(os.Args[2:])
-		serveAPI()
+		serveAPI(logger)
 	case "schemas":
 		schemaCmd.Parse(os.Args[2:])
 		generateAndWriteSchemas(*schemaPath)
@@ -66,42 +69,12 @@ func main() {
 	}
 }
 
-func AuthenticatorWithRequiredClaims(ja *jwtauth.JWTAuth, requiredClaims []string) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			token, claims, err := jwtauth.FromContext(r.Context())
-
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusUnauthorized)
-				return
-			}
-
-			if token == nil || jwt.Validate(token, ja.ValidateOptions()...) != nil {
-				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-				return
-			}
-
-			for _, claim := range requiredClaims {
-				if _, ok := claims[claim]; !ok {
-					err := fmt.Errorf("missing required claim %s", claim)
-					log.Error().Err(err).Msg("Missing required claim")
-					http.Error(w, "missing required claim", http.StatusUnauthorized)
-					return
-				}
-			}
-
-			// Token is authenticated and all required claims are present, pass it through
-			next.ServeHTTP(w, r)
-		})
-	}
-}
-
-func serveAPI() {
+func serveAPI(logger zerolog.Logger) {
 	// Create a new token authenticator
 	tokenAuth := jwtauth.New("HS256", []byte("secret"), nil, jwt.WithAcceptableSkew(30*time.Second))
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
-	r.Use(middleware.Logger)
+	r.Use(OpenCHAMILogger(logger))
 	r.Use(middleware.Recoverer)
 	myStorage, err := storage.NewDuckDBStorage("data.db")
 	if err != nil {
@@ -168,5 +141,74 @@ func snapshot() {
 	err = myStorage.SnapshotParquet(*snapshotPath)
 	if err != nil {
 		log.Fatal()
+	}
+}
+
+func AuthenticatorWithRequiredClaims(ja *jwtauth.JWTAuth, requiredClaims []string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			token, claims, err := jwtauth.FromContext(r.Context())
+
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusUnauthorized)
+				return
+			}
+
+			if token == nil || jwt.Validate(token, ja.ValidateOptions()...) != nil {
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+				return
+			}
+
+			for _, claim := range requiredClaims {
+				if _, ok := claims[claim]; !ok {
+					err := fmt.Errorf("missing required claim %s", claim)
+					log.Error().Err(err).Msg("Missing required claim")
+					http.Error(w, "missing required claim", http.StatusUnauthorized)
+					return
+				}
+			}
+
+			// Token is authenticated and all required claims are present, pass it through
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+const LoggerKey = "logger"
+
+// OpenCHAMILogger is a chi middleware that adds a sublogger to the context.
+func OpenCHAMILogger(logger zerolog.Logger) func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		fn := func(w http.ResponseWriter, r *http.Request) {
+			start := time.Now()
+			sublogger := logger.With().
+				Str("request_id", middleware.GetReqID(r.Context())).
+				Str("request_uri", r.RequestURI).
+				Str("remote_addr", r.RemoteAddr).
+				Str("user_agent", r.UserAgent()).
+				Str("method", r.Method).
+				Logger()
+			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
+			ctx := context.WithValue(r.Context(), LoggerKey, &sublogger)
+
+			// Use the modified context with the sublogger
+			r = r.WithContext(ctx)
+
+			defer func() {
+				duration := time.Since(start)
+				// Extract the sublogger from the context again
+				sublogger := r.Context().Value(LoggerKey).(*zerolog.Logger)
+				sublogger.Info().
+					Str("status", http.StatusText(ww.Status())).
+					Int("status_code", ww.Status()).
+					Int64("bytes_in", r.ContentLength).
+					Int("bytes_out", ww.BytesWritten()).
+					Dur("duration", duration).
+					Msg("Request")
+			}()
+
+			next.ServeHTTP(ww, r)
+		}
+		return http.HandlerFunc(fn)
 	}
 }

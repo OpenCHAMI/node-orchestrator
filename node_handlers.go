@@ -12,6 +12,7 @@ import (
 	"github.com/openchami/node-orchestrator/internal/storage"
 	"github.com/openchami/node-orchestrator/pkg/nodes"
 	"github.com/openchami/node-orchestrator/pkg/xnames"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
@@ -131,13 +132,14 @@ func getNode(storage storage.Storage) http.HandlerFunc {
 
 func searchNodes(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		query := r.URL.Query()
 		xname := query.Get("xname")
 		hostname := query.Get("hostname")
 		arch := query.Get("arch")
 		bootMac := query.Get("boot_mac")
 		bmcMac := query.Get("bmc_mac")
-		log.Info().
+		log.Debug().
 			Str("xname", xname).
 			Str("hostname", hostname).
 			Str("arch", arch).
@@ -145,7 +147,7 @@ func searchNodes(storage storage.Storage) http.HandlerFunc {
 			Str("request_id", middleware.GetReqID(r.Context())).
 			Str("path", r.URL.Path).
 			Str("query", r.URL.RawQuery).
-			Msg("Searching nodes")
+			Msg("Dispatching ComputeNode search to Storage")
 
 		nodes, err := storage.SearchComputeNodes(xname, hostname, arch, bootMac, bmcMac)
 		if err != nil {
@@ -153,6 +155,17 @@ func searchNodes(storage storage.Storage) http.HandlerFunc {
 			http.Error(w, "error searching nodes", http.StatusInternalServerError)
 			return
 		}
+
+		// If the logging middleware is loaded, add event details
+		requestLogger, ok := r.Context().Value(LoggerKey).(*zerolog.Logger)
+		if ok {
+			*requestLogger = requestLogger.With().
+				Int("num_nodes", len(nodes)).
+				Str("event_type", "search_nodes").
+				Logger()
+
+		}
+
 		json.NewEncoder(w).Encode(nodes)
 	}
 }

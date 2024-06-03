@@ -160,11 +160,11 @@ func (d *DuckDBStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMA
 		foundNodes = append(foundNodes, node)
 	}
 	// Log the query and number of rows returned
-	log.Info().
+	log.Debug().
 		Str("query", query).
 		Interface("args", queryArgs).
 		Int("count", len(foundNodes)).
-		Msg("Searching compute nodes")
+		Msg("DuckDB ComputeNode search complete")
 	return foundNodes, nil
 }
 
@@ -264,6 +264,32 @@ func (d *DuckDBStorage) SnapshotParquet(path string) error {
 	log.Info().
 		Str("path", escapedPath).
 		Msg("SnapshotParquet")
+
+	return nil
+}
+
+func (d *DuckDBStorage) RestoreParquet(path string) error {
+	// Ensure the path is escaped properly
+	escapedPath := strings.ReplaceAll(path, "'", "''")
+	// Add a trailing slash if it is missing
+	if !strings.HasSuffix(escapedPath, "/") {
+		escapedPath += "/"
+	}
+
+	// Construct the SQL statement
+	sql := fmt.Sprintf(`INSTALL parquet;
+	LOAD parquet;
+	IMPORT DATABASE '%s' (FORMAT PARQUET);`, escapedPath)
+
+	// Execute the SQL statement
+	_, err := d.db.Exec(sql)
+	if err != nil {
+		log.Error().Err(err).Msg("Error importing DuckDB database from Parquet format")
+		return err
+	}
+	log.Info().
+		Str("path", escapedPath).
+		Msg("RestoreParquet")
 
 	return nil
 }
