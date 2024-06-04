@@ -2,3 +2,5 @@ requests
 click
 jsonschema
 pyjwt
+faker
+aiohttp

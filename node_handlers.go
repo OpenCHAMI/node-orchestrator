@@ -49,12 +49,12 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 
 		// Deal with the BMC. If it has been provided already, check if it is valid
 		if newNode.BMC != nil {
-			if newNode.BMC.XName != "" && !xnames.IsValidBMCXName(newNode.BMC.XName) {
+			if newNode.BMC.XName.Value != "" && !xnames.IsValidBMCXName(newNode.BMC.XName.Value) {
 				http.Error(w, "invalid BMC XName", http.StatusBadRequest)
 				return
 			}
 
-			if existingBMC, err := storage.LookupBMCByXName(newNode.BMC.XName); err == nil {
+			if existingBMC, err := storage.LookupBMCByXName(newNode.BMC.XName.Value); err == nil {
 				newNode.BMC.ID = existingBMC.ID
 			} else if existingBMC, err := storage.LookupBMCByMACAddress(newNode.BMC.MACAddress); err == nil {
 				newNode.BMC.ID = existingBMC.ID
@@ -79,7 +79,7 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 			}
 			newNode.BMC = &nodes.BMC{
 				ID:    uuid.New(),
-				XName: bmcXname,
+				XName: xnames.BMCXname{Value: bmcXname},
 			}
 			storage.SaveBMC(newNode.BMC.ID, *newNode.BMC)
 		}
@@ -103,7 +103,7 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 		if newNode.BMC != nil {
 			sublog.With().
 				Str("bmc_mac", newNode.BMC.MACAddress).
-				Str("bmc_xname", newNode.BMC.XName).
+				Str("bmc_xname", newNode.BMC.XName.Value).
 				Str("bmc_id", newNode.BMC.ID.String())
 		}
 		sublog.Info().Msg("Node created")
@@ -206,7 +206,7 @@ func updateNode(storage storage.Storage) http.HandlerFunc {
 			Str("node_arch", updateNode.Architecture).
 			Str("node_boot_mac", updateNode.BootMac).
 			Str("bmc_mac", updateNode.BMC.MACAddress).
-			Str("bmc_xname", updateNode.BMC.XName).
+			Str("bmc_xname", updateNode.BMC.XName.Value).
 			Str("bmc_id", updateNode.BMC.ID.String()).
 			Str("request_id", middleware.GetReqID(r.Context())).
 			Msg("Node updated")

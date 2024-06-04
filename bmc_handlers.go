@@ -18,12 +18,12 @@ func postBMC(storage storage.Storage) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		if newBMC.XName != "" {
-			if !xnames.IsValidBMCXName(newBMC.XName) {
+		if newBMC.XName.Value != "" {
+			if !xnames.IsValidBMCXName(newBMC.XName.Value) {
 				http.Error(w, "invalid XName", http.StatusBadRequest)
 			}
 			// Check if the XName already exists
-			_, err := storage.LookupBMCByXName(newBMC.XName)
+			_, err := storage.LookupBMCByXName(newBMC.XName.Value)
 			if err == nil {
 				http.Error(w, "XName already exists", http.StatusConflict)
 				return

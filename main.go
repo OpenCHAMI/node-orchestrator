@@ -4,12 +4,9 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
-	"path/filepath"
-	"sort"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -26,11 +23,13 @@ import (
 )
 
 var (
-	serveCmd     = flag.NewFlagSet("serve", flag.ExitOnError)
-	schemaCmd    = flag.NewFlagSet("schemas", flag.ExitOnError)
-	snapshotCmd  = flag.NewFlagSet("snapshot", flag.ExitOnError)
-	snapshotPath = snapshotCmd.String("dir", "snapshots/", "directory to store snapshots")
-	schemaPath   = schemaCmd.String("dir", "schemas/", "directory to store JSON schemas")
+	serveCmd          = flag.NewFlagSet("serve", flag.ExitOnError)
+	schemaCmd         = flag.NewFlagSet("schemas", flag.ExitOnError)
+	snapshotPath      = serveCmd.String("dir", "snapshots/", "directory to store snapshots")
+	schemaPath        = schemaCmd.String("dir", "schemas/", "directory to store JSON schemas")
+	snapshotFreq      = serveCmd.Duration("snapshot-freq", 60*time.Second, "frequency to take snapshots")
+	snapshotDirCreate = serveCmd.Bool("snapshot-dir", true, "create snapshot directory if it doesn't exist")
+	initTables        = serveCmd.Bool("init-tables", false, "initialize tables in the database")
 )
 
 type Config struct {
@@ -63,14 +62,8 @@ func main() {
 	case "schemas":
 		schemaCmd.Parse(os.Args[2:])
 		generateAndWriteSchemas(*schemaPath)
-	case "snapshot":
-		snapshotCmd.Parse(os.Args[2:])
-		snapshot()
-	case "restore":
-		snapshotCmd.Parse(os.Args[2:])
-		restore()
 	default:
-		fmt.Println("expected 'serve', 'snapshot', or 'schemas' subcommands")
+		fmt.Println("expected 'serve' or 'schemas' subcommands")
 		os.Exit(1)
 	}
 }
@@ -82,9 +75,19 @@ func serveAPI(logger zerolog.Logger) {
 	r.Use(middleware.RequestID)
 	r.Use(OpenCHAMILogger(logger))
 	r.Use(middleware.Recoverer)
-	myStorage, err := storage.NewDuckDBStorage("data.db")
+
+	myStorage, err := storage.NewDuckDBStorage("data.db",
+		storage.WithRestore(*snapshotPath),
+		storage.WithSnapshotFrequency(*snapshotFreq),
+		storage.WithCreateSnapshotDir(*snapshotDirCreate),
+		storage.WithInitTables(*initTables),
+	)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Error creating storage")
+		if err.Error() == "no snapshot found" {
+			log.Warn().Msg("No snapshot found, starting with empty database")
+		} else {
+			log.Fatal().Err(err).Msg("Error creating storage")
+		}
 	}
 
 	app := &App{
@@ -136,65 +139,6 @@ func serveAPI(logger zerolog.Logger) {
 	})
 
 	log.Fatal().Err(http.ListenAndServe(":8080", r))
-}
-
-func snapshot() {
-	log.Info().Msg("Taking snapshot")
-	myStorage, err := storage.NewDuckDBStorage("data.db")
-	if err != nil {
-		log.Fatal().Err(err).Msg("Error creating storage")
-	}
-	err = myStorage.SnapshotParquet(*snapshotPath)
-	if err != nil {
-		log.Fatal()
-	}
-}
-
-func restore() {
-	log.Info().Msg("Restoring snapshot")
-	myStorage, err := storage.NewDuckDBStorageForRestore("data.db")
-	if err != nil {
-		log.Fatal().Err(err).Msg("Error creating storage")
-	}
-
-	// Find the most recent snapshot directory
-	snapshotDir, err := findMostRecentSnapshotDir(*snapshotPath)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Error finding snapshot directory")
-	}
-
-	err = myStorage.RestoreParquet(snapshotDir)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Error restoring snapshot")
-	}
-}
-
-// findMostRecentSnapshotDir finds the most recent directory under the given path
-func findMostRecentSnapshotDir(path string) (string, error) {
-	files, err := ioutil.ReadDir(path)
-	if err != nil {
-		return "", err
-	}
-
-	var dirs []os.FileInfo
-	for _, file := range files {
-		if file.IsDir() {
-			dirs = append(dirs, file)
-		}
-	}
-
-	if len(dirs) == 0 {
-		return "", fmt.Errorf("no snapshot directories found")
-	}
-
-	// Sort directories by name (assuming they are named by date)
-	sort.Slice(dirs, func(i, j int) bool {
-		return dirs[i].Name() > dirs[j].Name() // descending order
-	})
-
-	// Return the most recent directory
-	mostRecentDir := filepath.Join(path, dirs[0].Name())
-	return mostRecentDir, nil
 }
 
 func AuthenticatorWithRequiredClaims(ja *jwtauth.JWTAuth, requiredClaims []string) func(http.Handler) http.Handler {

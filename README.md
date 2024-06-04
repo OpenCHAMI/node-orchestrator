@@ -1,12 +1,167 @@
 # Node Orchestrator (Experimental)
 
-This experimental service and client are meant to explore standardized object structures that can be shareed independently of backend implementation.
+This service and client showcase a set of experiments that may be useful for OpenCHAMI
 
-In [nodes.go](/nodes.go) is the definition of a set of go structs with some struct tags that allow code in [main.go](/main.go) to automatically create a [jsonschema](https://json-schema.org/) representation of the object structure.
+## Jsonschema for object definitions
 
-Once compiled, this go program will create the schemas in the schemas/ directory.  These could also be served through a special service endpoint so clients can refer to them directly.
+The jsonschema library we use supports reflecting go structs as jsonschema objects using struct tags.  Notice the tags in the struct below `jsonschema:"required"` indicates that the jsonschema of the BMC should require both Username and Password in order to be valid.
 
-[client.py](/clients/client.py) demonstrates how to somewhat automatically create a python client that can read the jsonschema files and automatically generate API calls for common CRUD operations.  Since the jsonschema file establishes a contract, the client can validate the object before trying to submit it to a remote endpoint.
+```go
+type BMC struct {
+	ID          uuid.UUID       `json:"id,omitempty" format:"uuid"`
+	XName       xnames.BMCXname `json:"xname,omitempty"`
+	Username    string          `json:"username" jsonschema:"required"`
+	Password    string          `json:"password" jsonschema:"required"`
+	IPv4Address string          `json:"ipv4_address,omitempty" format:"ipv4"`
+	IPv6Address string          `json:"ipv6_address,omitempty" format:"ipv6"`
+	MACAddress  string          `json:"mac_address" format:"mac-address" binding:"required"`
+	Description string          `json:"description,omitempty"`
+}
+```
+
+We can extend that behavior with some custom methods on the structs.  For example, we can extend the jsonschema definition of an xname with a regex for validation.
+
+```go
+func (NodeXname) JSONSchema() *jsonschema.Schema {
+	return &jsonschema.Schema{
+		Type:        "string",
+		Title:       "NodeXName",
+		Description: "XName for a compute node",
+		Pattern:     `^x(\d{3,5})c(\d{1,3})s(\d{1,3})b(\d{1,3})n(\d{1,3})$`,
+	}
+}
+```
+
+The command has a `schemas` argument that will write out a set of objects to the schemas directory using the reflection features.  See generateAndWriteSchemas for the API to generate jsonschema filles.
+
+```go
+func generateAndWriteSchemas(path string) {
+	schemas := map[string]interface{}{
+		"ComputeNode.json":      &nodes.ComputeNode{},
+		"NetworkInterface.json": &nodes.NetworkInterface{},
+		"BMC.json":              &nodes.BMC{},
+		"Component.json":        &base.Component{},
+		"NodeCollection.json":   &nodes.NodeCollection{},
+	}
+
+	if err := os.MkdirAll(path, 0755); err != nil {
+		log.Fatal().Err(err).Str("path", path).Msg("Failed to create schema directory")
+	}
+
+	for filename, model := range schemas {
+		schema := jsonschema.Reflect(model)
+		data, err := json.MarshalIndent(schema, "", "  ")
+		if err != nil {
+			log.Fatal().Err(err).Str("filename", filename).Msg("Failed to generate JSON schema")
+		}
+		fullpath := filepath.Join(path, filename)
+		if err := os.WriteFile(fullpath, data, 0644); err != nil {
+			log.Fatal().Err(err).Str("filename", filename).Msg("Failed to write JSON schema to file")
+		}
+		log.Info().Str("fullpath", fullpath).Msg("Schema written")
+	}
+}```
+
+
+These files are also valuable for clients.  In our python example, the client reads the jsonschema files and can validate a structure on the client side.  In fact, since we can make many assumptions about how to GET and POST these objects, we can create a generic client that doesn't need to understsand these structures directly.
+
+```python
+def validate_json(schema_dir, object_type, data):
+    if schema_dir:
+        schema_path = os.path.join(schema_dir, f"{object_type}.json")
+        try:
+            with open(schema_path, 'r') as schema_file:
+                schema = json.load(schema_file)
+            validate(instance=data, schema=schema)
+        except FileNotFoundError:
+            click.echo(f"Schema file not found: {schema_path}", err=True)
+            raise
+        except ValidationError as ve:
+            click.echo(f"Validation error: {ve}", err=True)
+            raise
+```
+
+Using it is simple as well.  You create the json object and pass it in.  The client validates it with the schemas in the directory and only passes it to the remote api if everything looks good.  For many use cases, we can test our API calls without needing to start up the remote server.
+
+```python
+@cli.command()
+@click.argument('object', type=str)
+@click.option('--data', type=str, help='JSON string representing the object(s) to create')
+@click.option('--file', type=click.File('r'), help='File containing JSON object(s) to create')
+def create(object, data, file):
+    """Create object(s) on the remote API."""
+    if data:
+        data = json.loads(data)
+    else:
+        click.echo("Error: No data provided for creation.", err=True)
+        return
+    if cli.schema_dir:
+        validate_json(cli.schema_dir, object, data)
+    response = api_call('POST', cli.url, object, None, data, cli.jwt)
+    click.echo(response)
+```
+
+## In-Memory Working Set with Periodic Snapshots
+
+Our system employs a pattern that maintains the working set in memory with periodic snapshots to disk. 
+
+### Overview
+
+Th
+1. **In-Memory Working Set**:
+   - The system keeps all active data in memory for fast access and quick response times.
+   - Changes to the working set are handled in-memory, ensuring efficient operations.
+
+2. **Periodic Snapshots**:
+   - At configurable intervals, the system takes a snapshot of the in-memory working set and writes it to disk.
+   - This ensures that even in the event of a failure, data can be quickly restored from the most recent snapshot.
+
+#### Startup and Recovery
+- **Startup**:
+  - On startup, the system reads the most recent snapshot from disk to initialize the in-memory working set.
+  - This process is nearly instantaneous, even with large datasets (hundreds of thousands of nodes).
+
+- **Recovery**:
+  - If the system is restarted or crashes, it can quickly restore the working set from the most recent snapshot, minimizing downtime.
+
+#### Customization and Performance
+- **Snapshot Frequency**:
+  - The sysadmin can configure how often snapshots are taken (e.g., once a minute, once an hour).
+  - Frequent snapshots ensure minimal data loss, even in the event of a crash.
+
+- **Snapshot Retention**:
+  - The system can be configured to retain a specified number of old snapshots.
+  - This allows for rollback to previous states if needed.
+
+- **Performance**:
+  - Snapshotting has a very low performance cost, even with frequent snapshots.
+  - The system uses efficient technologies to ensure that performance remains high.
+
+#### Technologies Used
+1. **DuckDB**:
+   - An embedded SQL OLAP database management system that provides fast and efficient data management.
+   - Used for in-memory data handling and snapshot operations.
+
+2. **Parquet**:
+   - A columnar storage file format optimized for big data processing.
+   - Snapshots are stored in Parquet format, ensuring efficient storage and fast access.
+   - Many big data tools natively support Parquet, making the snapshot data easily accessible for analysis.
+
+#### Benefits
+- **Speed and Efficiency**:
+  - Fast access to data in memory and quick restoration from snapshots.
+  - Minimal performance impact from frequent snapshots.
+
+- **Flexibility and Control**:
+  - Configurable snapshot frequency and retention.
+  - Admins can tune the system to balance between performance and data safety.
+
+- **Big Data Compatibility**:
+  - Parquet format snapshots are compatible with many big data tools.
+  - Enables advanced data analysis and integration with existing big data workflows.
+
+This pattern ensures a robust, high-performance system that maintains data safety and provides flexibility for administrators. By leveraging DuckDB and Parquet, the system achieves efficient data management and compatibility with big data analysis tools.
+
 
 ## Usage
 

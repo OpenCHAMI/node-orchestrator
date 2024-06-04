@@ -4,9 +4,14 @@ import (
 	"bufio"
 	"database/sql"
 	"fmt"
+	"io/fs"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"sort"
 	"strings"
+	"sync"
+	"syscall"
 	"time"
 
 	"github.com/google/uuid"
@@ -21,16 +26,97 @@ import (
 // DuckDBStorage is a storage backend that uses DuckDB
 
 type DuckDBStorage struct {
-	db *sql.DB
+	db                *sql.DB
+	snapshotFrequency time.Duration
+	snapshotPath      string
+	restoreFirst      bool
+	wg                sync.WaitGroup
 }
 
-func NewDuckDBStorage(path string) (*DuckDBStorage, error) {
+type DuckDBStorageOption interface {
+	apply(*DuckDBStorage) error
+}
+
+type snapshotFrequencyOption time.Duration
+
+func (s snapshotFrequencyOption) apply(d *DuckDBStorage) error {
+	d.snapshotFrequency = time.Duration(s)
+	return nil
+}
+
+func WithSnapshotFrequency(frequency time.Duration) DuckDBStorageOption {
+	return snapshotFrequencyOption(frequency)
+}
+
+type snapshotPathOption string
+
+func (s snapshotPathOption) apply(d *DuckDBStorage) error {
+	d.snapshotPath = string(s)
+	return nil
+}
+
+func WithSnapshotPath(path string) DuckDBStorageOption {
+	return snapshotPathOption(path)
+}
+
+type restoreOption string
+
+func (r restoreOption) apply(d *DuckDBStorage) error {
+	d.restoreFirst = true
+	d.snapshotPath = string(r)
+
+	err := d.restore(d.snapshotPath)
+	return err
+
+}
+
+func WithRestore(path string) DuckDBStorageOption {
+	return restoreOption(path)
+}
+
+type createSnapshotDirOption bool
+
+func (c createSnapshotDirOption) apply(d *DuckDBStorage) error {
+	if bool(c) {
+		return os.MkdirAll(d.snapshotPath, 0755)
+	}
+	return nil
+}
+
+func WithCreateSnapshotDir(create bool) DuckDBStorageOption {
+	return createSnapshotDirOption(create)
+}
+
+type initTablesOption bool
+
+func (i initTablesOption) apply(d *DuckDBStorage) error {
+	if bool(i) {
+		return d.initTables()
+	}
+	return nil
+}
+
+func WithInitTables(init bool) DuckDBStorageOption {
+	return initTablesOption(init)
+}
+
+func NewDuckDBStorage(path string, options ...DuckDBStorageOption) (*DuckDBStorage, error) {
 	db, err := sql.Open("duckdb", path)
 	if err != nil {
 		return nil, err
 	}
 
-	d := &DuckDBStorage{db: db}
+	d := &DuckDBStorage{
+		db: db,
+	}
+
+	// Apply the options
+	for _, option := range options {
+		err := option.apply(d)
+		if err != nil {
+			log.Warn().Err(err).Msg("Error applying DuckDBStorage option")
+		}
+	}
 
 	// load extensions
 	d.db.Exec("INSTALL json; LOAD json")
@@ -39,21 +125,42 @@ func NewDuckDBStorage(path string) (*DuckDBStorage, error) {
 		return nil, err
 	}
 
+	// Start the snapshot routine
+	d.wg.Add(1)
+	go d.snapshotRoutine()
+
+	// Handle graceful shutdown
+	go d.handleShutdown()
+
 	return d, nil
 }
 
-func NewDuckDBStorageForRestore(path string) (*DuckDBStorage, error) {
-	db, err := sql.Open("duckdb", path)
-	if err != nil {
-		return nil, err
+func (d *DuckDBStorage) snapshotRoutine() {
+	defer d.wg.Done()
+	ticker := time.NewTicker(d.snapshotFrequency)
+	defer ticker.Stop()
+
+	for range ticker.C {
+		// Take a snapshot
+		if err := d.SnapshotParquet(d.snapshotPath); err != nil {
+			log.Error().Err(err).Msg("Error taking snapshot")
+		}
+	}
+}
+
+func (d *DuckDBStorage) handleShutdown() {
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	log.Info().Msg("Shutting down... Taking final snapshot")
+	if err := d.SnapshotParquet(d.snapshotPath); err != nil {
+		log.Error().Err(err).Msg("Error taking final snapshot")
 	}
 
-	d := &DuckDBStorage{db: db}
-
-	// load extensions
-	d.db.Exec("INSTALL json; LOAD json")
-
-	return d, nil
+	log.Info().Msg("Waiting for all goroutines to finish")
+	d.wg.Wait()
+	log.Info().Msg("Shutdown complete")
 }
 
 func (d *DuckDBStorage) initTables() error {
@@ -328,4 +435,52 @@ func (d *DuckDBStorage) executeSQLFile(filePath string) error {
 	}
 
 	return nil
+}
+
+func (d *DuckDBStorage) restore(path string) error {
+	log.Info().Msg("Restoring snapshot")
+
+	// Find the most recent snapshot directory
+	snapshotDir, err := findMostRecentSnapshotDir(path)
+	if err != nil {
+		return err
+	}
+
+	err = d.RestoreParquet(snapshotDir)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// findMostRecentSnapshotDir finds the most recent directory under the given path
+func findMostRecentSnapshotDir(path string) (string, error) {
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return "", err
+	}
+
+	var dirs []fs.FileInfo
+	for _, entry := range entries {
+		if entry.IsDir() {
+			info, err := entry.Info()
+			if err != nil {
+				return "", err
+			}
+			dirs = append(dirs, info)
+		}
+	}
+
+	if len(dirs) == 0 {
+		return "", fmt.Errorf("no snapshot directories found")
+	}
+
+	// Sort directories by name (assuming they are named by date)
+	sort.Slice(dirs, func(i, j int) bool {
+		return dirs[i].Name() > dirs[j].Name() // descending order
+	})
+
+	// Return the most recent directory
+	mostRecentDir := filepath.Join(path, dirs[0].Name())
+	return mostRecentDir, nil
 }

@@ -106,7 +106,7 @@ func (s *InMemoryStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmc
 
 func (s *InMemoryStorage) LookupBMCByXName(xname string) (nodes.BMC, error) {
 	for _, bmc := range s.bmcEntries {
-		if bmc.XName == xname {
+		if bmc.XName.Value == xname {
 			return bmc, nil
 		}
 	}

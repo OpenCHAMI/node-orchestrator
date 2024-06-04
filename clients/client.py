@@ -6,6 +6,8 @@ import jwt as pyjwt
 import datetime
 from datetime import timezone
 from jsonschema import validate, ValidationError
+import asyncio
+import aiohttp
 
 def common_options(f):
     f = click.option('--jwt', help='JWT for API authentication', required=False)(f)
@@ -79,35 +81,38 @@ def create(object, data, file):
     else:
         click.echo("Error: No data provided for creation.", err=True)
         return
-    if isinstance(data, list):
-        for obj in data:
-            if cli.schema_dir:
-                try:
-                    validate_json(cli.schema_dir, object, obj)
-                except ValidationError:
-                    click.echo(f"Error validating object: {obj}")
-                    continue
-                
+
+    async def create_object(obj, semaphore):
+        async with semaphore:
             try:
+                if cli.schema_dir:
+                    validate_json(cli.schema_dir, object, obj)
                 response = api_call('POST', cli.url, object, None, obj, cli.jwt)
-                if response.status_code in [200, 201]:
-                    continue
-                    #click.echo(f"Created object: {obj}")
-                elif response.status_code == 400:
-                    click.echo(f"Error creating object: {obj}, {response.content}")
-                else:
-                    click.echo(f" Status Code: {response.status_code}, {response.content}")
+                if response.status_code not in [200, 201]:
+                    if response.status_code == 400:
+                        click.echo(f"Error creating object: {obj}, {response.content}")
+                    else:
+                        click.echo(f" Status Code: {response.status_code}, {response.content}")
             except requests.exceptions.HTTPError as e:
                 click.echo(f"Error creating object: {obj}")
                 click.echo(e)
             except requests.exceptions.JSONDecodeError as e:
                 click.echo(f"Error decoding JSON response when creating object: {obj}")
                 click.echo(e)
-    else:
-        if cli.schema_dir:
-            validate_json(cli.schema_dir, object, data)
-        response = api_call('POST', cli.url, object, None, data, cli.jwt)
-        click.echo(response)
+
+    async def create_objects():
+        semaphore = asyncio.Semaphore(20)
+        tasks = []
+        if isinstance(data, list):
+            for obj in data:
+                task = asyncio.create_task(create_object(obj, semaphore))
+                tasks.append(task)
+        else:
+            task = asyncio.create_task(create_object(data, semaphore))
+            tasks.append(task)
+        await asyncio.gather(*tasks)
+
+    asyncio.run(create_objects())
 
 @cli.command()
 @click.argument('object', type=str)

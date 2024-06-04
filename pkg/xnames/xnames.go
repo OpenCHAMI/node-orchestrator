@@ -138,6 +138,66 @@ func NewNodeXname(xname string) NodeXname {
 	return NodeXname{Value: xname}
 }
 
+type BMCXname struct {
+	Value string
+}
+
+func NewBMCXname(xname string) BMCXname {
+	return BMCXname{Value: xname}
+}
+
+func (b BMCXname) String() string {
+	return b.Value
+}
+
+func (b BMCXname) JSONSchema() *jsonschema.Schema {
+	return &jsonschema.Schema{
+		Type:        "string",
+		Title:       "BMCXName",
+		Description: "XName for a BMC",
+		Pattern:     `^x(\d{3,5})c(\d{1,3})s(\d{1,3})b(\d{1,3})$`,
+	}
+}
+
+func (b BMCXname) MarshalJSON() ([]byte, error) {
+	return json.Marshal(b.Value)
+}
+
+func (b *BMCXname) UnmarshalJSON(data []byte) error {
+	b.Value = string(data)
+	// Remove quotation marks if they exist
+	if len(b.Value) >= 2 && b.Value[0] == '"' && b.Value[len(b.Value)-1] == '"' {
+		b.Value = b.Value[1 : len(b.Value)-1]
+	}
+	return nil
+}
+
+func (b BMCXname) Valid() (bool, error) {
+	bmcXnameRegex := regexp.MustCompile(`^x(?P<cabinet>\d{3,5})c(?P<chassis>\d{1,3})s(?P<slot>\d{1,3})b(?P<bmc>\d{1,3})$`)
+	if !bmcXnameRegex.MatchString(b.Value) {
+		return false, fmt.Errorf("XName does not match regex")
+	}
+
+	// Extract the named groups
+	match := bmcXnameRegex.FindStringSubmatch(b.Value)
+	result := make(map[string]string)
+	for i, name := range bmcXnameRegex.SubexpNames() {
+		if i > 0 && i <= len(match) {
+			result[name] = match[i]
+		}
+	}
+
+	// Convert and check chassis number
+	chassis, err := strconv.Atoi(result["chassis"])
+	if err != nil {
+		return false, fmt.Errorf("chassis is not a valid number: %s", result["chassis"])
+	}
+	if chassis >= 256 {
+		return false, fmt.Errorf("chassis number %d exceeds the maximum allowed value of 255", chassis)
+	}
+	return true, nil
+}
+
 func IsValidBMCXName(xname string) bool {
 	// Compile the regular expression. This is the pattern from your requirement.
 	re := regexp.MustCompile(`^x(?P<cabinet>\d{3,5})c(?P<chassis>\d{1,3})s(?P<slot>\d{1,3})b(?P<bmc>\d{1,3})$`)
