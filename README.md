@@ -103,28 +103,15 @@ def create(object, data, file):
 
 ## In-Memory Working Set with Periodic Snapshots
 
-Our system employs a pattern that maintains the working set in memory with periodic snapshots to disk. 
+Our system employs a pattern that maintains the working set in memory with periodic snapshots to disk.  On startup, the system finds the most recent snapshot and loads it as a working set.  If it cannot find a snapshot, it starts up anyway with an empty working set.
 
-### Overview
+The snapshots themselves use [parquet](https://parquet.apache.org/) files which are column-oriented and optimized for efficient compression, storage, and retrieval.  As a common file format for Big Data, there are dozens of tools that deal natively with the file format in predictable directory structures.
 
-Th
-1. **In-Memory Working Set**:
-   - The system keeps all active data in memory for fast access and quick response times.
-   - Changes to the working set are handled in-memory, ensuring efficient operations.
+The working set is managed by an in-memory engine called [DuckDB](https://duckdb.org/) which supports efficient SQL and analytical queries on structured data.  The same engine has features that allow it to efficiently execute queries directly against other databases and even directories full of parquet files without needing to load the full dataset into memory.
 
-2. **Periodic Snapshots**:
-   - At configurable intervals, the system takes a snapshot of the in-memory working set and writes it to disk.
-   - This ensures that even in the event of a failure, data can be quickly restored from the most recent snapshot.
+The duckdb engine can deal very efficiently with parquet files.  Even at inventory sizes of 250K nodes, the snapshot and recovery processes take just a few seconds.
 
-#### Startup and Recovery
-- **Startup**:
-  - On startup, the system reads the most recent snapshot from disk to initialize the in-memory working set.
-  - This process is nearly instantaneous, even with large datasets (hundreds of thousands of nodes).
-
-- **Recovery**:
-  - If the system is restarted or crashes, it can quickly restore the working set from the most recent snapshot, minimizing downtime.
-
-#### Customization and Performance
+### Customization and Performance
 - **Snapshot Frequency**:
   - The sysadmin can configure how often snapshots are taken (e.g., once a minute, once an hour).
   - Frequent snapshots ensure minimal data loss, even in the event of a crash.
@@ -132,15 +119,14 @@ Th
 - **Snapshot Retention**:
   - The system can be configured to retain a specified number of old snapshots.
   - This allows for rollback to previous states if needed.
-
-- **Performance**:
-  - Snapshotting has a very low performance cost, even with frequent snapshots.
-  - The system uses efficient technologies to ensure that performance remains high.
+  - Queries against historical snapshots allow for offline analytical queries
+  - Filesystems that support block-level deduplification improve the performance and reliability of this pattern
 
 #### Technologies Used
 1. **DuckDB**:
    - An embedded SQL OLAP database management system that provides fast and efficient data management.
    - Used for in-memory data handling and snapshot operations.
+   - Supports direct queries of files on remote storage without loading all data into memory
 
 2. **Parquet**:
    - A columnar storage file format optimized for big data processing.
