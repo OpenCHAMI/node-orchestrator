@@ -101,7 +101,7 @@ def create(object, data, file):
                 click.echo(e)
 
     async def create_objects():
-        semaphore = asyncio.Semaphore(20)
+        semaphore = asyncio.Semaphore(256)
         tasks = []
         if isinstance(data, list):
             for obj in data:

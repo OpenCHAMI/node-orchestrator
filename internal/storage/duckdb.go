@@ -408,6 +408,11 @@ func (d *DuckDBStorage) SnapshotParquet(path string) error {
 }
 
 func (d *DuckDBStorage) RestoreParquet(path string) error {
+	// Load the appropriate extensions for our restore to work correctly
+	_, err := d.db.Exec(`SET autoinstall_known_extensions=1;INSTALL json;LOAD json;INSTALL parquet;LOAD parquet`)
+	if err != nil {
+		return err
+	}
 	// Read and execute schema.sql to set up the database schema
 	schemaFile := filepath.Join(path, "schema.sql")
 	if err := d.executeSQLFile(schemaFile); err != nil {

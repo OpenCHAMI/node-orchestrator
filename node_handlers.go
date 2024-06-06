@@ -91,22 +91,24 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 			return
 		}
 
-		sublog := log.With().
+		sublogger := r.Context().Value(LoggerKey).(*zerolog.Logger)
+
+		sublog := sublogger.With().
 			Str("node_id", newNode.ID.String()).
 			Str("xname", newNode.XName.String()).
 			Str("hostname", newNode.Hostname).
 			Str("arch", newNode.Architecture).
 			Str("boot_mac", newNode.BootMac).
-			Str("request_id", middleware.GetReqID(r.Context())).
+			Str("event_type", "create_node").
 			Logger()
 
 		if newNode.BMC != nil {
 			sublog.With().
 				Str("bmc_mac", newNode.BMC.MACAddress).
 				Str("bmc_xname", newNode.BMC.XName.Value).
-				Str("bmc_id", newNode.BMC.ID.String())
+				Str("bmc_id", newNode.BMC.ID.String()).
+				Logger()
 		}
-		sublog.Info().Msg("Node created")
 
 		render.Status(r, http.StatusCreated)
 		render.JSON(w, r, newNode)
