@@ -4,3 +4,4 @@ schemas/*.json
 snapshots/
 data.db
 data.db.wal
+.DS_Store

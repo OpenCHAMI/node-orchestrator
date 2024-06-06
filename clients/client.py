@@ -61,7 +61,7 @@ def cli(jwt, gen_jwt_secret, schema_dir, url):
             "partition_name": "testpartition",
             "partition_roles": ["admin"],
             # These are the standard claims
-            "exp": datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(seconds=600),
+            "exp": datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(seconds=86400),
             "nbf": datetime.datetime.now(tz=timezone.utc),
             "iss": "https://foobar.openchami.cluster",
             "aud": "https://foobar.openchami.cluster",

@@ -2,6 +2,7 @@ package storage
 
 import (
 	"bufio"
+	"context"
 	"database/sql"
 	"fmt"
 	"io/fs"
@@ -31,6 +32,7 @@ type DuckDBStorage struct {
 	snapshotPath      string
 	restoreFirst      bool
 	wg                sync.WaitGroup
+	cancelSnapshot    context.CancelFunc
 }
 
 type DuckDBStorageOption interface {
@@ -125,9 +127,13 @@ func NewDuckDBStorage(path string, options ...DuckDBStorageOption) (*DuckDBStora
 		return nil, err
 	}
 
+	// Create a context for snapshot routine
+	ctx, cancel := context.WithCancel(context.Background())
+	d.cancelSnapshot = cancel
+
 	// Start the snapshot routine
 	d.wg.Add(1)
-	go d.snapshotRoutine()
+	go d.snapshotRoutine(ctx)
 
 	// Handle graceful shutdown
 	go d.handleShutdown()
@@ -135,15 +141,21 @@ func NewDuckDBStorage(path string, options ...DuckDBStorageOption) (*DuckDBStora
 	return d, nil
 }
 
-func (d *DuckDBStorage) snapshotRoutine() {
+func (d *DuckDBStorage) snapshotRoutine(ctx context.Context) {
 	defer d.wg.Done()
 	ticker := time.NewTicker(d.snapshotFrequency)
 	defer ticker.Stop()
 
-	for range ticker.C {
-		// Take a snapshot
-		if err := d.SnapshotParquet(d.snapshotPath); err != nil {
-			log.Error().Err(err).Msg("Error taking snapshot")
+	for {
+		select {
+		case <-ctx.Done():
+			log.Info().Msg("Snapshot routine stopped")
+			return
+		case <-ticker.C:
+			// Take a snapshot
+			if err := d.SnapshotParquet(d.snapshotPath); err != nil {
+				log.Error().Err(err).Msg("Error taking snapshot")
+			}
 		}
 	}
 }
@@ -151,16 +163,20 @@ func (d *DuckDBStorage) snapshotRoutine() {
 func (d *DuckDBStorage) handleShutdown() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
 
+	<-quit
 	log.Info().Msg("Shutting down... Taking final snapshot")
 	if err := d.SnapshotParquet(d.snapshotPath); err != nil {
 		log.Error().Err(err).Msg("Error taking final snapshot")
 	}
 
+	log.Info().Msg("Stopping snapshot routine")
+	d.cancelSnapshot() // Cancel the snapshot routine
+
 	log.Info().Msg("Waiting for all goroutines to finish")
 	d.wg.Wait()
 	log.Info().Msg("Shutdown complete")
+	os.Exit(1)
 }
 
 func (d *DuckDBStorage) initTables() error {
