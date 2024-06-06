@@ -47,7 +47,6 @@ func createCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 			Str("name", collection.Name).
 			Str("type", collection.Type.String()).
 			Strs("nodes", xnames.XnameSliceString(collection.Nodes)).
-			Str("alias", collection.Alias).
 			Str("request_id", middleware.GetReqID(r.Context())).
 			Str("request_uri", r.RequestURI).
 			Str("jwt_subject", claims["sub"].(string)).
@@ -111,7 +110,6 @@ func updateCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 			Str("name", collection.Name).
 			Str("type", collection.Type.String()).
 			Strs("nodes", xnames.XnameSliceString(collection.Nodes)).
-			Str("alias", collection.Alias).
 			Str("request_id", middleware.GetReqID(r.Context())).
 			Str("request_uri", r.RequestURI).
 			Str("jwt_subject", claims["sub"].(string)).

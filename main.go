@@ -14,6 +14,7 @@ import (
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/openchami/node-orchestrator/internal/storage"
+	"github.com/openchami/node-orchestrator/internal/storage/duckdb"
 	"github.com/openchami/node-orchestrator/pkg/nodes"
 	"github.com/openchami/node-orchestrator/pkg/xnames"
 	"github.com/rs/zerolog"
@@ -76,11 +77,11 @@ func serveAPI(logger zerolog.Logger) {
 	r.Use(OpenCHAMILogger(logger))
 	r.Use(middleware.Recoverer)
 
-	myStorage, err := storage.NewDuckDBStorage("data.db",
-		storage.WithRestore(*snapshotPath),
-		storage.WithSnapshotFrequency(*snapshotFreq),
-		storage.WithCreateSnapshotDir(*snapshotDirCreate),
-		storage.WithInitTables(*initTables),
+	myStorage, err := duckdb.NewDuckDBStorage("data.db",
+		duckdb.WithRestore(*snapshotPath),
+		duckdb.WithSnapshotFrequency(*snapshotFreq),
+		duckdb.WithCreateSnapshotDir(*snapshotDirCreate),
+		duckdb.WithInitTables(*initTables),
 	)
 	if err != nil {
 		if err.Error() == "no snapshot found" {
