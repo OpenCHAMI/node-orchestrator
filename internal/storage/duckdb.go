@@ -93,7 +93,7 @@ type initTablesOption bool
 
 func (i initTablesOption) apply(d *DuckDBStorage) error {
 	if bool(i) {
-		return d.initTables()
+		return d.initializeDatabase()
 	}
 	return nil
 }
@@ -141,42 +141,19 @@ func NewDuckDBStorage(path string, options ...DuckDBStorageOption) (*DuckDBStora
 	return d, nil
 }
 
-func (d *DuckDBStorage) snapshotRoutine(ctx context.Context) {
-	defer d.wg.Done()
-	ticker := time.NewTicker(d.snapshotFrequency)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case <-ctx.Done():
-			log.Info().Msg("Snapshot routine stopped")
-			return
-		case <-ticker.C:
-			// Take a snapshot
-			if err := d.SnapshotParquet(d.snapshotPath); err != nil {
-				log.Error().Err(err).Msg("Error taking snapshot")
-			}
-		}
+func (d *DuckDBStorage) initializeDatabase() error {
+	if err := d.loadExtensions(); err != nil {
+		return err
 	}
+	return d.initTables()
 }
 
-func (d *DuckDBStorage) handleShutdown() {
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-
-	<-quit
-	log.Info().Msg("Shutting down... Taking final snapshot")
-	if err := d.SnapshotParquet(d.snapshotPath); err != nil {
-		log.Error().Err(err).Msg("Error taking final snapshot")
+func (d *DuckDBStorage) loadExtensions() error {
+	_, err := d.db.Exec("SET autoinstall_known_extensions=1;INSTALL json;LOAD json;INSTALL parquet;LOAD parquet")
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to load DuckDB extensions")
 	}
-
-	log.Info().Msg("Stopping snapshot routine")
-	d.cancelSnapshot() // Cancel the snapshot routine
-
-	log.Info().Msg("Waiting for all goroutines to finish")
-	d.wg.Wait()
-	log.Info().Msg("Shutdown complete")
-	os.Exit(1)
+	return err
 }
 
 func (d *DuckDBStorage) initTables() error {
@@ -374,7 +351,27 @@ func (d *DuckDBStorage) Close() error {
 	return d.db.Close()
 }
 
-func (d *DuckDBStorage) SnapshotParquet(path string) error {
+func (d *DuckDBStorage) snapshotRoutine(ctx context.Context) {
+	defer d.wg.Done()
+	ticker := time.NewTicker(d.snapshotFrequency)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ctx.Done():
+			log.Info().Msg("Snapshot routine stopped")
+			return
+		case <-ticker.C:
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+			defer cancel()
+			if err := d.SnapshotParquet(ctx, d.snapshotPath); err != nil {
+				log.Error().Err(err).Msg("Error taking snapshot")
+			}
+		}
+	}
+}
+
+func (d *DuckDBStorage) SnapshotParquet(ctx context.Context, path string) error {
 	// Ensure the path is escaped properly
 	escapedPath := strings.ReplaceAll(path, "'", "''")
 	// Add a trailing slash if it is missing
@@ -394,8 +391,8 @@ func (d *DuckDBStorage) SnapshotParquet(path string) error {
 	LOAD parquet;
 	EXPORT DATABASE '%s' (FORMAT PARQUET);`, escapedPath)
 
-	// Execute the SQL statement
-	_, err := d.db.Exec(sql)
+	// Execute the SQL statement with context
+	_, err := d.db.ExecContext(ctx, sql)
 	if err != nil {
 		log.Error().Err(err).Msg("Error exporting DuckDB database to Parquet format")
 		return err
@@ -409,7 +406,7 @@ func (d *DuckDBStorage) SnapshotParquet(path string) error {
 
 func (d *DuckDBStorage) RestoreParquet(path string) error {
 	// Load the appropriate extensions for our restore to work correctly
-	_, err := d.db.Exec(`SET autoinstall_known_extensions=1;INSTALL json;LOAD json;INSTALL parquet;LOAD parquet`)
+	_, err := d.db.Exec(``)
 	if err != nil {
 		return err
 	}
@@ -472,6 +469,52 @@ func (d *DuckDBStorage) restore(path string) error {
 		return err
 	}
 	return nil
+}
+
+func (d *DuckDBStorage) handleShutdown() {
+	// Create a channel to listen for OS signals
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	// Block until a signal is received
+	sig := <-quit
+	log.Info().Str("signal", sig.String()).Msg("Received shutdown signal")
+
+	// Create a context with a timeout for the shutdown process
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// Attempt to take a final snapshot
+	log.Info().Msg("Taking final snapshot before shutdown")
+	if err := d.SnapshotParquet(ctx, d.snapshotPath); err != nil {
+		log.Error().Err(err).Msg("Error taking final snapshot")
+	}
+
+	// Stop the snapshot routine
+	log.Info().Msg("Stopping snapshot routine")
+	d.cancelSnapshot()
+
+	// Wait for all goroutines to finish with the context's timeout
+	done := make(chan struct{})
+	go func() {
+		d.wg.Wait()
+		close(done)
+	}()
+
+	select {
+	case <-done:
+		log.Info().Msg("All goroutines finished cleanly")
+	case <-ctx.Done():
+		log.Warn().Msg("Timeout waiting for goroutines to finish")
+	}
+
+	// Close the database connection
+	log.Info().Msg("Closing database connection")
+	if err := d.Close(); err != nil {
+		log.Error().Err(err).Msg("Error closing database connection")
+	}
+
+	log.Info().Msg("Shutdown complete")
 }
 
 // findMostRecentSnapshotDir finds the most recent directory under the given path

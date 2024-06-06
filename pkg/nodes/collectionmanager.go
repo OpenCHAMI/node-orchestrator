@@ -9,16 +9,16 @@ import (
 
 // CollectionManager manages collections with constraints.
 type CollectionManager struct {
-	CollectionsByID    map[uuid.UUID]*NodeCollection
-	CollectionsByAlias map[string]*NodeCollection
-	Constraints        map[NodeCollectionType]CollectionConstraint
+	CollectionsByID   map[uuid.UUID]*NodeCollection
+	CollectionsByName map[string]*NodeCollection
+	Constraints       map[NodeCollectionType]CollectionConstraint
 }
 
 func NewCollectionManager() *CollectionManager {
 	manager := &CollectionManager{
-		CollectionsByID:    make(map[uuid.UUID]*NodeCollection),
-		CollectionsByAlias: make(map[string]*NodeCollection),
-		Constraints:        make(map[NodeCollectionType]CollectionConstraint),
+		CollectionsByID:   make(map[uuid.UUID]*NodeCollection),
+		CollectionsByName: make(map[string]*NodeCollection),
+		Constraints:       make(map[NodeCollectionType]CollectionConstraint),
 	}
 	// Add constraints for each type if needed
 	manager.AddConstraint(PartitionType, &MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
@@ -40,11 +40,11 @@ func (m *CollectionManager) CreateCollection(collection *NodeCollection) error {
 		}
 	}
 
-	if collection.Alias != "" {
-		if _, exists := m.CollectionsByAlias[collection.Alias]; exists {
-			return fmt.Errorf("alias %s is already in use", collection.Alias)
+	if collection.Name != "" {
+		if _, exists := m.CollectionsByName[collection.Name]; exists {
+			return fmt.Errorf("alias %s is already in use", collection.Name)
 		}
-		m.CollectionsByAlias[collection.Alias] = collection
+		m.CollectionsByName[collection.Name] = collection
 	}
 
 	m.CollectionsByID[collection.ID] = collection
@@ -65,11 +65,11 @@ func (m *CollectionManager) UpdateCollection(collection *NodeCollection) error {
 		}
 	}
 
-	if collection.Alias != "" {
-		if _, exists := m.CollectionsByAlias[collection.Alias]; exists && m.CollectionsByAlias[collection.Alias].ID != collection.ID {
-			return fmt.Errorf("alias %s is already in use", collection.Alias)
+	if collection.Name != "" {
+		if _, exists := m.CollectionsByName[collection.Name]; exists && m.CollectionsByName[collection.Name].ID != collection.ID {
+			return fmt.Errorf("alias %s is already in use", collection.Name)
 		}
-		m.CollectionsByAlias[collection.Alias] = collection
+		m.CollectionsByName[collection.Name] = collection
 	}
 
 	m.CollectionsByID[collection.ID] = collection
@@ -82,8 +82,8 @@ func (m *CollectionManager) DeleteCollection(collectionID uuid.UUID) error {
 		return fmt.Errorf("collection %s not found", collectionID)
 	}
 
-	if collection.Alias != "" {
-		delete(m.CollectionsByAlias, collection.Alias)
+	if collection.Name != "" {
+		delete(m.CollectionsByName, collection.Name)
 	}
 	delete(m.CollectionsByID, collectionID)
 	return nil
@@ -94,7 +94,7 @@ func (m *CollectionManager) GetCollection(identifier string) (*NodeCollection, b
 	if collection, exists := m.CollectionsByID[id]; exists {
 		return collection, true
 	}
-	if collection, exists := m.CollectionsByAlias[identifier]; exists {
+	if collection, exists := m.CollectionsByName[identifier]; exists {
 		return collection, true
 	}
 	return nil, false

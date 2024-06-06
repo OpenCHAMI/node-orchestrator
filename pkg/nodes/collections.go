@@ -45,8 +45,8 @@ type NodeCollection struct {
 	Description    string             `json:"description,omitempty"`
 	Name           string             `json:"name"`
 	Type           NodeCollectionType `json:"type"`
-	Nodes          []xnames.NodeXname `json:"nodes"`           // List of ComputeNode IDs
-	Alias          string             `json:"alias,omitempty"` // Optional alias for the collection
+	Nodes          []xnames.NodeXname `json:"nodes"`                     // List of ComputeNode IDs
+	CloudInitData  map[string]string  `json:"cloud_init_data,omitempty"` // Optional cloud-init data for the collection.  It will be available in the payload as `group_{Name}`
 }
 
 func (c *NodeCollection) Bind(r *http.Request) error {
