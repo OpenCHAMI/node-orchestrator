@@ -60,7 +60,8 @@ func generateAndWriteSchemas(path string) {
 		}
 		log.Info().Str("fullpath", fullpath).Msg("Schema written")
 	}
-}```
+}
+```
 
 
 These files are also valuable for clients.  In our python example, the client reads the jsonschema files and can validate a structure on the client side.  In fact, since we can make many assumptions about how to GET and POST these objects, we can create a generic client that doesn't need to understsand these structures directly.
