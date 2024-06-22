@@ -1,10 +1,6 @@
 package nodes
 
 import (
-	"database/sql"
-
-	"github.com/rs/zerolog/log"
-
 	"github.com/google/uuid"
 	"github.com/openchami/node-orchestrator/pkg/xnames"
 )
@@ -49,100 +45,4 @@ type ComputeNodeEvent struct {
 	EventType string    `json:"event,omitempty" db:"event_type"` // CREATE, UPDATE, DELETE
 	EventJSON string    `json:"event_json,omitempty" db:"event_json"`
 	Timestamp int64     `json:"timestamp,omitempty" db:"timestamp"`
-}
-
-func CreateNodeTables(db *sql.DB) {
-	if err := db.Ping(); err != nil {
-		log.Fatal().Err(err).Msg("Error connecting to database")
-	}
-	_, err := db.Exec(createCloudInitDataTableSQL())
-	if err != nil {
-		log.Fatal().Err(err).Msg("Error creating cloud_init_data table")
-	}
-	log.Info().Msg("Created cloud_init_data table")
-
-	if _, err := db.Exec(createBootDataTableSQL()); err != nil {
-		log.Fatal().Err(err).Msg("Error creating boot_data table")
-	}
-	log.Info().Msg("Created boot_data table")
-
-	if _, err := db.Exec(createComputeNodeTableSQL()); err != nil {
-		log.Fatal().Err(err).Msg("Error creating compute_node table")
-	}
-	log.Info().Msg("Created compute_node table")
-
-	if _, err := db.Exec(createNetworkInterfaceTableSQL()); err != nil {
-		log.Fatal().Err(err).Msg("Error creating network_interface table")
-	}
-	log.Info().Msg("Created network_interface table")
-
-	if _, err := db.Exec(createComputeNodeEventTableSQL()); err != nil {
-		log.Fatal().Err(err).Msg("Error creating compute_node_event table")
-	}
-	log.Info().Msg("Created compute_node_event table")
-}
-
-func createCloudInitDataTableSQL() string {
-	return `
-CREATE TABLE IF NOT EXISTS cloud_init_data (
-	id UUID PRIMARY KEY,
-	userdata JSONB,
-	metadata JSONB,
-	vendordata JSONB
-);
-`
-}
-
-func createBootDataTableSQL() string {
-	return `
-CREATE TABLE IF NOT EXISTS boot_data (
-	id UUID PRIMARY KEY,
-	kernel_url TEXT,
-	kernel_command_line TEXT,
-	image_url TEXT
-);
-`
-}
-
-func createComputeNodeTableSQL() string {
-	return `
-CREATE TABLE IF NOT EXISTS compute_node (
-	id UUID PRIMARY KEY,
-	hostname TEXT NOT NULL,
-	xname TEXT,
-	architecture TEXT NOT NULL,
-	boot_mac TEXT,
-	description TEXT,
-	boot_data_id UUID,
-	cloud_init_data_id UUID,
-	FOREIGN KEY (boot_data_id) REFERENCES boot_data (id),
-	FOREIGN KEY (cloud_init_data_id) REFERENCES cloud_init_data (id)
-);
-`
-}
-
-func createNetworkInterfaceTableSQL() string {
-	return `
-CREATE TABLE IF NOT EXISTS network_interface (
-	interface_name TEXT NOT NULL,
-	ipv4_address TEXT,
-	ipv6_address TEXT,
-	mac_address TEXT NOT NULL,
-	description TEXT,
-	PRIMARY KEY (mac_address)
-);
-`
-
-}
-
-func createComputeNodeEventTableSQL() string {
-	return `
-CREATE TABLE IF NOT EXISTS compute_node_event (
-	node_id UUID,
-	event_type TEXT,
-	event_json TEXT,
-	timestamp INTEGER,
-	FOREIGN KEY (node_id) REFERENCES compute_node (id)
-);
-`
 }
