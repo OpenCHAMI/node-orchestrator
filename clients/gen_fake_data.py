@@ -12,8 +12,6 @@ def generate_compute_node():
     for _ in range(num_interfaces):
         interface = {
             "interface_name": random.choice(["eth0", "eth1", "ib0", "ib1", "ip2", "ip3"]),
-            "ipv4_address": fake.ipv4(),
-            "ipv6_address": fake.ipv6(),
             "mac_address": fake.mac_address(),
             "description": fake.sentence()
         }
@@ -25,7 +23,6 @@ def generate_compute_node():
         bmc = {
             "username": "admin",
             "password": "admin",
-            "ipv4_address": fake.ipv4(),
             "mac_address": fake.mac_address()
         }
     

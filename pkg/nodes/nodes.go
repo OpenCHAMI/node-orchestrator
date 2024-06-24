@@ -30,6 +30,7 @@ type ComputeNode struct {
 	Description       string             `json:"description,omitempty" db:"description"`
 	BootData          *BootData          `json:"boot_data,omitempty" db:"boot_data"`
 	CloudInitData     *CloudInitData     `json:"cloud_init_data,omitempty" db:"cloud_init_data"`
+	TPMPubKey         string             `json:"tpm_pub_key,omitempty" db:"tpm_pub_key"`
 }
 
 type NetworkInterface struct {

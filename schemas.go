@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	base "github.com/Cray-HPE/hms-base"
 	"github.com/invopop/jsonschema"
 	nodes "github.com/openchami/node-orchestrator/pkg/nodes"
+	smd "github.com/openchami/node-orchestrator/pkg/smd"
 	"github.com/rs/zerolog/log"
 )
 
@@ -17,7 +17,7 @@ func generateAndWriteSchemas(path string) {
 		"ComputeNode.json":      &nodes.ComputeNode{},
 		"NetworkInterface.json": &nodes.NetworkInterface{},
 		"BMC.json":              &nodes.BMC{},
-		"Component.json":        &base.Component{},
+		"Component.json":        &smd.Component{},
 		"NodeCollection.json":   &nodes.NodeCollection{},
 	}
 

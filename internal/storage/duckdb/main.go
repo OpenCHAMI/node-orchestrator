@@ -58,7 +58,7 @@ func NewDuckDBStorage(path string, options ...DuckDBStorageOption) (*DuckDBStora
 
 func (d *DuckDBStorage) initTables() error {
 	queries := []string{
-		`CREATE TABLE IF NOT EXISTS compute_nodes (id UUID PRIMARY KEY, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, xname TEXT UNIQUE, data JSON)`,
+		`CREATE TABLE IF NOT EXISTS compute_nodes (id UUID PRIMARY KEY, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, xname TEXT UNIQUE, boot_mac TEXT UNIQUE, data JSON)`,
 		`CREATE TABLE IF NOT EXISTS bmcs (id UUID PRIMARY KEY, xname TEXT UNIQUE, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, data JSON)`,
 		`CREATE TABLE IF NOT EXISTS collections (id UUID PRIMARY KEY, name TEXT UNIQUE, data JSON, nodes JSON)`,
 		`CREATE INDEX IF NOT EXISTS idx_collections_nodes ON collections USING GIN (nodes)`,
@@ -118,7 +118,7 @@ func (d *DuckDBStorage) handleShutdown() {
 		log.Error().Err(err).Msg("Error closing database connection")
 	}
 
-	log.Info().Msg("Shutdown complete")
+	log.Info().Msg("DuckDB Shutdown complete")
 }
 
 func (d *DuckDBStorage) initializeDatabase() error {

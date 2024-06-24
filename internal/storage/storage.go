@@ -5,7 +5,7 @@ import (
 	"github.com/openchami/node-orchestrator/pkg/nodes"
 )
 
-type Storage interface {
+type NodeStorage interface {
 	SaveComputeNode(nodeID uuid.UUID, node nodes.ComputeNode) error
 	GetComputeNode(nodeID uuid.UUID) (nodes.ComputeNode, error)
 	UpdateComputeNode(nodeID uuid.UUID, node nodes.ComputeNode) error

@@ -11,7 +11,7 @@ import (
 	"github.com/openchami/node-orchestrator/pkg/xnames"
 )
 
-func postBMC(storage storage.Storage) http.HandlerFunc {
+func postBMC(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var newBMC nodes.BMC
 		if err := json.NewDecoder(r.Body).Decode(&newBMC); err != nil {
@@ -36,7 +36,7 @@ func postBMC(storage storage.Storage) http.HandlerFunc {
 	}
 }
 
-func updateBMC(storage storage.Storage) http.HandlerFunc {
+func updateBMC(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		bmcID, err := uuid.Parse(chi.URLParam(r, "bmcID"))
 		if err != nil {
@@ -59,7 +59,7 @@ func updateBMC(storage storage.Storage) http.HandlerFunc {
 	}
 }
 
-func getBMC(storage storage.Storage) http.HandlerFunc {
+func getBMC(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		bmcID, err := uuid.Parse(chi.URLParam(r, "bmcID"))
 		if err != nil {
@@ -75,7 +75,7 @@ func getBMC(storage storage.Storage) http.HandlerFunc {
 	}
 }
 
-func deleteBMC(storage storage.Storage) http.HandlerFunc {
+func deleteBMC(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		bmcID, err := uuid.Parse(chi.URLParam(r, "bmcID"))
 		if err != nil {

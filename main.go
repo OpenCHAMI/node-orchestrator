@@ -17,6 +17,7 @@ import (
 	"github.com/openchami/node-orchestrator/internal/storage/duckdb"
 	"github.com/openchami/node-orchestrator/pkg/nodes"
 	"github.com/openchami/node-orchestrator/pkg/xnames"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
@@ -28,7 +29,7 @@ var (
 	schemaCmd         = flag.NewFlagSet("schemas", flag.ExitOnError)
 	snapshotPath      = serveCmd.String("dir", "snapshots/", "directory to store snapshots")
 	schemaPath        = schemaCmd.String("dir", "schemas/", "directory to store JSON schemas")
-	snapshotFreq      = serveCmd.Duration("snapshot-freq", 60*time.Second, "frequency to take snapshots")
+	snapshotFreq      = serveCmd.Duration("snapshot-freq", 60*time.Minute, "frequency to take snapshots")
 	snapshotDirCreate = serveCmd.Bool("snapshot-dir", true, "create snapshot directory if it doesn't exist")
 	initTables        = serveCmd.Bool("init-tables", false, "initialize tables in the database")
 )
@@ -40,8 +41,8 @@ type Config struct {
 }
 
 type App struct {
-	Storage storage.Storage
-	Router  *chi.Mux
+	NodeStorage storage.NodeStorage
+	Router      *chi.Mux
 }
 
 func main() {
@@ -79,7 +80,7 @@ func serveAPI(logger zerolog.Logger) {
 
 	myStorage, err := duckdb.NewDuckDBStorage("data.db",
 		duckdb.WithRestore(*snapshotPath),
-		duckdb.WithSnapshotFrequency(*snapshotFreq),
+		duckdb.WithSnapshotFrequency(*snapshotFreq*time.Second),
 		duckdb.WithCreateSnapshotDir(*snapshotDirCreate),
 		duckdb.WithInitTables(*initTables),
 	)
@@ -92,8 +93,8 @@ func serveAPI(logger zerolog.Logger) {
 	}
 
 	app := &App{
-		Storage: myStorage,
-		Router:  r,
+		NodeStorage: myStorage,
+		Router:      r,
 	}
 
 	manager := nodes.NewCollectionManager()
@@ -106,17 +107,17 @@ func serveAPI(logger zerolog.Logger) {
 
 		// Handle valid / invalid tokens.
 		r.Use(AuthenticatorWithRequiredClaims(tokenAuth, []string{"sub", "iss", "aud"}))
-		r.Put("/ComputeNode/{nodeID}", updateNode(app.Storage))
-		r.Post("/ComputeNode", postNode(app.Storage))
-		r.Delete("/ComputeNode/{nodeID}", deleteNode(app.Storage))
+		r.Put("/ComputeNode/{nodeID}", updateNode(app.NodeStorage))
+		r.Post("/ComputeNode", postNode(app.NodeStorage))
+		r.Delete("/ComputeNode/{nodeID}", deleteNode(app.NodeStorage))
 
-		r.Post("/nodes", postNode(app.Storage))
-		r.Put("/nodes/{nodeID}", updateNode(app.Storage))
-		r.Delete("/nodes/{nodeID}", deleteNode(app.Storage))
+		r.Post("/nodes", postNode(app.NodeStorage))
+		r.Put("/nodes/{nodeID}", updateNode(app.NodeStorage))
+		r.Delete("/nodes/{nodeID}", deleteNode(app.NodeStorage))
 
-		r.Post("/bmc", postBMC(app.Storage))
-		r.Put("/bmc/{bmcID}", updateBMC(app.Storage))
-		r.Delete("/bmc/{bmcID}", deleteBMC(app.Storage))
+		r.Post("/bmc", postBMC(app.NodeStorage))
+		r.Put("/bmc/{bmcID}", updateBMC(app.NodeStorage))
+		r.Delete("/bmc/{bmcID}", deleteBMC(app.NodeStorage))
 
 		r.Post("/NodeCollection", createCollection(manager))
 		r.Put("/NodeCollection/{identifier}", updateCollection(manager))
@@ -126,12 +127,17 @@ func serveAPI(logger zerolog.Logger) {
 
 	// Public routes
 
-	r.Get("/ComputeNode/{nodeID}", getNode(app.Storage))
-	r.Get("/ComputeNode", searchNodes(app.Storage))
-	r.Get("/nodes/{nodeID}", getNode(app.Storage))
-	r.Get("/nodes", searchNodes(app.Storage))
-	r.Get("/bmc/{bmcID}", getBMC(app.Storage))
+	r.Get("/ComputeNode/{nodeID}", getNode(app.NodeStorage))
+	r.Get("/ComputeNode", searchNodes(app.NodeStorage))
+	r.Get("/nodes/{nodeID}", getNode(app.NodeStorage))
+	r.Get("/nodes", searchNodes(app.NodeStorage))
+	r.Get("/bmc/{bmcID}", getBMC(app.NodeStorage))
 	r.Get("/NodeCollection/{identifier}", getCollection(manager))
+
+	// CSM Routes
+	// r.Group(func(r chi.Router) {
+	// 	smd.SMDComponentRoutes()
+	// })
 
 	log.Info().Msg("Starting server on :8080")
 	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {

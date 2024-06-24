@@ -23,7 +23,7 @@ func mustInt(i int, e error) int {
 	return i
 }
 
-func postNode(storage storage.Storage) http.HandlerFunc {
+func postNode(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var newNode nodes.ComputeNode
 
@@ -115,7 +115,7 @@ func postNode(storage storage.Storage) http.HandlerFunc {
 	}
 }
 
-func getNode(storage storage.Storage) http.HandlerFunc {
+func getNode(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		nodeID, err := uuid.Parse(chi.URLParam(r, "nodeID"))
 		if err != nil {
@@ -132,7 +132,7 @@ func getNode(storage storage.Storage) http.HandlerFunc {
 	}
 }
 
-func searchNodes(storage storage.Storage) http.HandlerFunc {
+func searchNodes(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		query := r.URL.Query()
@@ -172,7 +172,7 @@ func searchNodes(storage storage.Storage) http.HandlerFunc {
 	}
 }
 
-func updateNode(storage storage.Storage) http.HandlerFunc {
+func updateNode(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		nodeID, err := uuid.Parse(chi.URLParam(r, "nodeID"))
 		if err != nil {
@@ -218,7 +218,7 @@ func updateNode(storage storage.Storage) http.HandlerFunc {
 	}
 }
 
-func deleteNode(storage storage.Storage) http.HandlerFunc {
+func deleteNode(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		nodeID, err := uuid.Parse(chi.URLParam(r, "nodeID"))
 		if err != nil {
