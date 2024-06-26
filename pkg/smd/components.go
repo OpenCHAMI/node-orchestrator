@@ -9,7 +9,7 @@ import (
 type Component struct {
 	UID                 uuid.UUID        `json:"UID,omitempty" db:"uid"`
 	ID                  string           `json:"ID" db:"id" jsonschema:"description=Xname"`
-	Type                string           `json:"Type" db:"type"`
+	Type                ComponentType    `json:"Type" db:"type"`
 	Subtype             string           `json:"Subtype,omitempty" db:"subtype"`
 	Role                ComponentRole    `json:"Role,omitempty" db:"role"`
 	SubRole             ComponentSubRole `json:"SubRole,omitempty" db:"sub_role"`
@@ -23,6 +23,94 @@ type Component struct {
 	NID                 int              `json:"NID,omitempty" db:"nid"`
 	ReservationDisabled bool             `json:"ReservationDisabled,omitempty" db:"reservation_disabled"`
 	Locked              bool             `json:"Locked,omitempty" db:"locked"`
+}
+
+type ComponentType string
+
+const (
+	TypeCDU                      ComponentType = "CDU"
+	TypeCabinetCDU               ComponentType = "CabinetCDU"
+	TypeCabinetPDU               ComponentType = "CabinetPDU"
+	TypeCabinetPDUOutlet         ComponentType = "CabinetPDUOutlet"
+	TypeCabinetPDUPowerConnector ComponentType = "CabinetPDUPowerConnector"
+	TypeCabinetPDUController     ComponentType = "CabinetPDUController"
+	TypeCabinet                  ComponentType = "Cabinet"
+	TypeChassis                  ComponentType = "Chassis"
+	TypeChassisBMC               ComponentType = "ChassisBMC"
+	TypeCMMRectifier             ComponentType = "CMMRectifier"
+	TypeCMMFpga                  ComponentType = "CMMFpga"
+	TypeCEC                      ComponentType = "CEC"
+	TypeComputeModule            ComponentType = "ComputeModule"
+	TypeRouterModule             ComponentType = "RouterModule"
+	TypeNodeBMC                  ComponentType = "NodeBMC"
+	TypeNodeEnclosure            ComponentType = "NodeEnclosure"
+	TypeNodeEnclosurePowerSupply ComponentType = "NodeEnclosurePowerSupply"
+	TypeHSNBoard                 ComponentType = "HSNBoard"
+	TypeMgmtSwitch               ComponentType = "MgmtSwitch"
+	TypeMgmtHLSwitch             ComponentType = "MgmtHLSwitch"
+	TypeCDUMgmtSwitch            ComponentType = "CDUMgmtSwitch"
+	TypeNode                     ComponentType = "Node"
+	TypeVirtualNode              ComponentType = "VirtualNode"
+	TypeProcessor                ComponentType = "Processor"
+	TypeDrive                    ComponentType = "Drive"
+	TypeStorageGroup             ComponentType = "StorageGroup"
+	TypeNodeNIC                  ComponentType = "NodeNIC"
+	TypeMemory                   ComponentType = "Memory"
+	TypeNodeAccel                ComponentType = "NodeAccel"
+	TypeNodeAccelRiser           ComponentType = "NodeAccelRiser"
+	TypeNodeFpga                 ComponentType = "NodeFpga"
+	TypeHSNAsic                  ComponentType = "HSNAsic"
+	TypeRouterFpga               ComponentType = "RouterFpga"
+	TypeRouterBMC                ComponentType = "RouterBMC"
+	TypeHSNLink                  ComponentType = "HSNLink"
+	TypeHSNConnector             ComponentType = "HSNConnector"
+	TypeINVALID                  ComponentType = "INVALID"
+)
+
+func (ComponentType) JSONSchema() *jsonschema.Schema {
+	return &jsonschema.Schema{
+		Type: "string",
+		Enum: []interface{}{
+			string(TypeCDU),
+			string(TypeCabinetCDU),
+			string(TypeCabinetPDU),
+			string(TypeCabinetPDUOutlet),
+			string(TypeCabinetPDUPowerConnector),
+			string(TypeCabinetPDUController),
+			string(TypeCabinet),
+			string(TypeChassis),
+			string(TypeChassisBMC),
+			string(TypeCMMRectifier),
+			string(TypeCMMFpga),
+			string(TypeCEC),
+			string(TypeComputeModule),
+			string(TypeRouterModule),
+			string(TypeNodeBMC),
+			string(TypeNodeEnclosure),
+			string(TypeNodeEnclosurePowerSupply),
+			string(TypeHSNBoard),
+			string(TypeMgmtSwitch),
+			string(TypeMgmtHLSwitch),
+			string(TypeCDUMgmtSwitch),
+			string(TypeNode),
+			string(TypeVirtualNode),
+			string(TypeProcessor),
+			string(TypeDrive),
+			string(TypeStorageGroup),
+			string(TypeNodeNIC),
+			string(TypeMemory),
+			string(TypeNodeAccel),
+			string(TypeNodeAccelRiser),
+			string(TypeNodeFpga),
+			string(TypeHSNAsic),
+			string(TypeRouterFpga),
+			string(TypeRouterBMC),
+			string(TypeHSNLink),
+			string(TypeHSNConnector),
+			string(TypeINVALID),
+		},
+		Description: "This is the CSM component type category.  It has a particular xname format and represents the kind of component that can occupy that location.  Not to be confused with RedfishType which is Redfish specific and only used when providing Redfish endpoint data from discovery.",
+	}
 }
 
 // ComponentState represents the state of an CSM component

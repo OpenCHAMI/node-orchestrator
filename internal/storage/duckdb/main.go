@@ -3,10 +3,7 @@ package duckdb
 import (
 	"context"
 	"database/sql"
-	"os"
-	"os/signal"
 	"sync"
-	"syscall"
 	"time"
 
 	_ "github.com/marcboeker/go-duckdb"
@@ -33,6 +30,7 @@ func NewDuckDBStorage(path string, options ...DuckDBStorageOption) (*DuckDBStora
 	d := &DuckDBStorage{
 		db:                db,
 		collectionManager: nodes.NewCollectionManager(),
+		cancelSnapshot:    func() {},
 	}
 
 	for _, option := range options {
@@ -45,80 +43,24 @@ func NewDuckDBStorage(path string, options ...DuckDBStorageOption) (*DuckDBStora
 	d.loadExtensions()
 	d.initTables()
 
-	ctx, cancel := context.WithCancel(context.Background())
-	d.cancelSnapshot = cancel
-
-	d.wg.Add(1)
-	go d.snapshotRoutine(ctx)
-
-	go d.handleShutdown()
-
 	return d, nil
 }
 
 func (d *DuckDBStorage) initTables() error {
-	queries := []string{
-		`CREATE TABLE IF NOT EXISTS compute_nodes (id UUID PRIMARY KEY, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, xname TEXT UNIQUE, boot_mac TEXT UNIQUE, data JSON)`,
-		`CREATE TABLE IF NOT EXISTS bmcs (id UUID PRIMARY KEY, xname TEXT UNIQUE, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, data JSON)`,
-		`CREATE TABLE IF NOT EXISTS collections (id UUID PRIMARY KEY, name TEXT UNIQUE, data JSON, nodes JSON)`,
-		`CREATE INDEX IF NOT EXISTS idx_collections_nodes ON collections USING GIN (nodes)`,
+	err := initNodeTables(d.db)
+	if err != nil {
+		return err
 	}
-	for _, query := range queries {
-		if _, err := d.db.Exec(query); err != nil {
-			return err
-		}
+
+	err = initComponentTables(d.db)
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
 func (d *DuckDBStorage) Close() error {
 	return d.db.Close()
-}
-
-func (d *DuckDBStorage) handleShutdown() {
-	// Create a channel to listen for OS signals
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-
-	// Block until a signal is received
-	sig := <-quit
-	log.Info().Str("signal", sig.String()).Msg("Received shutdown signal")
-
-	// Create a context with a timeout for the shutdown process
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-
-	// Attempt to take a final snapshot
-	log.Info().Msg("Taking final snapshot before shutdown")
-	if err := d.SnapshotParquet(ctx, d.snapshotPath); err != nil {
-		log.Error().Err(err).Msg("Error taking final snapshot")
-	}
-
-	// Stop the snapshot routine
-	log.Info().Msg("Stopping snapshot routine")
-	d.cancelSnapshot()
-
-	// Wait for all goroutines to finish with the context's timeout
-	done := make(chan struct{})
-	go func() {
-		d.wg.Wait()
-		close(done)
-	}()
-
-	select {
-	case <-done:
-		log.Info().Msg("All goroutines finished cleanly")
-	case <-ctx.Done():
-		log.Warn().Msg("Timeout waiting for goroutines to finish")
-	}
-
-	// Close the database connection
-	log.Info().Msg("Closing database connection")
-	if err := d.Close(); err != nil {
-		log.Error().Err(err).Msg("Error closing database connection")
-	}
-
-	log.Info().Msg("DuckDB Shutdown complete")
 }
 
 func (d *DuckDBStorage) initializeDatabase() error {
@@ -134,4 +76,35 @@ func (d *DuckDBStorage) loadExtensions() error {
 		log.Error().Err(err).Msg("Failed to load DuckDB extensions")
 	}
 	return err
+}
+
+// Shutdown initiates the shutdown process
+func (d *DuckDBStorage) Shutdown(ctx context.Context) {
+	log.Info().Msg("Taking final snapshot before shutdown")
+	if err := d.SnapshotParquet(ctx, d.snapshotPath); err != nil {
+		log.Error().Err(err).Msg("Error taking final snapshot")
+	}
+
+	log.Info().Msg("Stopping snapshot routine")
+	d.cancelSnapshot()
+
+	done := make(chan struct{})
+	go func() {
+		d.wg.Wait()
+		close(done)
+	}()
+
+	select {
+	case <-done:
+		log.Info().Msg("All goroutines finished cleanly")
+	case <-ctx.Done():
+		log.Warn().Msg("Timeout waiting for goroutines to finish")
+	}
+
+	log.Info().Msg("Closing database connection")
+	if err := d.Close(); err != nil {
+		log.Error().Err(err).Msg("Error closing database connection")
+	}
+
+	log.Info().Msg("DuckDB Shutdown complete")
 }

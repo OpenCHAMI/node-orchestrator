@@ -1,9 +1,10 @@
-package smd
+package duckdb
 
 import (
 	"testing"
 
 	_ "github.com/marcboeker/go-duckdb"
+	"github.com/openchami/node-orchestrator/pkg/smd"
 
 	"github.com/google/uuid"
 )
@@ -11,10 +12,10 @@ import (
 func TestCreateOrUpdateComponents(t *testing.T) {
 
 	// Create the DuckDBSMDStorage instance
-	storage, _ := NewDuckDBSMDStorage("")
+	storage, _ := NewDuckDBStorage("")
 
 	// Create a test component
-	component := Component{
+	component := smd.Component{
 		UID:                 uuid.New(),
 		ID:                  "test-component",
 		Type:                "test-type",
@@ -34,20 +35,20 @@ func TestCreateOrUpdateComponents(t *testing.T) {
 	}
 
 	// Test creating a new component
-	err := storage.CreateOrUpdateComponents([]Component{component})
+	err := storage.CreateOrUpdateComponents([]smd.Component{component})
 	if err != nil {
 		t.Errorf("failed to create component: %v", err)
 	}
 
 	// Test updating an existing component
 	component.Enabled = false
-	err = storage.CreateOrUpdateComponents([]Component{component})
+	err = storage.CreateOrUpdateComponents([]smd.Component{component})
 	if err != nil {
 		t.Errorf("failed to update component: %v", err)
 	}
 
 	// Test creating multiple components
-	components := []Component{
+	components := []smd.Component{
 		{
 			UID:                 uuid.New(),
 			ID:                  "test-component-2",

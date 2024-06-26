@@ -57,6 +57,7 @@ require (
 	github.com/marcboeker/go-duckdb v1.6.6
 	github.com/rs/zerolog v1.33.0
 	github.com/sirupsen/logrus v1.9.3
+	github.com/stmcginnis/gofish v0.18.0
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/xitongsys/parquet-go v1.6.2
 )

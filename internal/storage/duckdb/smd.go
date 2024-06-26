@@ -1,4 +1,4 @@
-package smd
+package duckdb
 
 import (
 	"database/sql"
@@ -7,29 +7,12 @@ import (
 
 	"github.com/google/uuid"
 	_ "github.com/marcboeker/go-duckdb"
+	"github.com/openchami/node-orchestrator/pkg/smd"
 )
 
-type DuckDBSMDStorage struct {
-	db *sql.DB
-}
-
-func NewDuckDBSMDStorage(dataSourceName string) (*DuckDBSMDStorage, error) {
-	db, err := sql.Open("duckdb", dataSourceName)
-	if err != nil {
-		return nil, err
-	}
-
-	storage := &DuckDBSMDStorage{db: db}
-	if err := storage.initDB(); err != nil {
-		return nil, err
-	}
-
-	return storage, nil
-}
-
-func (s *DuckDBSMDStorage) initDB() error {
-	query := `
-	CREATE TABLE IF NOT EXISTS components (
+func initComponentTables(db *sql.DB) error {
+	queries := []string{
+		`CREATE TABLE IF NOT EXISTS components (
 		uid UUID,
 		id TEXT PRIMARY KEY,
 		type TEXT,
@@ -46,12 +29,23 @@ func (s *DuckDBSMDStorage) initDB() error {
 		nid INTEGER,
 		reservation_disabled BOOLEAN,
 		locked BOOLEAN
-	)`
-	_, err := s.db.Exec(query)
-	return err
+	)`,
+		`CREATE TABLE IF NOT EXISTS redfish_endpoints (
+		id TEXT PRIMARY KEY,
+		name TEXT,
+		uri TEXT,
+		username TEXT,
+		password TEXT
+	)`}
+	for _, query := range queries {
+		if _, err := db.Exec(query); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
-func (s *DuckDBSMDStorage) GetComponents() ([]Component, error) {
+func (s *DuckDBStorage) GetComponents() ([]smd.Component, error) {
 	query := "SELECT * FROM components"
 	rows, err := s.db.Query(query)
 	if err != nil {
@@ -59,9 +53,9 @@ func (s *DuckDBSMDStorage) GetComponents() ([]Component, error) {
 	}
 	defer rows.Close()
 
-	var components []Component
+	var components []smd.Component
 	for rows.Next() {
-		var c Component
+		var c smd.Component
 		if err := rows.Scan(&c.UID, &c.ID, &c.Type, &c.Subtype, &c.Role, &c.SubRole, &c.NetType, &c.Arch, &c.Class, &c.State, &c.Flag, &c.Enabled, &c.SwStatus, &c.NID, &c.ReservationDisabled, &c.Locked); err != nil {
 			return nil, err
 		}
@@ -70,33 +64,33 @@ func (s *DuckDBSMDStorage) GetComponents() ([]Component, error) {
 	return components, nil
 }
 
-func (s *DuckDBSMDStorage) GetComponentByXname(xname string) (Component, error) {
+func (s *DuckDBStorage) GetComponentByXname(xname string) (smd.Component, error) {
 	query := "SELECT * FROM components WHERE id = ?"
 	row := s.db.QueryRow(query, xname)
 
-	var c Component
+	var c smd.Component
 	if err := row.Scan(&c.UID, &c.ID, &c.Type, &c.Subtype, &c.Role, &c.SubRole, &c.NetType, &c.Arch, &c.Class, &c.State, &c.Flag, &c.Enabled, &c.SwStatus, &c.NID, &c.ReservationDisabled, &c.Locked); err != nil {
 		return c, err
 	}
 	return c, nil
 }
 
-func (s *DuckDBSMDStorage) GetComponentByNID(nid int) (Component, error) {
+func (s *DuckDBStorage) GetComponentByNID(nid int) (smd.Component, error) {
 	query := "SELECT * FROM components WHERE nid = ?"
 	row := s.db.QueryRow(query, nid)
 
-	var c Component
+	var c smd.Component
 	if err := row.Scan(&c.UID, &c.ID, &c.Type, &c.Subtype, &c.Role, &c.SubRole, &c.NetType, &c.Arch, &c.Class, &c.State, &c.Flag, &c.Enabled, &c.SwStatus, &c.NID, &c.ReservationDisabled, &c.Locked); err != nil {
 		return c, err
 	}
 	return c, nil
 }
 
-func (s *DuckDBSMDStorage) GetComponentByUID(uid uuid.UUID) (Component, error) {
+func (s *DuckDBStorage) GetComponentByUID(uid uuid.UUID) (smd.Component, error) {
 	query := "SELECT * FROM components WHERE uid = ?"
 	row := s.db.QueryRow(query, uid)
 
-	var c Component
+	var c smd.Component
 	if err := row.Scan(&c.UID, &c.ID, &c.Type, &c.Subtype, &c.Role, &c.SubRole, &c.NetType, &c.Arch, &c.Class, &c.State, &c.Flag, &c.Enabled, &c.SwStatus, &c.NID, &c.ReservationDisabled, &c.Locked); err != nil {
 		if err == sql.ErrNoRows {
 			return c, fmt.Errorf("component not found")
@@ -106,7 +100,7 @@ func (s *DuckDBSMDStorage) GetComponentByUID(uid uuid.UUID) (Component, error) {
 	return c, nil
 }
 
-func (s *DuckDBSMDStorage) QueryComponents(xname string, params map[string]string) ([]Component, error) {
+func (s *DuckDBStorage) QueryComponents(xname string, params map[string]string) ([]smd.Component, error) {
 	query := "SELECT * FROM components WHERE id = ?"
 	args := []interface{}{xname}
 
@@ -121,9 +115,9 @@ func (s *DuckDBSMDStorage) QueryComponents(xname string, params map[string]strin
 	}
 	defer rows.Close()
 
-	var components []Component
+	var components []smd.Component
 	for rows.Next() {
-		var c Component
+		var c smd.Component
 		if err := rows.Scan(&c.UID, &c.ID, &c.Type, &c.Subtype, &c.Role, &c.SubRole, &c.NetType, &c.Arch, &c.Class, &c.State, &c.Flag, &c.Enabled, &c.SwStatus, &c.NID, &c.ReservationDisabled, &c.Locked); err != nil {
 			return nil, err
 		}
@@ -132,10 +126,10 @@ func (s *DuckDBSMDStorage) QueryComponents(xname string, params map[string]strin
 	return components, nil
 }
 
-func (s *DuckDBSMDStorage) CreateOrUpdateComponents(components []Component) error {
+func (s *DuckDBStorage) CreateOrUpdateComponents(components []smd.Component) error {
 	for _, c := range components {
 
-		var existingComponent Component
+		var existingComponent smd.Component
 		var err error
 
 		// Check if component already exists by xname
@@ -152,7 +146,7 @@ func (s *DuckDBSMDStorage) CreateOrUpdateComponents(components []Component) erro
 			}
 			// if it doesn't exist, create
 		} else {
-			existingComponent = Component{}
+			existingComponent = smd.Component{}
 		}
 
 		// If component exists, update it
@@ -196,19 +190,19 @@ func (s *DuckDBSMDStorage) CreateOrUpdateComponents(components []Component) erro
 	return nil
 }
 
-func (s *DuckDBSMDStorage) DeleteComponents() error {
+func (s *DuckDBStorage) DeleteComponents() error {
 	query := "DELETE FROM components"
 	_, err := s.db.Exec(query)
 	return err
 }
 
-func (s *DuckDBSMDStorage) DeleteComponentByXname(xname string) error {
+func (s *DuckDBStorage) DeleteComponentByXname(xname string) error {
 	query := "DELETE FROM components WHERE id = ?"
 	_, err := s.db.Exec(query, xname)
 	return err
 }
 
-func (s *DuckDBSMDStorage) UpdateComponentData(xnames []string, data map[string]interface{}) error {
+func (s *DuckDBStorage) UpdateComponentData(xnames []string, data map[string]interface{}) error {
 	setClauses := []string{}
 	args := []interface{}{}
 
@@ -220,5 +214,79 @@ func (s *DuckDBSMDStorage) UpdateComponentData(xnames []string, data map[string]
 
 	query := fmt.Sprintf("UPDATE components SET %s WHERE id IN (?)", strings.Join(setClauses, ", "))
 	_, err := s.db.Exec(query, args...)
+	return err
+}
+
+func (s *DuckDBStorage) GetRedfishEndpoints() ([]smd.RedfishEndpoint, error) {
+	query := "SELECT * FROM redfish_endpoints"
+	rows, err := s.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var endpoints []smd.RedfishEndpoint
+	for rows.Next() {
+		var e smd.RedfishEndpoint
+		if err := rows.Scan(&e.ID, &e.Name, &e.URI, &e.User, &e.Password); err != nil {
+			return nil, err
+		}
+		endpoints = append(endpoints, e)
+	}
+	return endpoints, nil
+}
+
+func (s *DuckDBStorage) GetRedfishEndpointByID(id string) (smd.RedfishEndpoint, error) {
+	query := "SELECT * FROM redfish_endpoints WHERE id = ?"
+	row := s.db.QueryRow(query, id)
+	var e smd.RedfishEndpoint
+	if err := row.Scan(&e.ID, &e.Name, &e.URI, &e.User, &e.Password); err != nil {
+		return e, err
+	}
+	return e, nil
+}
+
+func (s *DuckDBStorage) CreateOrUpdateRedfishEndpoints(endpoints []smd.RedfishEndpoint) error {
+	for _, e := range endpoints {
+		var existingEndpoint smd.RedfishEndpoint
+		var err error
+		// Check if endpoint already exists by ID
+		if e.ID != "" {
+			existingEndpoint, err = s.GetRedfishEndpointByID(e.ID)
+			if err != nil && err != sql.ErrNoRows {
+				return err
+			}
+		} else {
+			existingEndpoint = smd.RedfishEndpoint{}
+		}
+		// If endpoint exists, update it
+		if existingEndpoint.ID != "" {
+			query := `
+			UPDATE redfish_endpoints SET
+			name = ?,
+			url = ?,
+			username = ?,
+			password = ?
+			WHERE id = ?`
+			_, err := s.db.Exec(query, e.Name, e.URI, e.User, e.Password, e.ID)
+			if err != nil {
+				return err
+			}
+		} else {
+			// If endpoint does not exist, create it
+			query := `
+			INSERT INTO redfish_endpoints (id, name, url, username, password)
+			VALUES (?, ?, ?, ?, ?)`
+			_, err := s.db.Exec(query, e.ID, e.Name, e.URI, e.User, e.Password)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (s *DuckDBStorage) DeleteRedfishEndpointByID(id string) error {
+	query := "DELETE FROM redfish_endpoints WHERE id = ?"
+	_, err := s.db.Exec(query, id)
 	return err
 }

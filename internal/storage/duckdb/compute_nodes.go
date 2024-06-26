@@ -1,6 +1,7 @@
 package duckdb
 
 import (
+	"database/sql"
 	"encoding/json"
 
 	"github.com/google/uuid"
@@ -168,4 +169,19 @@ func (d *DuckDBStorage) LookupBMCByXName(xname string) (nodes.BMC, error) {
 	var bmc nodes.BMC
 	err = json.Unmarshal([]byte(data), &bmc)
 	return bmc, err
+}
+
+func initNodeTables(db *sql.DB) error {
+	queries := []string{
+		`CREATE TABLE IF NOT EXISTS compute_nodes (id UUID PRIMARY KEY, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, xname TEXT UNIQUE, boot_mac TEXT UNIQUE, data JSON)`,
+		`CREATE TABLE IF NOT EXISTS bmcs (id UUID PRIMARY KEY, xname TEXT UNIQUE, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, data JSON)`,
+		`CREATE TABLE IF NOT EXISTS collections (id UUID PRIMARY KEY, name TEXT UNIQUE, data JSON, nodes JSON)`,
+		`CREATE INDEX IF NOT EXISTS idx_collections_nodes ON collections USING GIN (nodes)`,
+	}
+	for _, query := range queries {
+		if _, err := db.Exec(query); err != nil {
+			return err
+		}
+	}
+	return nil
 }

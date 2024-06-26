@@ -17,8 +17,9 @@ func generateAndWriteSchemas(path string) {
 		"ComputeNode.json":      &nodes.ComputeNode{},
 		"NetworkInterface.json": &nodes.NetworkInterface{},
 		"BMC.json":              &nodes.BMC{},
-		"Component.json":        &smd.Component{},
 		"NodeCollection.json":   &nodes.NodeCollection{},
+		"Component.json":        &smd.Component{},
+		"RedfishEndpoint.json":  &smd.RedfishEndpoint{},
 	}
 
 	if err := os.MkdirAll(path, 0755); err != nil {

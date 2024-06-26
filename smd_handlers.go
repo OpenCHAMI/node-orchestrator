@@ -1,14 +1,14 @@
-package smd
+package main
 
 import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/google/uuid"
 	"github.com/invopop/jsonschema"
-
+	smd "github.com/openchami/node-orchestrator/pkg/smd"
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -16,12 +16,12 @@ import (
 var componentSchemaLoader gojsonschema.JSONLoader
 
 type SMDStorage interface {
-	GetComponents() ([]Component, error)
-	GetComponentByXname(xname string) (Component, error)
-	GetComponentByNID(nid int) (Component, error)
-	GetComponentByUID(uid uuid.UUID) (Component, error)
-	QueryComponents(xname string, params map[string]string) ([]Component, error)
-	CreateOrUpdateComponents(components []Component) error
+	GetComponents() ([]smd.Component, error)
+	GetComponentByXname(xname string) (smd.Component, error)
+	GetComponentByNID(nid int) (smd.Component, error)
+	GetComponentByUID(uid uuid.UUID) (smd.Component, error)
+	QueryComponents(xname string, params map[string]string) ([]smd.Component, error)
+	CreateOrUpdateComponents(components []smd.Component) error
 	DeleteComponents() error
 	DeleteComponentByXname(xname string) error
 	UpdateComponentData(xnames []string, data map[string]interface{}) error
@@ -72,7 +72,7 @@ func getComponentByXname(storage SMDStorage) http.HandlerFunc {
 
 func createUpdateComponents(storage SMDStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var components []Component
+		var components []smd.Component
 		if err := json.NewDecoder(r.Body).Decode(&components); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -203,10 +203,10 @@ func NewRouter(storage SMDStorage) chi.Router {
 	return r
 }
 
-func SMDComponentRoutes() chi.Router {
-	// Generate JSON schema for Component struct
+func SMDComponentRoutes(storage SMDStorage) chi.Router {
+	// Generate JSON schema for smd.Component struct
 	reflector := jsonschema.Reflector{}
-	componentSchema := reflector.Reflect(&Component{})
+	componentSchema := reflector.Reflect(&smd.Component{})
 
 	// Convert schema to JSON
 	schemaJSON, err := json.Marshal(componentSchema)
@@ -216,12 +216,6 @@ func SMDComponentRoutes() chi.Router {
 
 	// Initialize the JSON schema loader
 	componentSchemaLoader = gojsonschema.NewBytesLoader(schemaJSON)
-
-	// Implement a concrete storage that satisfies the Storage interface
-	storage, err := NewDuckDBSMDStorage("smd.db")
-	if err != nil {
-		panic(err)
-	}
 
 	r := NewRouter(storage)
 	return r

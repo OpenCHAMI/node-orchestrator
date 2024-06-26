@@ -7,6 +7,8 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -41,8 +43,8 @@ type Config struct {
 }
 
 type App struct {
-	NodeStorage storage.NodeStorage
-	Router      *chi.Mux
+	Storage storage.NodeStorage
+	Router  *chi.Mux
 }
 
 func main() {
@@ -92,11 +94,6 @@ func serveAPI(logger zerolog.Logger) {
 		}
 	}
 
-	app := &App{
-		NodeStorage: myStorage,
-		Router:      r,
-	}
-
 	manager := nodes.NewCollectionManager()
 	manager.AddConstraint(nodes.DefaultType, &nodes.MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
 
@@ -107,17 +104,17 @@ func serveAPI(logger zerolog.Logger) {
 
 		// Handle valid / invalid tokens.
 		r.Use(AuthenticatorWithRequiredClaims(tokenAuth, []string{"sub", "iss", "aud"}))
-		r.Put("/ComputeNode/{nodeID}", updateNode(app.NodeStorage))
-		r.Post("/ComputeNode", postNode(app.NodeStorage))
-		r.Delete("/ComputeNode/{nodeID}", deleteNode(app.NodeStorage))
+		r.Put("/ComputeNode/{nodeID}", updateNode(myStorage))
+		r.Post("/ComputeNode", postNode(myStorage))
+		r.Delete("/ComputeNode/{nodeID}", deleteNode(myStorage))
 
-		r.Post("/nodes", postNode(app.NodeStorage))
-		r.Put("/nodes/{nodeID}", updateNode(app.NodeStorage))
-		r.Delete("/nodes/{nodeID}", deleteNode(app.NodeStorage))
+		r.Post("/nodes", postNode(myStorage))
+		r.Put("/nodes/{nodeID}", updateNode(myStorage))
+		r.Delete("/nodes/{nodeID}", deleteNode(myStorage))
 
-		r.Post("/bmc", postBMC(app.NodeStorage))
-		r.Put("/bmc/{bmcID}", updateBMC(app.NodeStorage))
-		r.Delete("/bmc/{bmcID}", deleteBMC(app.NodeStorage))
+		r.Post("/bmc", postBMC(myStorage))
+		r.Put("/bmc/{bmcID}", updateBMC(myStorage))
+		r.Delete("/bmc/{bmcID}", deleteBMC(myStorage))
 
 		r.Post("/NodeCollection", createCollection(manager))
 		r.Put("/NodeCollection/{identifier}", updateCollection(manager))
@@ -127,17 +124,17 @@ func serveAPI(logger zerolog.Logger) {
 
 	// Public routes
 
-	r.Get("/ComputeNode/{nodeID}", getNode(app.NodeStorage))
-	r.Get("/ComputeNode", searchNodes(app.NodeStorage))
-	r.Get("/nodes/{nodeID}", getNode(app.NodeStorage))
-	r.Get("/nodes", searchNodes(app.NodeStorage))
-	r.Get("/bmc/{bmcID}", getBMC(app.NodeStorage))
+	r.Get("/ComputeNode/{nodeID}", getNode(myStorage))
+	r.Get("/ComputeNode", searchNodes(myStorage))
+	r.Get("/nodes/{nodeID}", getNode(myStorage))
+	r.Get("/nodes", searchNodes(myStorage))
+	r.Get("/bmc/{bmcID}", getBMC(myStorage))
 	r.Get("/NodeCollection/{identifier}", getCollection(manager))
 
 	// CSM Routes
-	// r.Group(func(r chi.Router) {
-	// 	smd.SMDComponentRoutes()
-	// })
+	r.Group(func(r chi.Router) {
+		SMDComponentRoutes(myStorage)
+	})
 
 	log.Info().Msg("Starting server on :8080")
 	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
@@ -145,7 +142,28 @@ func serveAPI(logger zerolog.Logger) {
 		return nil
 	})
 
-	log.Fatal().Err(http.ListenAndServe(":8080", r))
+	// Set up signal handling
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	// Start the HTTP server
+	go func() {
+		r := http.NewServeMux() // Set up your router
+		if err := http.ListenAndServe(":8080", r); err != nil {
+			log.Fatal().Err(err).Msg("HTTP server failed")
+		}
+	}()
+
+	// Wait for a signal
+	sig := <-quit
+	log.Info().Str("signal", sig.String()).Msg("Received shutdown signal")
+
+	// Create a context with a timeout for the shutdown process
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// Call the storage shutdown method
+	myStorage.Shutdown(ctx)
 }
 
 func AuthenticatorWithRequiredClaims(ja *jwtauth.JWTAuth, requiredClaims []string) func(http.Handler) http.Handler {
