@@ -25,6 +25,8 @@ type ComputeNode struct {
 	XName             xnames.NodeXname   `json:"xname,omitempty" db:"xname"`
 	Architecture      string             `json:"architecture" binding:"required" db:"architecture"`
 	BootMac           string             `json:"boot_mac,omitempty" format:"mac-address" db:"boot_mac"`
+	BootIPv4Address   string             `json:"boot_ipv4_address,omitempty" format:"ipv4" db:"boot_ipv4_address"`
+	BootIPv6Address   string             `json:"boot_ipv6_address,omitempty" format:"ipv6" db:"boot_ipv6_address"`
 	NetworkInterfaces []NetworkInterface `json:"network_interfaces,omitempty" db:"network_interfaces"`
 	BMC               *BMC               `json:"bmc,omitempty" db:"bmc"`
 	Description       string             `json:"description,omitempty" db:"description"`

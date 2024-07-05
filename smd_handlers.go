@@ -203,7 +203,7 @@ func NewRouter(storage SMDStorage) chi.Router {
 	return r
 }
 
-func SMDComponentRoutes(storage SMDStorage) chi.Router {
+func SMDComponentRoutes(storage SMDStorage, authMiddlewares []func(http.Handler) http.Handler) chi.Router {
 	// Generate JSON schema for smd.Component struct
 	reflector := jsonschema.Reflector{}
 	componentSchema := reflector.Reflect(&smd.Component{})
@@ -217,6 +217,17 @@ func SMDComponentRoutes(storage SMDStorage) chi.Router {
 	// Initialize the JSON schema loader
 	componentSchemaLoader = gojsonschema.NewBytesLoader(schemaJSON)
 
-	r := NewRouter(storage)
+	r := chi.NewRouter()
+
+	// Unprotected Routes
+	r.Get("/State/Components/", getComponents(storage))
+	r.Get("/State/Components/{xname}", getComponentByXname(storage))
+
+	// Protected Routes
+	r.With(authMiddlewares...).Post("/State/Components/", createUpdateComponents(storage))
+	r.With(authMiddlewares...).Put("/State/Components/{xname}", createUpdateComponents(storage))
+	r.With(authMiddlewares...).Delete("/State/Components/", deleteComponents(storage))
+	r.With(authMiddlewares...).Delete("/State/Components/{xname}", deleteComponentByXname(storage))
+
 	return r
 }

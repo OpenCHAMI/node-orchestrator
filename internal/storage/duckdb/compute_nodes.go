@@ -6,7 +6,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/openchami/node-orchestrator/pkg/nodes"
-	"github.com/rs/zerolog/log"
 )
 
 func (d *DuckDBStorage) SaveComputeNode(nodeID uuid.UUID, node nodes.ComputeNode) error {
@@ -58,65 +57,6 @@ func (d *DuckDBStorage) LookupComputeNodeByMACAddress(mac string) (nodes.Compute
 	var node nodes.ComputeNode
 	err = json.Unmarshal([]byte(data), &node)
 	return node, err
-}
-
-func (d *DuckDBStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMAC string) ([]nodes.ComputeNode, error) {
-	var queryStrings []string
-	var queryArgs []interface{}
-	if xname != "" {
-		queryStrings = append(queryStrings, "json_extract(data, '$.xname')::text = ?")
-		queryArgs = append(queryArgs, `"`+xname+`"`)
-	}
-	if hostname != "" {
-		queryStrings = append(queryStrings, " json_extract(data, '$.hostname')::text = ? ")
-		queryArgs = append(queryArgs, `"`+hostname+`"`)
-	}
-	if arch != "" {
-		queryStrings = append(queryStrings, " json_extract(data, '$.arch')::text = ? ")
-		queryArgs = append(queryArgs, `"`+arch+`"`)
-	}
-	if bootMAC != "" {
-		queryStrings = append(queryStrings, " json_extract(data, '$.boot_mac')::text = ? ")
-		queryArgs = append(queryArgs, `"`+bootMAC+`"`)
-	}
-	if bmcMAC != "" {
-		queryStrings = append(queryStrings, " json_extract(data, '$.bmc.mac_address')::text = ? ")
-		queryArgs = append(queryArgs, `"`+bmcMAC+`"`)
-	}
-
-	query := buildQuery("AND", queryStrings...)
-
-	rows, err := d.db.Query(query, queryArgs...)
-	if err != nil {
-		log.Error().Err(err).Msg("Error querying DuckDB for ComputeNodes")
-		return nil, err
-	}
-	defer rows.Close()
-
-	var foundNodes []nodes.ComputeNode
-	for rows.Next() {
-		var data string
-		if err := rows.Scan(&data); err != nil {
-			return nil, err
-		}
-		var node nodes.ComputeNode
-		if err := json.Unmarshal([]byte(data), &node); err != nil {
-			return nil, err
-		}
-		foundNodes = append(foundNodes, node)
-	}
-
-	log.Debug().Str("query", query).Interface("args", queryArgs).Int("count", len(foundNodes)).Msg("DuckDB ComputeNode search complete")
-	return foundNodes, nil
-}
-
-// buildQuery builds a SQL query for searching compute nodes
-func buildQuery(condition string, fields ...string) string {
-	query := "SELECT data FROM compute_nodes WHERE 1=1"
-	for _, field := range fields {
-		query += " " + condition + " " + field
-	}
-	return query
 }
 
 func (d *DuckDBStorage) SaveBMC(bmcID uuid.UUID, bmc nodes.BMC) error {
@@ -176,7 +116,7 @@ func initNodeTables(db *sql.DB) error {
 		`CREATE TABLE IF NOT EXISTS compute_nodes (id UUID PRIMARY KEY, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, xname TEXT UNIQUE, boot_mac TEXT UNIQUE, data JSON)`,
 		`CREATE TABLE IF NOT EXISTS bmcs (id UUID PRIMARY KEY, xname TEXT UNIQUE, added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, data JSON)`,
 		`CREATE TABLE IF NOT EXISTS collections (id UUID PRIMARY KEY, name TEXT UNIQUE, data JSON, nodes JSON)`,
-		`CREATE INDEX IF NOT EXISTS idx_collections_nodes ON collections USING GIN (nodes)`,
+		`CREATE INDEX IF NOT EXISTS idx_collections_nodes ON collections (nodes)`,
 	}
 	for _, query := range queries {
 		if _, err := db.Exec(query); err != nil {

@@ -17,13 +17,10 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/openchami/node-orchestrator/internal/storage"
 	"github.com/openchami/node-orchestrator/internal/storage/duckdb"
-	"github.com/openchami/node-orchestrator/pkg/nodes"
-	"github.com/openchami/node-orchestrator/pkg/xnames"
+	openchami_middleware "github.com/openchami/node-orchestrator/pkg/middleware"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-
-	"github.com/google/uuid"
 )
 
 var (
@@ -31,9 +28,10 @@ var (
 	schemaCmd         = flag.NewFlagSet("schemas", flag.ExitOnError)
 	snapshotPath      = serveCmd.String("dir", "snapshots/", "directory to store snapshots")
 	schemaPath        = schemaCmd.String("dir", "schemas/", "directory to store JSON schemas")
-	snapshotFreq      = serveCmd.Duration("snapshot-freq", 60*time.Minute, "frequency to take snapshots")
+	snapshotFreq      = serveCmd.Duration("snapshot-freq", 60*time.Minute, "frequency to take snapshots. 0 disables snapshots")
 	snapshotDirCreate = serveCmd.Bool("snapshot-dir", true, "create snapshot directory if it doesn't exist")
 	initTables        = serveCmd.Bool("init-tables", false, "initialize tables in the database")
+	restoreSnapshot   = serveCmd.Bool("restore", true, "restore from snapshot on startup")
 )
 
 type Config struct {
@@ -75,17 +73,43 @@ func main() {
 func serveAPI(logger zerolog.Logger) {
 	// Create a new token authenticator
 	tokenAuth := jwtauth.New("HS256", []byte("secret"), nil, jwt.WithAcceptableSkew(30*time.Second))
+	// Create a new chi router
 	r := chi.NewRouter()
+	// Add middleware to the router
 	r.Use(middleware.RequestID)
-	r.Use(OpenCHAMILogger(logger))
+	r.Use(openchami_middleware.OpenCHAMILogger(logger))
 	r.Use(middleware.Recoverer)
 
-	myStorage, err := duckdb.NewDuckDBStorage("data.db",
-		duckdb.WithRestore(*snapshotPath),
-		duckdb.WithSnapshotFrequency(*snapshotFreq*time.Second),
-		duckdb.WithCreateSnapshotDir(*snapshotDirCreate),
-		duckdb.WithInitTables(*initTables),
-	)
+	var authMiddleware = []func(http.Handler) http.Handler{
+		jwtauth.Verifier(tokenAuth),
+		openchami_middleware.AuthenticatorWithRequiredClaims(tokenAuth, []string{"sub", "iss", "aud"}),
+	}
+
+	// Initialize the storage backend options
+	var options []duckdb.DuckDBStorageOption
+	if serveCmd.Parsed() {
+		if *initTables {
+			options = append(options, duckdb.WithInitTables(*initTables))
+		}
+		if *snapshotPath != "" {
+			log.Info().Msg("Adding the storage option to specify a snapshot path")
+			options = append(options, duckdb.WithSnapshotPath(*snapshotPath))
+			if *snapshotDirCreate {
+				log.Info().Msg("Adding the storage option to create the snapshot directory if it doesn't exist")
+				options = append(options, duckdb.WithCreateSnapshotDir(*snapshotDirCreate))
+			}
+			if *snapshotFreq > time.Duration(0) {
+				log.Info().Msg("Adding the storage option to snapshot regularly")
+				options = append(options, duckdb.WithSnapshotFrequency(*snapshotFreq))
+			}
+			if *restoreSnapshot {
+				log.Info().Msg("Adding the storage option to restore from snapshot on startup")
+				options = append(options, duckdb.WithRestore(*snapshotPath))
+			}
+		}
+	}
+
+	myStorage, err := duckdb.NewDuckDBStorage("data.db", options...)
 	if err != nil {
 		if err.Error() == "no snapshot found" {
 			log.Warn().Msg("No snapshot found, starting with empty database")
@@ -94,47 +118,10 @@ func serveAPI(logger zerolog.Logger) {
 		}
 	}
 
-	manager := nodes.NewCollectionManager()
-	manager.AddConstraint(nodes.DefaultType, &nodes.MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
-
-	// Protected routes
-	r.Group(func(r chi.Router) {
-		// Seek, verify and validate JWT tokens
-		r.Use(jwtauth.Verifier(tokenAuth))
-
-		// Handle valid / invalid tokens.
-		r.Use(AuthenticatorWithRequiredClaims(tokenAuth, []string{"sub", "iss", "aud"}))
-		r.Put("/ComputeNode/{nodeID}", updateNode(myStorage))
-		r.Post("/ComputeNode", postNode(myStorage))
-		r.Delete("/ComputeNode/{nodeID}", deleteNode(myStorage))
-
-		r.Post("/nodes", postNode(myStorage))
-		r.Put("/nodes/{nodeID}", updateNode(myStorage))
-		r.Delete("/nodes/{nodeID}", deleteNode(myStorage))
-
-		r.Post("/bmc", postBMC(myStorage))
-		r.Put("/bmc/{bmcID}", updateBMC(myStorage))
-		r.Delete("/bmc/{bmcID}", deleteBMC(myStorage))
-
-		r.Post("/NodeCollection", createCollection(manager))
-		r.Put("/NodeCollection/{identifier}", updateCollection(manager))
-		r.Delete("/NodeCollection/{identifier}", deleteCollection(manager))
-
-	})
-
-	// Public routes
-
-	r.Get("/ComputeNode/{nodeID}", getNode(myStorage))
-	r.Get("/ComputeNode", searchNodes(myStorage))
-	r.Get("/nodes/{nodeID}", getNode(myStorage))
-	r.Get("/nodes", searchNodes(myStorage))
-	r.Get("/bmc/{bmcID}", getBMC(myStorage))
-	r.Get("/NodeCollection/{identifier}", getCollection(manager))
+	r.Mount("/inventory", NodeRoutes(myStorage, authMiddleware))
 
 	// CSM Routes
-	r.Group(func(r chi.Router) {
-		SMDComponentRoutes(myStorage)
-	})
+	r.Mount("/smd", SMDComponentRoutes(myStorage, authMiddleware))
 
 	log.Info().Msg("Starting server on :8080")
 	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
@@ -148,7 +135,6 @@ func serveAPI(logger zerolog.Logger) {
 
 	// Start the HTTP server
 	go func() {
-		r := http.NewServeMux() // Set up your router
 		if err := http.ListenAndServe(":8080", r); err != nil {
 			log.Fatal().Err(err).Msg("HTTP server failed")
 		}
@@ -164,73 +150,4 @@ func serveAPI(logger zerolog.Logger) {
 
 	// Call the storage shutdown method
 	myStorage.Shutdown(ctx)
-}
-
-func AuthenticatorWithRequiredClaims(ja *jwtauth.JWTAuth, requiredClaims []string) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			token, claims, err := jwtauth.FromContext(r.Context())
-
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusUnauthorized)
-				return
-			}
-
-			if token == nil || jwt.Validate(token, ja.ValidateOptions()...) != nil {
-				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-				return
-			}
-
-			for _, claim := range requiredClaims {
-				if _, ok := claims[claim]; !ok {
-					err := fmt.Errorf("missing required claim %s", claim)
-					log.Error().Err(err).Msg("Missing required claim")
-					http.Error(w, "missing required claim", http.StatusUnauthorized)
-					return
-				}
-			}
-
-			// Token is authenticated and all required claims are present, pass it through
-			next.ServeHTTP(w, r)
-		})
-	}
-}
-
-const LoggerKey = "logger"
-
-// OpenCHAMILogger is a chi middleware that adds a sublogger to the context.
-func OpenCHAMILogger(logger zerolog.Logger) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		fn := func(w http.ResponseWriter, r *http.Request) {
-			start := time.Now()
-			sublogger := logger.With().
-				Str("request_id", middleware.GetReqID(r.Context())).
-				Str("request_uri", r.RequestURI).
-				Str("remote_addr", r.RemoteAddr).
-				Str("user_agent", r.UserAgent()).
-				Str("method", r.Method).
-				Logger()
-			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
-			ctx := context.WithValue(r.Context(), LoggerKey, &sublogger)
-
-			// Use the modified context with the sublogger
-			r = r.WithContext(ctx)
-
-			defer func() {
-				duration := time.Since(start)
-				// Extract the sublogger from the context again
-				sublogger := r.Context().Value(LoggerKey).(*zerolog.Logger)
-				sublogger.Info().
-					Str("status", http.StatusText(ww.Status())).
-					Int("status_code", ww.Status()).
-					Int64("bytes_in", r.ContentLength).
-					Int("bytes_out", ww.BytesWritten()).
-					Dur("duration", duration).
-					Msg("Request")
-			}()
-
-			next.ServeHTTP(ww, r)
-		}
-		return http.HandlerFunc(fn)
-	}
 }

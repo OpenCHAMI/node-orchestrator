@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/openchami/node-orchestrator/internal/storage"
+	openchami_middleware "github.com/openchami/node-orchestrator/pkg/middleware"
 	"github.com/openchami/node-orchestrator/pkg/nodes"
 	"github.com/openchami/node-orchestrator/pkg/xnames"
 	"github.com/rs/zerolog"
@@ -91,7 +92,7 @@ func postNode(storage storage.NodeStorage) http.HandlerFunc {
 			return
 		}
 
-		sublogger := r.Context().Value(LoggerKey).(*zerolog.Logger)
+		sublogger := r.Context().Value(openchami_middleware.LoggerKey).(*zerolog.Logger)
 
 		sublog := sublogger.With().
 			Str("node_id", newNode.ID.String()).
@@ -132,15 +133,39 @@ func getNode(storage storage.NodeStorage) http.HandlerFunc {
 	}
 }
 
-func searchNodes(storage storage.NodeStorage) http.HandlerFunc {
+func searchNodes(myStorage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		query := r.URL.Query()
+		var searchOptions []storage.NodeSearchOption
 		xname := query.Get("xname")
+		if xname != "" {
+			searchOptions = append(searchOptions, storage.WithXName(xname))
+		}
 		hostname := query.Get("hostname")
+		if hostname != "" {
+			searchOptions = append(searchOptions, storage.WithHostname(hostname))
+		}
 		arch := query.Get("arch")
+		if arch != "" {
+			searchOptions = append(searchOptions, storage.WithArch(arch))
+		}
 		bootMac := query.Get("boot_mac")
+		if bootMac != "" {
+			searchOptions = append(searchOptions, storage.WithBootMAC(bootMac))
+		}
 		bmcMac := query.Get("bmc_mac")
+		if bmcMac != "" {
+			searchOptions = append(searchOptions, storage.WithBMCMAC(bmcMac))
+		}
+		missingIPV4 := query.Get("missingIPV4")
+		if missingIPV4 == "true" {
+			searchOptions = append(searchOptions, storage.WithMissingIPV4())
+		}
+		missingIPV6 := query.Get("missingIPV4")
+		if missingIPV6 == "true" {
+			searchOptions = append(searchOptions, storage.WithMissingIPV6())
+		}
 		log.Debug().
 			Str("xname", xname).
 			Str("hostname", hostname).
@@ -151,7 +176,7 @@ func searchNodes(storage storage.NodeStorage) http.HandlerFunc {
 			Str("query", r.URL.RawQuery).
 			Msg("Dispatching ComputeNode search to Storage")
 
-		nodes, err := storage.SearchComputeNodes(xname, hostname, arch, bootMac, bmcMac)
+		nodes, err := myStorage.SearchComputeNodes(searchOptions...)
 		if err != nil {
 			log.Error().Err(err).Msg("Error searching nodes")
 			http.Error(w, "error searching nodes", http.StatusInternalServerError)
@@ -159,7 +184,7 @@ func searchNodes(storage storage.NodeStorage) http.HandlerFunc {
 		}
 
 		// If the logging middleware is loaded, add event details
-		requestLogger, ok := r.Context().Value(LoggerKey).(*zerolog.Logger)
+		requestLogger, ok := r.Context().Value(openchami_middleware.LoggerKey).(*zerolog.Logger)
 		if ok {
 			*requestLogger = requestLogger.With().
 				Int("num_nodes", len(nodes)).
@@ -230,4 +255,46 @@ func deleteNode(storage storage.NodeStorage) http.HandlerFunc {
 			http.Error(w, "node not found", http.StatusNotFound)
 		}
 	}
+}
+
+func NodeRoutes(myStorage storage.NodeStorage, authMiddlewares []func(http.Handler) http.Handler) chi.Router {
+	// Create a new collection manager for node collections
+	manager := nodes.NewCollectionManager()
+	// Add a mutual exclusivity constraint to the manager that prevents a node from being in multipe partitions
+	manager.AddConstraint(nodes.DefaultType, &nodes.MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
+
+	// Create a router for both protected and unprotected routes
+	r := chi.NewRouter()
+
+	// ComputeNode routes
+	r.With(authMiddlewares...).Put("/ComputeNode/{nodeID}", updateNode(myStorage))
+	r.With(authMiddlewares...).Post("/ComputeNode/{nodeID}", updateNode(myStorage))
+	r.With(authMiddlewares...).Post("/ComputeNode", postNode(myStorage))
+	r.With(authMiddlewares...).Delete("/ComputeNode/{nodeID}", deleteNode(myStorage))
+
+	// Node routes
+	r.With(authMiddlewares...).Post("/nodes", postNode(myStorage))
+	r.With(authMiddlewares...).Put("/nodes/{nodeID}", updateNode(myStorage))
+	r.With(authMiddlewares...).Post("/nodes/{nodeID}", updateNode(myStorage))
+	r.With(authMiddlewares...).Delete("/nodes/{nodeID}", deleteNode(myStorage))
+
+	// BMC routes
+	r.With(authMiddlewares...).Post("/bmc", postBMC(myStorage))
+	r.With(authMiddlewares...).Put("/bmc/{bmcID}", updateBMC(myStorage))
+	r.With(authMiddlewares...).Delete("/bmc/{bmcID}", deleteBMC(myStorage))
+
+	// NodeCollection routes
+	r.With(authMiddlewares...).Post("/NodeCollection", createCollection(manager))
+	r.With(authMiddlewares...).Put("/NodeCollection/{identifier}", updateCollection(manager))
+	r.With(authMiddlewares...).Delete("/NodeCollection/{identifier}", deleteCollection(manager))
+
+	// Unprotected routes
+	r.Get("/ComputeNode/{nodeID}", getNode(myStorage))
+	r.Get("/ComputeNode", searchNodes(myStorage))
+	r.Get("/nodes/{nodeID}", getNode(myStorage))
+	r.Get("/nodes", searchNodes(myStorage))
+	r.Get("/bmc/{bmcID}", getBMC(myStorage))
+	r.Get("/NodeCollection/{identifier}", getCollection(manager))
+
+	return r
 }
