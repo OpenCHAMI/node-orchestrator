@@ -15,6 +15,8 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/lestrrat-go/jwx/v2/jwt"
+	"github.com/openchami/node-orchestrator/internal/api/openchami"
+	"github.com/openchami/node-orchestrator/internal/api/smd"
 	"github.com/openchami/node-orchestrator/internal/storage"
 	"github.com/openchami/node-orchestrator/internal/storage/duckdb"
 	openchami_middleware "github.com/openchami/node-orchestrator/pkg/middleware"
@@ -118,10 +120,10 @@ func serveAPI(logger zerolog.Logger) {
 		}
 	}
 
-	r.Mount("/inventory", NodeRoutes(myStorage, authMiddleware))
+	r.Mount("/inventory", openchami.NodeRoutes(myStorage, authMiddleware))
 
 	// CSM Routes
-	r.Mount("/smd", SMDComponentRoutes(myStorage, authMiddleware))
+	r.Mount("/smd", smd.SMDComponentRoutes(myStorage, authMiddleware))
 
 	log.Info().Msg("Starting server on :8080")
 	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {

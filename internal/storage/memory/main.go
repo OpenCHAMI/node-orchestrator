@@ -83,8 +83,9 @@ func (s *InMemoryStorage) DeleteBMC(bmcID uuid.UUID) error {
 }
 
 func (s *InMemoryStorage) LookupComputeNodeByXName(xname string) (nodes.ComputeNode, error) {
+	//Convert string to xname and compare
 	for _, node := range s.nodes {
-		if (node.XName == xnames.NodeXname{Value: xname}) {
+		if (node.LocationString == xnames.NodeXname{Value: xname}.String()) {
 			return node, nil
 		}
 	}
@@ -94,7 +95,7 @@ func (s *InMemoryStorage) LookupComputeNodeByXName(xname string) (nodes.ComputeN
 func (s *InMemoryStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmcMAC string) ([]nodes.ComputeNode, error) {
 	var nodes []nodes.ComputeNode
 	for _, node := range s.nodes {
-		if (xname == "" || node.XName.Value == xname) &&
+		if (xname == "" || node.LocationString == xname) &&
 			(hostname == "" || node.Hostname == hostname) &&
 			(arch == "" || node.Architecture == arch) &&
 			(bootMAC == "" || node.BootMac == bootMAC) {
@@ -106,7 +107,7 @@ func (s *InMemoryStorage) SearchComputeNodes(xname, hostname, arch, bootMAC, bmc
 
 func (s *InMemoryStorage) LookupBMCByXName(xname string) (nodes.BMC, error) {
 	for _, bmc := range s.bmcEntries {
-		if bmc.XName.Value == xname {
+		if bmc.LocationString == xname {
 			return bmc, nil
 		}
 	}

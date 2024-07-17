@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	_ "github.com/marcboeker/go-duckdb"
-	"github.com/openchami/node-orchestrator/pkg/smd"
+	"github.com/openchami/node-orchestrator/internal/api/smd"
 )
 
 func initComponentTables(db *sql.DB) error {

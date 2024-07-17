@@ -13,7 +13,7 @@ func (d *DuckDBStorage) SaveComputeNode(nodeID uuid.UUID, node nodes.ComputeNode
 	if err != nil {
 		return err
 	}
-	_, err = d.db.Exec(`INSERT INTO compute_nodes (id, xname, data) VALUES (?, ?, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data`, nodeID, node.XName.Value, string(data))
+	_, err = d.db.Exec(`INSERT INTO compute_nodes (id, xname, data) VALUES (?, ?, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data`, nodeID, node.LocationString, string(data))
 	return err
 }
 

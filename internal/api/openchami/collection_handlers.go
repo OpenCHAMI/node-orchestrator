@@ -1,4 +1,4 @@
-package main
+package openchami
 
 import (
 	"encoding/json"
@@ -32,7 +32,6 @@ func createCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 				Msg("Error extracting claims")
 		}
 
-		collection.Owner = uuid.MustParse(claims["sub"].(string))
 		collection.CreatorSubject = claims["sub"].(string)
 
 		if err := manager.CreateCollection(&collection); err != nil {
@@ -41,7 +40,6 @@ func createCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 		}
 		log.Info().
 			Str("collection_id", collection.ID.String()).
-			Str("owner", collection.Owner.String()).
 			Str("creator", collection.CreatorSubject).
 			Str("description", collection.Description).
 			Str("name", collection.Name).
@@ -104,7 +102,6 @@ func updateCollection(manager *nodes.CollectionManager) http.HandlerFunc {
 		}
 		log.Info().
 			Str("collection_id", collection.ID.String()).
-			Str("owner", collection.Owner.String()).
 			Str("creator", collection.CreatorSubject).
 			Str("description", collection.Description).
 			Str("name", collection.Name).

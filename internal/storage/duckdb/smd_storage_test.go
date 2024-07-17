@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	_ "github.com/marcboeker/go-duckdb"
-	"github.com/openchami/node-orchestrator/pkg/smd"
+	"github.com/openchami/node-orchestrator/internal/api/smd"
 
 	"github.com/google/uuid"
 )

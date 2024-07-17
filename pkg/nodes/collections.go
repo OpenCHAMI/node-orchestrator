@@ -40,7 +40,6 @@ func (NodeCollectionType) JSONSchema() *jsonschema.Schema {
 // NodeCollection represents an arbitrary collection of nodes.
 type NodeCollection struct {
 	ID             uuid.UUID          `json:"id,omitempty" format:"uuid"`
-	Owner          uuid.UUID          `json:"owner,omitempty" format:"uuid"`            // UUID of the owner of the collection
 	CreatorSubject string             `json:"creator_subject,omitempty" format:"email"` // JWT subject of the creator of the collection
 	Description    string             `json:"description,omitempty"`
 	Name           string             `json:"name"`

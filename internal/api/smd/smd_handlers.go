@@ -1,4 +1,4 @@
-package main
+package smd
 
 import (
 	"encoding/json"
@@ -8,7 +8,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/invopop/jsonschema"
-	smd "github.com/openchami/node-orchestrator/pkg/smd"
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -16,12 +15,12 @@ import (
 var componentSchemaLoader gojsonschema.JSONLoader
 
 type SMDStorage interface {
-	GetComponents() ([]smd.Component, error)
-	GetComponentByXname(xname string) (smd.Component, error)
-	GetComponentByNID(nid int) (smd.Component, error)
-	GetComponentByUID(uid uuid.UUID) (smd.Component, error)
-	QueryComponents(xname string, params map[string]string) ([]smd.Component, error)
-	CreateOrUpdateComponents(components []smd.Component) error
+	GetComponents() ([]Component, error)
+	GetComponentByXname(xname string) (Component, error)
+	GetComponentByNID(nid int) (Component, error)
+	GetComponentByUID(uid uuid.UUID) (Component, error)
+	QueryComponents(xname string, params map[string]string) ([]Component, error)
+	CreateOrUpdateComponents(components []Component) error
 	DeleteComponents() error
 	DeleteComponentByXname(xname string) error
 	UpdateComponentData(xnames []string, data map[string]interface{}) error
@@ -72,7 +71,7 @@ func getComponentByXname(storage SMDStorage) http.HandlerFunc {
 
 func createUpdateComponents(storage SMDStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var components []smd.Component
+		var components []Component
 		if err := json.NewDecoder(r.Body).Decode(&components); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -204,9 +203,9 @@ func NewRouter(storage SMDStorage) chi.Router {
 }
 
 func SMDComponentRoutes(storage SMDStorage, authMiddlewares []func(http.Handler) http.Handler) chi.Router {
-	// Generate JSON schema for smd.Component struct
+	// Generate JSON schema for Component struct
 	reflector := jsonschema.Reflector{}
-	componentSchema := reflector.Reflect(&smd.Component{})
+	componentSchema := reflector.Reflect(&Component{})
 
 	// Convert schema to JSON
 	schemaJSON, err := json.Marshal(componentSchema)

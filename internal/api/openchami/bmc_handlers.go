@@ -1,4 +1,4 @@
-package main
+package openchami
 
 import (
 	"encoding/json"
@@ -18,12 +18,12 @@ func postBMC(storage storage.NodeStorage) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		if newBMC.XName.Value != "" {
-			if !xnames.IsValidBMCXName(newBMC.XName.Value) {
+		if newBMC.LocationString != "" {
+			if !xnames.IsValidBMCXName(newBMC.LocationString) {
 				http.Error(w, "invalid XName", http.StatusBadRequest)
 			}
 			// Check if the XName already exists
-			_, err := storage.LookupBMCByXName(newBMC.XName.Value)
+			_, err := storage.LookupBMCByXName(newBMC.LocationString)
 			if err == nil {
 				http.Error(w, "XName already exists", http.StatusConflict)
 				return

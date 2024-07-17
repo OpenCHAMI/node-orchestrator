@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 
 	"github.com/invopop/jsonschema"
+	smd "github.com/openchami/node-orchestrator/internal/api/smd"
 	nodes "github.com/openchami/node-orchestrator/pkg/nodes"
-	smd "github.com/openchami/node-orchestrator/pkg/smd"
 	"github.com/rs/zerolog/log"
 )
 

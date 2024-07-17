@@ -1,4 +1,4 @@
-package main
+package openchami
 
 import (
 	"encoding/json"
@@ -27,22 +27,24 @@ func mustInt(i int, e error) int {
 func postNode(storage storage.NodeStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var newNode nodes.ComputeNode
+		var nodeXName xnames.NodeXname
 
 		if err := render.DecodeJSON(r.Body, &newNode); err != nil {
 			log.Error().Err(err).Msg("Error decoding request body")
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-
-		if newNode.XName.String() != "" {
-			if _, err := newNode.XName.Valid(); err != nil {
-				log.Print("Invalid XName ", newNode.XName.String(), err)
+		// If the LocationString validates as an Xname, check if it is valid
+		if newNode.LocationString != "" {
+			nodeXName = xnames.NodeXname{Value: newNode.LocationString}
+			if _, err := nodeXName.Valid(); err != nil {
+				log.Print("Invalid XName ", nodeXName.String(), err)
 				http.Error(w, "Invalid XName "+err.Error(), http.StatusBadRequest)
 				return
 			}
 
-			if _, err := storage.LookupComputeNodeByXName(newNode.XName.String()); err == nil {
-				log.Print("Duplicate XName", newNode.XName.String())
+			if _, err := storage.LookupComputeNodeByXName(nodeXName.String()); err == nil {
+				log.Print("Duplicate XName", nodeXName.String())
 				http.Error(w, "Compute Node with the same XName already exists", http.StatusBadRequest)
 				return
 			}
@@ -50,12 +52,12 @@ func postNode(storage storage.NodeStorage) http.HandlerFunc {
 
 		// Deal with the BMC. If it has been provided already, check if it is valid
 		if newNode.BMC != nil {
-			if newNode.BMC.XName.Value != "" && !xnames.IsValidBMCXName(newNode.BMC.XName.Value) {
+			if newNode.BMC.LocationString != "" && !xnames.IsValidBMCXName(newNode.BMC.LocationString) {
 				http.Error(w, "invalid BMC XName", http.StatusBadRequest)
 				return
 			}
 
-			if existingBMC, err := storage.LookupBMCByXName(newNode.BMC.XName.Value); err == nil {
+			if existingBMC, err := storage.LookupBMCByXName(newNode.BMC.LocationString); err == nil {
 				newNode.BMC.ID = existingBMC.ID
 			} else if existingBMC, err := storage.LookupBMCByMACAddress(newNode.BMC.MACAddress); err == nil {
 				newNode.BMC.ID = existingBMC.ID
@@ -68,19 +70,19 @@ func postNode(storage storage.NodeStorage) http.HandlerFunc {
 		}
 
 		// If the BMC has not been provided, check to see if it can be inferred from the XName and create it if necessary
-		if newNode.BMC == nil && newNode.XName.String() != "" {
+		if newNode.BMC == nil && nodeXName.String() != "" {
 			bmcXname := fmt.Sprintf("x%dc%ds%db%d",
-				mustInt(newNode.XName.Cabinet()),
-				mustInt(newNode.XName.Chassis()),
-				mustInt(newNode.XName.Slot()),
-				mustInt(newNode.XName.BMCPosition()),
+				mustInt(nodeXName.Cabinet()),
+				mustInt(nodeXName.Chassis()),
+				mustInt(nodeXName.Slot()),
+				mustInt(nodeXName.BMCPosition()),
 			)
 			if existingBMC, err := storage.LookupBMCByXName(bmcXname); err == nil {
 				newNode.BMC = &existingBMC
 			}
 			newNode.BMC = &nodes.BMC{
-				ID:    uuid.New(),
-				XName: xnames.BMCXname{Value: bmcXname},
+				ID:             uuid.New(),
+				LocationString: xnames.BMCXname{Value: bmcXname}.String(),
 			}
 			storage.SaveBMC(newNode.BMC.ID, *newNode.BMC)
 		}
@@ -96,7 +98,7 @@ func postNode(storage storage.NodeStorage) http.HandlerFunc {
 
 		sublog := sublogger.With().
 			Str("node_id", newNode.ID.String()).
-			Str("xname", newNode.XName.String()).
+			Str("xname", nodeXName.String()).
 			Str("hostname", newNode.Hostname).
 			Str("arch", newNode.Architecture).
 			Str("boot_mac", newNode.BootMac).
@@ -106,7 +108,7 @@ func postNode(storage storage.NodeStorage) http.HandlerFunc {
 		if newNode.BMC != nil {
 			sublog.With().
 				Str("bmc_mac", newNode.BMC.MACAddress).
-				Str("bmc_xname", newNode.BMC.XName.Value).
+				Str("bmc_xname", newNode.BMC.LocationString).
 				Str("bmc_id", newNode.BMC.ID.String()).
 				Logger()
 		}
@@ -213,9 +215,10 @@ func updateNode(storage storage.NodeStorage) http.HandlerFunc {
 			return
 		}
 
-		if _, err := updateNode.XName.Valid(); err != nil {
+		// If the LocationString validates as an Xname, check if it is valid
+		if !(updateNode.LocationString == xnames.NodeXname{Value: updateNode.LocationString}.String()) {
 			render.Status(r, http.StatusBadRequest)
-			render.JSON(w, r, "invalid XName "+err.Error())
+			render.JSON(w, r, "invalid XName "+updateNode.LocationString)
 			return
 		}
 
@@ -228,12 +231,12 @@ func updateNode(storage storage.NodeStorage) http.HandlerFunc {
 
 		log.Info().
 			Str("node_id", updateNode.ID.String()).
-			Str("node_xname", updateNode.XName.String()).
+			Str("node_xname", updateNode.LocationString).
 			Str("node_hostname", updateNode.Hostname).
 			Str("node_arch", updateNode.Architecture).
 			Str("node_boot_mac", updateNode.BootMac).
 			Str("bmc_mac", updateNode.BMC.MACAddress).
-			Str("bmc_xname", updateNode.BMC.XName.Value).
+			Str("bmc_xname", updateNode.BMC.LocationString).
 			Str("bmc_id", updateNode.BMC.ID.String()).
 			Str("request_id", middleware.GetReqID(r.Context())).
 			Msg("Node updated")
@@ -260,8 +263,10 @@ func deleteNode(storage storage.NodeStorage) http.HandlerFunc {
 func NodeRoutes(myStorage storage.NodeStorage, authMiddlewares []func(http.Handler) http.Handler) chi.Router {
 	// Create a new collection manager for node collections
 	manager := nodes.NewCollectionManager()
-	// Add a mutual exclusivity constraint to the manager that prevents a node from being in multipe partitions
+	// Add a mutual exclusivity constraint to the manager that prevents a node from being in multipe partitions or multiple tenants.  Use the xname as the key.
 	manager.AddConstraint(nodes.DefaultType, &nodes.MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
+	manager.AddConstraint(nodes.PartitionType, &nodes.MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
+	manager.AddConstraint(nodes.TenantType, &nodes.MutualExclusivityConstraint{ExistingNodes: make(map[xnames.NodeXname]uuid.UUID)})
 
 	// Create a router for both protected and unprotected routes
 	r := chi.NewRouter()
@@ -271,12 +276,6 @@ func NodeRoutes(myStorage storage.NodeStorage, authMiddlewares []func(http.Handl
 	r.With(authMiddlewares...).Post("/ComputeNode/{nodeID}", updateNode(myStorage))
 	r.With(authMiddlewares...).Post("/ComputeNode", postNode(myStorage))
 	r.With(authMiddlewares...).Delete("/ComputeNode/{nodeID}", deleteNode(myStorage))
-
-	// Node routes
-	r.With(authMiddlewares...).Post("/nodes", postNode(myStorage))
-	r.With(authMiddlewares...).Put("/nodes/{nodeID}", updateNode(myStorage))
-	r.With(authMiddlewares...).Post("/nodes/{nodeID}", updateNode(myStorage))
-	r.With(authMiddlewares...).Delete("/nodes/{nodeID}", deleteNode(myStorage))
 
 	// BMC routes
 	r.With(authMiddlewares...).Post("/bmc", postBMC(myStorage))
@@ -291,8 +290,6 @@ func NodeRoutes(myStorage storage.NodeStorage, authMiddlewares []func(http.Handl
 	// Unprotected routes
 	r.Get("/ComputeNode/{nodeID}", getNode(myStorage))
 	r.Get("/ComputeNode", searchNodes(myStorage))
-	r.Get("/nodes/{nodeID}", getNode(myStorage))
-	r.Get("/nodes", searchNodes(myStorage))
 	r.Get("/bmc/{bmcID}", getBMC(myStorage))
 	r.Get("/NodeCollection/{identifier}", getCollection(manager))
 
